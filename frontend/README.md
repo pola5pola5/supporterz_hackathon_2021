@@ -1,24 +1,33 @@
-# frontend
+# 概要
+フロントエンド部分
 
-## Project setup
+# 起動に関して
+本アプリは`yarn`をパッケージ管理に利用している
+
+## ローカルで起動
+1. 依存パッケージをインストール
+    ```
+    yarn install
+    ```
+2. developmentモードで起動
+    ```
+    yarn serve
+    ```
+## dockerを用いて起動
+`Dockerfile`のある階層で実行
 ```
-yarn install
+docker build -t frontend_image .
+
+docker container run -it -p 8080:8080 --name frontend_container frontend_image
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
+## その他
+コードのビルド
 ```
 yarn build
 ```
 
-### Lints and fixes files
+コードの自動整形
 ```
 yarn lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

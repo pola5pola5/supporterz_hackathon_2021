@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    container_name: frontend_container
+    ports:
+      - "80:80"
+    networks: 
+      app_net:
+        ipv4_address: 192.168.0.2
+    environment:
+      TZ: "Asia/Tokyo"
+      URI_BACKEND: "http://192.168.0.3:1323/api"       
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    container_name: backend_container
+    # to debug
+    ports:
+      - "1323":"1323"
+    networks: 
+      app_net:
+        ipv4_address: 192.168.0.3
+    environment:
+      TZ: "Asia/Tokyo"
+      URI_FRONTEND: "http://192.168.0.2:8080"
+    
+networks: 
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
