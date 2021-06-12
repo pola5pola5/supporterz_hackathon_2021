@@ -1,0 +1,5 @@
+example.txt
+
+123456789
+aiueo
+あいうえお
