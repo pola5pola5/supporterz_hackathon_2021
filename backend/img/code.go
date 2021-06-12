@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 
@@ -9,7 +10,9 @@ import (
 )
 
 func main() {
-	filepath := "../images/test2.HEIC"
+	f := flag.String("img", "./images/test2.jpg", "input image_file")
+	flag.Parse()
+	filepath := *f
 	rawExif, err := exif.SearchFileAndExtractExif(filepath)
 	if err != nil {
 		log.Fatalf("1: %s", err)
