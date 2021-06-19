@@ -35,7 +35,7 @@ services:
       MYSQL_USER: trip
       MYSQL_PASSWORD: trip_app
       TZ: "Asia/Tokyo"
-    platform: linux/amd64
+    # platform: linux/amd64  # m1
     networks: 
       app_net:
         ipv4_address: 192.168.0.4
