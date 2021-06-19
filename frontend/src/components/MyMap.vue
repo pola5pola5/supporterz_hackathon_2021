@@ -6,12 +6,27 @@
 
 <script>
     import mapboxgl from 'mapbox-gl';
+    import axios from 'axios';
+
+
     export default {
         name:'MyMap',
+        created:function(){
+            this.init();
+        },
         mounted:function(){
            this.mapCreate();
         },
         methods:{
+            init: async function(){
+                console.log(this.$store.state.tripid);
+                let getRequest
+                //json取得
+                await axios.get("http://13.112.197.183:1323/api/trip/get?trip_id=" + this.$store.state.tripid)
+                .then(res => getRequest = res.data);
+                console.log(getRequest);
+            },
+
             mapCreate:function(){
                 mapboxgl.accessToken = 'pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA';
                 const map = new mapboxgl.Map({
@@ -114,18 +129,11 @@
                     // create a DOM element for the marker
                     var el = document.createElement('div');
                     el.className = 'marker';
-                    el.style.backgroundImage =
-                    'url(https://placekitten.com/g/' +
-                    marker.properties.iconSize.join('/') +
-                    '/)';
-                    el.style.width = marker.properties.iconSize[0] + 'px';
-                    el.style.height = marker.properties.iconSize[1] + 'px';
                     
                     el.addEventListener('click', function() {
                     window.alert(marker.properties.message);
                     });
                     
-                    // add marker to map
                     new mapboxgl.Marker(el)
                     .setLngLat(marker.geometry.coordinates)
                     .addTo(map);
@@ -140,5 +148,16 @@
     #map {
         z-index: 0;
         height: 800px;
+    }
+    .marker {
+        background-image: url('../assets/mapbox-icon.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .mapboxgl-popup {
+        max-width: 200px;
     }
 </style>
