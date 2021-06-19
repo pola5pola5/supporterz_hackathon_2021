@@ -78,7 +78,8 @@ type userCreateRequest struct {
 
 // userCreateResponse ユーザ作成response
 type userCreateResponse struct {
-	Token string `json:"token"`
+	Token  string `json:"token"`
+	UserID string `json:"user_id"`
 }
 
 // TODO: tokenの扱い方検討
@@ -95,7 +96,7 @@ func (uh *userHandler) HandleUserCreate() echo.HandlerFunc {
 			return err
 		}
 
-		authToken, err := uh.userUsecase.RegisterUser(
+		authToken, userID, err := uh.userUsecase.RegisterUser(
 			requestBody.UserName,
 			requestBody.Password,
 		)
@@ -107,7 +108,8 @@ func (uh *userHandler) HandleUserCreate() echo.HandlerFunc {
 			return err
 		}
 		res := userCreateResponse{
-			Token: authToken,
+			Token:  authToken,
+			UserID: userID,
 		}
 		return c.JSON(
 			http.StatusOK,

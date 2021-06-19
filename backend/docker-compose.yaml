@@ -10,6 +10,7 @@ services:
     ports:
       - 1323:1323
     environment:
+      LOCAL: local
       TZ: "Asia/Tokyo"
       MYSQL_USER: trip
       MYSQL_PASSWORD: trip_app
@@ -30,7 +31,6 @@ services:
     volumes:
       - ./db/init:/docker-entrypoint-initdb.d
     environment:
-      LOCAL: true
       MYSQL_ROOT_PASSWORD: trip_app
       MYSQL_DATABASE: trip_db
       MYSQL_USER: trip

@@ -12,7 +12,7 @@ import (
 
 type UserUsecase interface {
 	GetUserByUserID(userID string) (*model.User, error)
-	RegisterUser(userName string, password string) (string, error)
+	RegisterUser(userName string, password string) (string, string, error)
 	GetTripsByUserID(userID string) ([]*tm.Trip, error)
 	// UpdateUser(userID string, userName string) (*model.User, error)
 }
@@ -43,16 +43,16 @@ func (uu *userUsecase) GetUserByUserID(userID string) (*model.User, error) {
 	return user, nil
 }
 
-func (uu *userUsecase) RegisterUser(userName string, password string) (string, error) {
+func (uu *userUsecase) RegisterUser(userName string, password string) (string, string, error) {
 	// userID
 	userID, err := uu.createUUID()
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	// token
 	token, err := uu.createUUID()
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	user := &model.User{
@@ -63,9 +63,9 @@ func (uu *userUsecase) RegisterUser(userName string, password string) (string, e
 	}
 	// 登録
 	if err := uu.userRepo.InsertUser(user); err != nil {
-		return "", err
+		return "", "", err
 	}
-	return user.AuthToken, nil
+	return user.AuthToken, user.UserID, nil
 }
 
 func (uu *userUsecase) GetTripsByUserID(userID string) ([]*tm.Trip, error) {

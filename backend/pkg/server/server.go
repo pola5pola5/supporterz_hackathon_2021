@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"os"
 
 	"github.com/google/uuid"
@@ -45,13 +46,14 @@ func Serve(addr string) {
 		uuid.NewRandom,
 	)
 	var tripUsecase tu.TripUsecase
-	if flag == "true" {
+	if flag == "local" {
 		tripUsecase = tu.NewTripUsecase(
 			localPersistence,
 			imgPersistence,
 			tripPersistence,
 			uuid.NewRandom,
 		)
+		log.Println("local")
 	} else {
 		tripUsecase = tu.NewTripUsecase(
 			s3Persistence,
@@ -59,6 +61,7 @@ func Serve(addr string) {
 			tripPersistence,
 			uuid.NewRandom,
 		)
+		log.Println("aws")
 	}
 
 	// interface
