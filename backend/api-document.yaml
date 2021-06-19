@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: supporterz_hackathon_2021 API Document
-  description: <b>バックエンド API仕様</b><br>
+  description: バックエンド API仕様
   version: '1.0'
   contact:
     name: Takeshi Haga
@@ -13,14 +13,16 @@ tags:
     description: 設定事項の出力
   - name: trip
     description: GPS情報抽出
+  - name: user
+    description: ユーザ関連
 paths:
-  /setting/get:
+  /api/setting/get:
     get:
       tags:
         - setting
       summary: 設定取得API
       description: |
-        設定事項の出力<br>
+        設定事項の出力
         TODO: 設定をDBに保存し動的に変えられるようにする
       operationId: get-settings
       responses:
@@ -29,22 +31,38 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SettingGetResponse'
+                type: object
+                properties:
+                  hello:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    hello: hello
+          headers: {}
       parameters: []
-  /trip/save:
+    parameters: []
+  /api/trip/save:
     post:
       tags:
         - trip
       summary: 旅情報保存API
       description: |
-        アップロードされた写真を保存するAPI<br>
+        アップロードされた写真を保存するAPI
       operationId: trip-save
       requestBody:
         description: Request Body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TripSaveRequest'
+              type: object
+              properties:
+                user_id:
+                  type: string
+                imgs:
+                  type: array
+                  items:
+                    type: string
         required: true
       responses:
         '200':
@@ -52,87 +70,210 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TripSaveResponse'
+                type: object
+                properties:
+                  trip_id:
+                    type: string
       x-codegen-request-body-name: body
-  /trip/get:
-    post:
+    parameters: []
+  /api/trip/get:
+    get:
+      summary: 旅情報全体を取得するAPI
+      operationId: get-trip-get
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  features:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        properties:
+                          type: object
+                          properties:
+                            trip_id:
+                              type: string
+                        geometry:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            coordinates:
+                              type: array
+                              items:
+                                type: number
+              examples:
+                example-1:
+                  value:
+                    type: FeatureCollection
+                    features:
+                      - type: Feature
+                        properties:
+                          trip_id: string
+                        geometry:
+                          type: Point
+                          coordinates:
+                            - -77.038659
+                            - 38.931567
+      description: 旅情報全体を取得するAPI
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: trip_id
+          description: 旅のID
+          required: true
       tags:
         - trip
-      summary: 旅情報取得API
-      description: |
-        userIDから保存済みの旅一覧を取得するAPI
-      operationId: trip-get
+    parameters: []
+  '/api/static/{img_url}':
+    get:
+      summary: 画像のファイルサーバAPI
+      description: |-
+        S3に保存した画像を取得するAPI
+        返り値はbase64エンコードを文字列にキャストしたもの
+      parameters:
+        - in: path
+          name: img_url
+          schema:
+            type: string
+          description: S3に保存した画像のURL
+          required: true
+      operationId: imgs-get
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: string
+      x-codegen-request-body-name: body
+      tags:
+        - setting
+    parameters:
+      - schema:
+          type: string
+        name: img_url
+        in: path
+        required: true
+  /api/user/get:
+    get:
+      summary: ユーザ情報を取得するAPI
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  user_name:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    user_id: c8fed8a1-7e15-4516-838a-14a6bc1f703f
+                    user_name: aaa
+      operationId: get-user
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: user_id
+          description: ユーザのID
+          required: true
+      description: ユーザ情報を取得するAPI
+    parameters: []
+  /api/user/create:
+    post:
+      summary: ユーザを登録するAPI
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    userID: aaa
+                    userName: hata
+      operationId: post-user-create
       requestBody:
-        description: Request Body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TripGetRequest'
-        required: true
-      responses:
-        '200':
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TripGetResponse'
-      x-codegen-request-body-name: body
-  /static/{img_url}:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                password:
+                  type: string
+            examples:
+              example-1:
+                value:
+                  user_name: ccc
+                  password: '333'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: API to create user
+      description: ユーザを登録するAPI
+    parameters: []
+  /api/user/get_trip:
     get:
+      summary: 旅の一覧を取得するAPI
       tags:
         - trip
-      summary: 画像のファイルサーバAPI
-      description: |
-        S3に保存した画像を取得するAPI
-      parameters:
-      - in: path
-        name: img_url
-        schema:
-          type: string
-        description: S3に保存した画像のURL 
-        required: true
-      operationId: imgs-get 
+        - user
       responses:
         '200':
-          description: A successful response.
+          description: OK
+          headers: {}
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TripGetResponse'
-      x-codegen-request-body-name: body
-
+                type: object
+                properties:
+                  trip_id:
+                    type: array
+                    items:
+                      type: string
+              examples:
+                example-1:
+                  value:
+                    trip_id:
+                      - string
+      operationId: get-user-get_trip
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: user_id
+          description: ユーザID
+          required: true
+      description: 各ユーザごとに保存してある旅を全件取得するAPI
+    parameters: []
 components:
-  schemas:
-    SettingGetResponse:
-      type: object
-      properties:
-        gachaCoinConsumption:
-          type: integer
-          description: ガチャ1回あたりのコイン消費数
-    TripSaveRequest:
-      type: object
-      properties:
-        userID:
-          type: string
-          description: ユーザID
-        imgs:
-          type: object
-          description: 画像
-    TripSaveResponse:
-      type: object
-      properties:
-        tripID:
-          type: string
-          description: 旅ごとに固有のID
-    TripGetRequest:
-      type: object
-      properties:
-        userID:
-          type: string
-          description: ユーザID
-    TripGetResponse:
-      type: object
-      properties:
-        tripID:
-          type: array
-          description: 旅IDのリスト
+  schemas: {}
+  securitySchemes: {}
