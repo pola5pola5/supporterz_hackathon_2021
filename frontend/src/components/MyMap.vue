@@ -21,6 +21,7 @@
                     zoom: 15
                 });
                 map.addControl(new mapboxgl.NavigationControl());
+                
                 map.on('load', function () {
                     map.addSource('route', {
                         'type': 'geojson',
@@ -68,6 +69,66 @@
                             'line-width': 8
                         }
                     });
+                });
+
+                var geojson = {
+                    'type': 'FeatureCollection',
+                    'features': [
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                            'message': 'Foo',
+                            'iconSize': [60, 60]
+                            },
+                            'geometry': {
+                            'type': 'Point',
+                            'coordinates': [-122.483696, 37.833818]
+                            }
+                        },
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                            'message': 'Bar',
+                            'iconSize': [50, 50]
+                            },
+                            'geometry': {
+                            'type': 'Point',
+                            'coordinates': [-122.48404, 37.831141]
+                            }
+                        },
+                        {
+                            'type': 'Feature',
+                            'properties': {
+                            'message': 'Baz',
+                            'iconSize': [40, 40]
+                            },
+                            'geometry': {
+                            'type': 'Point',
+                            'coordinates': [-122.487516, 37.831683]
+                            }
+                        }
+                    ]
+                };
+
+                geojson.features.forEach(function(marker) {
+                    // create a DOM element for the marker
+                    var el = document.createElement('div');
+                    el.className = 'marker';
+                    el.style.backgroundImage =
+                    'url(https://placekitten.com/g/' +
+                    marker.properties.iconSize.join('/') +
+                    '/)';
+                    el.style.width = marker.properties.iconSize[0] + 'px';
+                    el.style.height = marker.properties.iconSize[1] + 'px';
+                    
+                    el.addEventListener('click', function() {
+                    window.alert(marker.properties.message);
+                    });
+                    
+                    // add marker to map
+                    new mapboxgl.Marker(el)
+                    .setLngLat(marker.geometry.coordinates)
+                    .addTo(map);
                 });
             }
         }
