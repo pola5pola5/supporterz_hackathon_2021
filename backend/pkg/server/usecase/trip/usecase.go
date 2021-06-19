@@ -12,7 +12,6 @@ import (
 	tr "github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/repository/trip"
 )
 
-const path = "./save/"
 const layout = "2006:01:02 15:04:05"
 
 type TripUsecase interface {
@@ -78,8 +77,9 @@ func (tu *tripUsecase) RegisterTrip(userID string, imgs [][]byte) (string, error
 		// s3に保存
 		// TODO: 現状はサーバ上に保存
 		// ---
-		filename := path + imgID.String()
-		if err := tu.fileRepo.SaveFile(filename, imgs[i]); err != nil {
+		filename := imgID.String()
+		imgUrl, err := tu.fileRepo.SaveFile(filename, imgs[i])
+		if err != nil {
 			return "", err
 		}
 
@@ -104,7 +104,7 @@ func (tu *tripUsecase) RegisterTrip(userID string, imgs [][]byte) (string, error
 		img := &img.Img{
 			ImgID:     imgID.String(),
 			TripID:    tripID.String(),
-			ImgUrl:    filename,
+			ImgUrl:    imgUrl,
 			Latitude:  lat,
 			Longitude: lng,
 			DataTime:  time,
