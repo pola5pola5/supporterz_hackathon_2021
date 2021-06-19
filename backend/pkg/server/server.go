@@ -51,17 +51,18 @@ func Serve(addr string) {
 	// ---
 	// URL マッピング
 	// ---
+	api := e.Group("/api")
 	// setting
-	e.GET("/setting/get", settingHandler.HandleSettingGet())
+	api.GET("/setting/get", settingHandler.HandleSettingGet())
 	// user
-	e.GET("/user/get", userHandler.HandleUserGet())
-	e.POST("/user/create", userHandler.HandleUserCreate())
-	e.GET("/user/get_trip", userHandler.HandleUserTripGet())
+	api.GET("/user/get", userHandler.HandleUserGet())
+	api.POST("/user/create", userHandler.HandleUserCreate())
+	api.GET("/user/get_trip", userHandler.HandleUserTripGet())
 	// img
-	e.POST("/trip/save", tripHandler.HandleTripSave())
-	e.GET("/trip/get", tripHandler.HandleTripGet())
+	api.POST("/trip/save", tripHandler.HandleTripSave())
+	api.GET("/trip/get", tripHandler.HandleTripGet())
 	// html
-	e.Static("/html", "static")
+	api.Static("/html", "static")
 
 	// Start server
 	e.Logger.Fatal(e.Start(addr))

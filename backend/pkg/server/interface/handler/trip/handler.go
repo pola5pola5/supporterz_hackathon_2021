@@ -94,28 +94,6 @@ func (th *tripHandler) HandleTripSave() echo.HandlerFunc {
 			http.StatusOK,
 			res,
 		)
-
-		// img, err := c.FormFile("img")
-		// if err != nil {
-		// 	return err
-		// }
-		// src, err := img.Open()
-		// if err != nil {
-		// 	return err
-		// }
-		// defer src.Close()
-
-		// // Destination
-		// dst, err := os.Create(img.Filename)
-		// if err != nil {
-		// 	return err
-		// }
-		// defer dst.Close()
-
-		// // Copy
-		// if _, err = io.Copy(dst, src); err != nil {
-		// 	return err
-		// }
 	}
 }
 
@@ -137,6 +115,7 @@ type geometry struct {
 
 type properties struct {
 	TripID string `json:"trip_id"`
+	ImgURL string `json:"img_url"`
 }
 
 func (th *tripHandler) HandleTripGet() echo.HandlerFunc {
@@ -167,6 +146,7 @@ func (th *tripHandler) HandleTripGet() echo.HandlerFunc {
 		for i := 0; i < len(imgs); i++ {
 			properties := properties{
 				TripID: imgs[i].TripID,
+				ImgURL: imgs[i].ImgUrl,
 			}
 			geometry := geometry{
 				GeoType: "Point",
