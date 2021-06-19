@@ -1,12 +1,15 @@
 package server
 
 import (
+	"os"
+
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/db"
 	ip "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/img"
 	lp "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/local"
+	"github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/s3"
 	tp "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/trip"
 	up "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/user"
 	sh "github.com/littletake/supporterz_hackathon_2021/pkg/server/interface/handler/setting"
@@ -17,6 +20,7 @@ import (
 )
 
 func Serve(addr string) {
+	flag := os.Getenv("LOCAL")
 	// Echo instance
 	e := echo.New()
 	// Middleware
@@ -32,18 +36,31 @@ func Serve(addr string) {
 	imgPersistence := ip.NewPersistence(db.Conn)
 	tripPersistence := tp.NewPersistence(db.Conn)
 	localPersistence := lp.NewPersistence()
+	s3Persistence := s3.NewPersistence()
+
 	// usecase
 	userUsecase := uu.NewUserUsecase(
 		userPersistence,
 		tripPersistence,
 		uuid.NewRandom,
 	)
-	tripUsecase := tu.NewTripUsecase(
-		localPersistence,
-		imgPersistence,
-		tripPersistence,
-		uuid.NewRandom,
-	)
+	var tripUsecase tu.TripUsecase
+	if flag == "true" {
+		tripUsecase = tu.NewTripUsecase(
+			localPersistence,
+			imgPersistence,
+			tripPersistence,
+			uuid.NewRandom,
+		)
+	} else {
+		tripUsecase = tu.NewTripUsecase(
+			s3Persistence,
+			imgPersistence,
+			tripPersistence,
+			uuid.NewRandom,
+		)
+	}
+
 	// interface
 	settingHandler := sh.NewSettingHandler()
 	userHandler := uh.NewUserHandler(userUsecase, tripUsecase)

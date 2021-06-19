@@ -7,22 +7,23 @@ services:
       dockerfile: ./Dockerfile
     container_name: frontend_container
     ports:
-      - "80:80"
+      - 80:80
     networks: 
       app_net:
         ipv4_address: 192.168.0.2
     environment:
       TZ: "Asia/Tokyo"
       URI_BACKEND: "http://192.168.0.3:1323/api"       
-
+    depends_on: 
+        - backend
+        
   backend:
     build:
       context: ./backend
       dockerfile: ./Dockerfile
     container_name: backend_container
-    # to debug
     ports:
-      - "1323:1323"
+      - 1323:1323  # to debug
     networks: 
       app_net:
         ipv4_address: 192.168.0.3
@@ -34,6 +35,8 @@ services:
       MYSQL_HOST: 192.168.0.4
       MYSQL_PORT: 3306
       MYSQL_DATABASE: trip_db
+    depends_on: 
+      - db
 
   db:
     image: mysql
@@ -46,10 +49,12 @@ services:
     volumes:
       - ./backend/db/init:/docker-entrypoint-initdb.d
     environment:
-      MYSQL_ROOT_PASSWORD: triptrip
+      MYSQL_ROOT_PASSWORD: trip_app
       MYSQL_DATABASE: trip_db
       MYSQL_USER: trip
       MYSQL_PASSWORD: trip_app
+      TZ: "Asia/Tokyo"
+
 
 
 networks: 

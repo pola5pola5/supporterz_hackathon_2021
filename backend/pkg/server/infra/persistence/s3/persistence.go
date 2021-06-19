@@ -2,6 +2,7 @@ package s3
 
 import (
 	"bytes"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -37,6 +38,7 @@ func (sp s3Persistence) SaveFile(filename string, file []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	fmt.Println(output.Location)
 	return output.Location, nil
 
 }
