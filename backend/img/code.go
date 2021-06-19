@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	f := flag.String("img", "../test_data/test2.jpg", "input image_file")
+	f := flag.String("img", "./images/test2.jpg", "input image_file")
 	flag.Parse()
 	filepath := *f
 	rawExif, err := exif.SearchFileAndExtractExif(filepath)
@@ -30,7 +30,7 @@ func main() {
 		log.Fatalf("3: %s", err)
 	}
 	// fmt.Print(index.RootIfd.String())
-	tagName := "FileName"
+	tagName := "GPSLatitude"
 
 	results, err := index.Tree[2].FindTagWithName(tagName)
 	if err != nil {
