@@ -102,6 +102,8 @@ paths:
                           properties:
                             trip_id:
                               type: string
+                            img_url:
+                              type: string
                         geometry:
                           type: object
                           properties:
@@ -119,6 +121,7 @@ paths:
                       - type: Feature
                         properties:
                           trip_id: string
+                          img_url: xxx
                         geometry:
                           type: Point
                           coordinates:

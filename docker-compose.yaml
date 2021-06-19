@@ -31,7 +31,7 @@ services:
       URI_FRONTEND: "http://192.168.0.2:8080"
       MYSQL_USER: trip
       MYSQL_PASSWORD: trip_app
-      MYSQL_HOST: 192.168.0,4
+      MYSQL_HOST: 192.168.0.4
       MYSQL_PORT: 3306
       MYSQL_DATABASE: trip_db
 
