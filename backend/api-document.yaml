@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: supporterz_hackathon_2021 API Document
-  description: <b>バックエンド API仕様</b><br>
+  description: バックエンド API仕様
   version: '1.0'
   contact:
     name: Takeshi Haga
@@ -13,6 +13,8 @@ tags:
     description: 設定事項の出力
   - name: trip
     description: GPS情報抽出
+  - name: user
+    description: ユーザ関連
 paths:
   /setting/get:
     get:
@@ -20,7 +22,7 @@ paths:
         - setting
       summary: 設定取得API
       description: |
-        設定事項の出力<br>
+        設定事項の出力
         TODO: 設定をDBに保存し動的に変えられるようにする
       operationId: get-settings
       responses:
@@ -30,6 +32,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SettingGetResponse'
+              examples:
+                example-1:
+                  value:
+                    hello: hello
+          headers: {}
       parameters: []
   /trip/save:
     post:
@@ -37,7 +44,7 @@ paths:
         - trip
       summary: 旅情報保存API
       description: |
-        アップロードされた写真を保存するAPI<br>
+        アップロードされた写真を保存するAPI
       operationId: trip-save
       requestBody:
         description: Request Body
@@ -77,7 +84,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TripGetResponse'
       x-codegen-request-body-name: body
-  /static/{img_url}:
+  '/static/{img_url}':
     get:
       tags:
         - trip
@@ -85,13 +92,13 @@ paths:
       description: |
         S3に保存した画像を取得するAPI
       parameters:
-      - in: path
-        name: img_url
-        schema:
-          type: string
-        description: S3に保存した画像のURL 
-        required: true
-      operationId: imgs-get 
+        - in: path
+          name: img_url
+          schema:
+            type: string
+          description: S3に保存した画像のURL
+          required: true
+      operationId: imgs-get
       responses:
         '200':
           description: A successful response.
@@ -100,15 +107,91 @@ paths:
               schema:
                 $ref: '#/components/schemas/TripGetResponse'
       x-codegen-request-body-name: body
-
+  /user/get:
+    get:
+      summary: /user/get
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  user_name:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    user_id: c8fed8a1-7e15-4516-838a-14a6bc1f703f
+                    user_name: aaa
+      operationId: get-user
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: userID
+          description: ユーザのID
+          required: true
+      description: ユーザ情報を取得するAPI
+    parameters: []
+  /user/create:
+    post:
+      summary: API to create user
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    userID: aaa
+                    userName: hata
+      operationId: post-user-create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                password:
+                  type: string
+            examples:
+              example-1:
+                value:
+                  user_name: ccc
+                  password: '333'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: API to create user
+      description: ユーザを登録するAPI
 components:
   schemas:
     SettingGetResponse:
       type: object
       properties:
-        gachaCoinConsumption:
-          type: integer
-          description: ガチャ1回あたりのコイン消費数
+        hello:
+          type: string
+      x-examples:
+        example-1:
+          value:
+            hello: hello
     TripSaveRequest:
       type: object
       properties:
@@ -136,3 +219,4 @@ components:
         tripID:
           type: array
           description: 旅IDのリスト
+  securitySchemes: {}

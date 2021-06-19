@@ -1,28 +1,30 @@
 package user
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 
-	usecase "github.com/littletake/supporterz_hackathon_2021/pkg/server/usecase/user"
+	tu "github.com/littletake/supporterz_hackathon_2021/pkg/server/usecase/trip"
+	uu "github.com/littletake/supporterz_hackathon_2021/pkg/server/usecase/user"
 )
 
 type UserHandler interface {
 	HandleUserGet() echo.HandlerFunc
 	HandleUserCreate() echo.HandlerFunc
-	// HandleUserUpdate() echo.HandlerFunc
+	HandleUserTripGet() echo.HandlerFunc
 }
 
 type userHandler struct {
-	userUsecase usecase.UserUsecase
+	userUsecase uu.UserUsecase
+	tripUsecase tu.TripUsecase
 }
 
-func NewUserHandler(uu usecase.UserUsecase) UserHandler {
+func NewUserHandler(uu uu.UserUsecase, tu tu.TripUsecase) UserHandler {
 	return &userHandler{
 		userUsecase: uu,
+		tripUsecase: tu,
 	}
 }
 
@@ -36,21 +38,24 @@ type userGetResponse struct {
 func (uh *userHandler) HandleUserGet() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// クエリパラメータからuserID取得
-		userID := c.QueryParam("userID")
+		userID := c.QueryParam("user_id")
 		if userID == "" {
-			return c.JSON(
+			errMsg := fmt.Errorf("userID is empty")
+			c.JSON(
 				http.StatusBadRequest,
-				errors.New("userID is empty"),
+				errMsg,
 			)
+			return errMsg
 		}
 
 		// ユーザ取得
 		user, err := uh.userUsecase.GetUserByUserID(userID)
 		if err != nil {
-			return c.JSON(
+			c.JSON(
 				http.StatusBadRequest,
-				fmt.Errorf("user not found. userID=%s", userID),
+				err,
 			)
+			return err
 		}
 
 		// レスポンス
@@ -83,10 +88,11 @@ func (uh *userHandler) HandleUserCreate() echo.HandlerFunc {
 		// リクエストBodyから更新情報を取得
 		var requestBody userCreateRequest
 		if err := c.Bind(&requestBody); err != nil {
-			return c.JSON(
+			c.JSON(
 				http.StatusBadRequest,
-				err.Error(),
+				err,
 			)
+			return err
 		}
 
 		authToken, err := uh.userUsecase.RegisterUser(
@@ -94,13 +100,55 @@ func (uh *userHandler) HandleUserCreate() echo.HandlerFunc {
 			requestBody.Password,
 		)
 		if err != nil {
-			return c.JSON(
+			c.JSON(
 				http.StatusInternalServerError,
-				err.Error(),
+				err,
 			)
+			return err
 		}
 		res := userCreateResponse{
 			Token: authToken,
+		}
+		return c.JSON(
+			http.StatusOK,
+			res,
+		)
+	}
+}
+
+type userTripGetResponse struct {
+	TripID []string `json:"trip_id"`
+}
+
+func (uh *userHandler) HandleUserTripGet() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// クエリパラメータからuserID取得
+		userID := c.QueryParam("user_id")
+		if userID == "" {
+			errMsg := fmt.Errorf("userID is empty")
+			c.JSON(
+				http.StatusBadRequest,
+				errMsg,
+			)
+			return errMsg
+		}
+
+		// 旅情報の一覧取得
+		trips, err := uh.userUsecase.GetTripsByUserID(userID)
+		if err != nil {
+			c.JSON(
+				http.StatusInternalServerError,
+				err,
+			)
+			return err
+		}
+		tripIDSlice := make([]string, len(trips))
+		for i := 0; i < len(trips); i++ {
+			// TODO: ポインタ注意
+			tripIDSlice[i] = trips[i].TripID
+		}
+		res := userTripGetResponse{
+			TripID: tripIDSlice,
 		}
 		return c.JSON(
 			http.StatusOK,
