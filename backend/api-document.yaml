@@ -8,6 +8,8 @@ info:
     email: ritorut18@gmail.com
 servers:
   - url: 'http://localhost:1323'
+  - url: 'http://13.112.197.183:1323'
+  - url: 'http://54.64.77.173:1323'
 tags:
   - name: setting
     description: 設定事項の出力
@@ -63,6 +65,12 @@ paths:
                   type: array
                   items:
                     type: string
+            examples:
+              example-1:
+                value:
+                  user_id: c8fed8a1-7e15-4516-838a-14a6bc1f703f
+                  imgs:
+                    - string
         required: true
       responses:
         '200':
@@ -74,6 +82,10 @@ paths:
                 properties:
                   trip_id:
                     type: string
+              examples:
+                example-1:
+                  value:
+                    trip_id: string
       x-codegen-request-body-name: body
     parameters: []
   /api/trip/get:
@@ -121,7 +133,7 @@ paths:
                       - type: Feature
                         properties:
                           trip_id: string
-                          img_url: xxx
+                          img_url: 'http://192.168.0.4:1323/static/<画像の名前>'
                         geometry:
                           type: Point
                           coordinates:
@@ -215,11 +227,13 @@ paths:
                 properties:
                   token:
                     type: string
+                  user_id:
+                    type: string
               examples:
                 example-1:
                   value:
-                    userID: aaa
-                    userName: hata
+                    token: string
+                    user_id: string
       operationId: post-user-create
       requestBody:
         content:

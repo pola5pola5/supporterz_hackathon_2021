@@ -64,7 +64,7 @@ func (th *tripHandler) HandleTripSave() echo.HandlerFunc {
 			return err
 		}
 
-		// encode
+		// decode
 		// TODO: 並列処理を実装する
 		imgDecodedSlice := make([][]byte, len(requestBody.Imgs))
 		for i := 0; i < len(requestBody.Imgs); i++ {

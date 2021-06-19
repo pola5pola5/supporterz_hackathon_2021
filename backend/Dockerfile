@@ -1,4 +1,4 @@
-FROM golang:1.16.5 as builder
+FROM golang:latest as builder
 
 WORKDIR /go/src
 
@@ -19,5 +19,5 @@ RUN go build \
 FROM scratch as runner
 
 COPY --from=builder /go/bin/main /app/main
-
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ENTRYPOINT ["/app/main"]
