@@ -16,7 +16,7 @@ tags:
   - name: user
     description: ユーザ関連
 paths:
-  /setting/get:
+  /api/setting/get:
     get:
       tags:
         - setting
@@ -31,14 +31,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SettingGetResponse'
+                type: object
+                properties:
+                  hello:
+                    type: string
               examples:
                 example-1:
                   value:
                     hello: hello
           headers: {}
       parameters: []
-  /trip/save:
+    parameters: []
+  /api/trip/save:
     post:
       tags:
         - trip
@@ -51,7 +55,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TripSaveRequest'
+              type: object
+              properties:
+                user_id:
+                  type: string
+                imgs:
+                  type: array
+                  items:
+                    type: string
         required: true
       responses:
         '200':
@@ -59,11 +70,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TripSaveResponse'
+                type: object
+                properties:
+                  trip_id:
+                    type: string
       x-codegen-request-body-name: body
-  /trip/get:
+    parameters: []
+  /api/trip/get:
     get:
-      summary: ''
+      summary: 旅情報全体を取得するAPI
       operationId: get-trip-get
       responses:
         '200':
@@ -117,13 +132,15 @@ paths:
           name: trip_id
           description: 旅のID
           required: true
-  '/static/{img_url}':
-    get:
       tags:
         - trip
+    parameters: []
+  '/api/static/{img_url}':
+    get:
       summary: 画像のファイルサーバAPI
-      description: |
+      description: |-
         S3に保存した画像を取得するAPI
+        返り値はbase64エンコードを文字列にキャストしたもの
       parameters:
         - in: path
           name: img_url
@@ -138,11 +155,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TripGetResponse'
+                type: string
       x-codegen-request-body-name: body
-  /user/get:
+      tags:
+        - setting
+    parameters:
+      - schema:
+          type: string
+        name: img_url
+        in: path
+        required: true
+  /api/user/get:
     get:
-      summary: /user/get
+      summary: ユーザ情報を取得するAPI
       tags:
         - user
       responses:
@@ -172,9 +197,9 @@ paths:
           required: true
       description: ユーザ情報を取得するAPI
     parameters: []
-  /user/create:
+  /api/user/create:
     post:
-      summary: API to create user
+      summary: ユーザを登録するAPI
       tags:
         - user
       responses:
@@ -214,9 +239,10 @@ paths:
               properties: {}
         description: API to create user
       description: ユーザを登録するAPI
-  /user/get_trip:
+    parameters: []
+  /api/user/get_trip:
     get:
-      summary: API to get all trip_id
+      summary: 旅の一覧を取得するAPI
       tags:
         - trip
         - user
@@ -246,46 +272,8 @@ paths:
           name: user_id
           description: ユーザID
           required: true
+      description: 各ユーザごとに保存してある旅を全件取得するAPI
+    parameters: []
 components:
-  schemas:
-    SettingGetResponse:
-      type: object
-      properties:
-        hello:
-          type: string
-      x-examples:
-        example-1:
-          value:
-            hello: hello
-    TripSaveRequest:
-      type: object
-      description: ''
-      x-examples: {}
-      properties:
-        user_id:
-          type: string
-          description: ユーザID
-        imgs:
-          type: array
-          description: 画像
-          items:
-            type: string
-    TripSaveResponse:
-      type: object
-      properties:
-        trip_id:
-          type: string
-          description: 旅ごとに固有のID
-    TripGetRequest:
-      type: object
-      properties:
-        userID:
-          type: string
-          description: ユーザID
-    TripGetResponse:
-      type: object
-      properties:
-        tripID:
-          type: array
-          description: 旅IDのリスト
+  schemas: {}
   securitySchemes: {}
