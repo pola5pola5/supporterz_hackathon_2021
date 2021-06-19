@@ -62,28 +62,61 @@ paths:
                 $ref: '#/components/schemas/TripSaveResponse'
       x-codegen-request-body-name: body
   /trip/get:
-    post:
-      tags:
-        - trip
-      summary: 旅情報取得API
-      description: |
-        userIDから保存済みの旅一覧を取得するAPI
-      operationId: trip-get
-      requestBody:
-        description: Request Body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TripGetRequest'
-        required: true
+    get:
+      summary: ''
+      operationId: get-trip-get
       responses:
         '200':
-          description: A successful response.
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TripGetResponse'
-      x-codegen-request-body-name: body
+                type: object
+                properties:
+                  type:
+                    type: string
+                  features:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        properties:
+                          type: object
+                          properties:
+                            trip_id:
+                              type: string
+                        geometry:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            coordinates:
+                              type: array
+                              items:
+                                type: number
+              examples:
+                example-1:
+                  value:
+                    type: FeatureCollection
+                    features:
+                      - type: Feature
+                        properties:
+                          trip_id: string
+                        geometry:
+                          type: Point
+                          coordinates:
+                            - -77.038659
+                            - 38.931567
+      description: 旅情報全体を取得するAPI
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: trip_id
+          description: 旅のID
+          required: true
   '/static/{img_url}':
     get:
       tags:
@@ -134,7 +167,7 @@ paths:
         - schema:
             type: string
           in: query
-          name: userID
+          name: user_id
           description: ユーザのID
           required: true
       description: ユーザ情報を取得するAPI
@@ -181,6 +214,38 @@ paths:
               properties: {}
         description: API to create user
       description: ユーザを登録するAPI
+  /user/get_trip:
+    get:
+      summary: API to get all trip_id
+      tags:
+        - trip
+        - user
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trip_id:
+                    type: array
+                    items:
+                      type: string
+              examples:
+                example-1:
+                  value:
+                    trip_id:
+                      - string
+      operationId: get-user-get_trip
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: user_id
+          description: ユーザID
+          required: true
 components:
   schemas:
     SettingGetResponse:
@@ -194,17 +259,21 @@ components:
             hello: hello
     TripSaveRequest:
       type: object
+      description: ''
+      x-examples: {}
       properties:
-        userID:
+        user_id:
           type: string
           description: ユーザID
         imgs:
-          type: object
+          type: array
           description: 画像
+          items:
+            type: string
     TripSaveResponse:
       type: object
       properties:
-        tripID:
+        trip_id:
           type: string
           description: 旅ごとに固有のID
     TripGetRequest:
