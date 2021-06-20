@@ -3,7 +3,7 @@ import { createStore } from "vuex"
 const store = createStore({
     state() {
         return{
-            tripid: "ade01599-4acb-40a8-870c-4b9eea358d22",
+            tripid: "b0add9e8-cdba-42ee-85d5-be89bd9875f0",
         }
     },
     mutations: {
