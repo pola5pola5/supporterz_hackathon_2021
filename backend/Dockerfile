@@ -1,4 +1,4 @@
-FROM golang:1.16.5 as builder
+FROM golang:latest as builder
 
 WORKDIR /go/src
 
@@ -12,11 +12,12 @@ ARG GOOS=linux
 ARG GOARCH=amd64
 RUN go build \
     -o /go/bin/main \
-    -ldflags '-s -w'
+    -ldflags '-s -w' \
+    ./cmd/main.go
 
 
 FROM scratch as runner
 
 COPY --from=builder /go/bin/main /app/main
-
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ENTRYPOINT ["/app/main"]
