@@ -11,28 +11,36 @@
 
     export default {
         name:'MyMap',
-        created:function(){
+        
+        data(){
+            return{
+                geojsonData: [],
+            }
+        },
+        // created:function(){
+        //     this.init();
+        // },
+        mounted:function(){
             this.init();
         },
-        mounted:function(){
-           this.mapCreate();
+        computed: function(){
+            this.mapCreate(this.geojsonData);
         },
         methods:{
             init: async function(){
-                console.log(this.$store.state.tripid);
-                let getRequest
-                //json取得
+                // json取得
                 await axios.get("http://13.112.197.183:1323/api/trip/get?trip_id=" + this.$store.state.tripid)
-                .then(res => getRequest = res.data);
-                console.log(getRequest);
+                .then(res => {this.geojsonData = res.data, this.mapCreate(this.geojsonData)});
             },
 
-            mapCreate:function(){
+            mapCreate:function(geojsonData){
+                console.log(geojsonData);
                 mapboxgl.accessToken = 'pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA';
                 const map = new mapboxgl.Map({
                     container: 'map',
                     style: 'mapbox://styles/mapbox/streets-v11',
-                    center: [-122.486052, 37.830348],
+                    center: geojsonData.features[0].geometry.coordinates,
+                    //center: [-122.486958, 37.82931],
                     zoom: 15
                 });
                 map.addControl(new mapboxgl.NavigationControl());
@@ -46,6 +54,7 @@
                             'geometry': {
                                 'type': 'LineString',
                                 'coordinates': [
+                                    geojsonData.features[0].geometry.coordinates,
                                     [-122.483696, 37.833818],
                                     [-122.483482, 37.833174],
                                     [-122.483396, 37.8327],
@@ -124,20 +133,28 @@
                         }
                     ]
                 };
-
+                map.on('mouseenter', 'places', function () {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
                 geojson.features.forEach(function(marker) {
                     // create a DOM element for the marker
                     var el = document.createElement('div');
                     el.className = 'marker';
                     
-                    el.addEventListener('click', function() {
-                    window.alert(marker.properties.message);
-                    });
+                    // el.addEventListener('click', function() {
+                    // window.alert(marker.properties.message);
+                    // });
                     
                     new mapboxgl.Marker(el)
                     .setLngLat(marker.geometry.coordinates)
                     .addTo(map);
+
+                    new mapboxgl.Popup(el)
+                    .setLngLat(marker.geometry.coordinates)
+                    .addTo(map);
                 });
+
+
             }
         }
     }
