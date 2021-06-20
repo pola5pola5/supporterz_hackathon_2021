@@ -1,75 +1,76 @@
 <template>
   <div class="View">
     <!-- <input type="file" name="example" ref="preview" accept="image/*" multiple required> -->
-  <p id="error" v-show="error">{{ error }}</p>
+    <p id="error" v-show="error">{{ error }}</p>
     <p>クリックまたはドラッグ&ドロップで画像を追加してください．</p>
-  <label>
-    <!-- <img :src="avatar" alt="Avatar" class="image"> -->
-    <div 
-      class="drop_area" 
-      @dragenter="dragEnter"
-      @dragleave="dragLeave"
-      @dragover.prevent
-      @drop.prevent="dropFile()"
-      :class="{enter: isEnter}"
-      @change="onImageChange"
-
+    <label>
+      <!-- <img :src="avatar" alt="Avatar" class="image"> -->
+      <div
+        class="drop_area"
+        @dragenter="dragEnter"
+        @dragleave="dragLeave"
+        @dragover.prevent
+        @drop.prevent="dropFile()"
+        :class="{ enter: isEnter }"
+        @change="onImageChange"
       >
+        ファイルアップロード
+        <!-- <div> -->
+        <input
+          type="file"
+          id="avatar_name"
+          accept="image/jpeg, image/png"
+          @change="onImageChange"
+          multiple
+        />
+      </div>
+    </label>
 
-      ファイルアップロード
-    <!-- <div> -->
-    <input
-           type="file"
-           id="avatar_name"
-           accept="image/jpeg, image/png"
-           @change="onImageChange"
-           multiple
-           />
+    <br />
+    <div>
+      <ul class="flex">
+        <li
+          class="flex-col"
+          v-for="(file, index) in files"
+          :key="index"
+          @click="deleteFile(index)"
+        >
+          <!-- {{ index }} -->
+          <div style="position: relative">
+            <span class="delete-mark">×</span>
+            <img class="file_icon" src="../assets/icon.png" />
+            <!-- <img class="file_icon" :src="images[index]"> -->
+          </div>
+          <span>{{ file.name }}</span>
+        </li>
+      </ul>
     </div>
-  </label>
 
-  <br>
-  <div>
-        <ul class="flex">
-          <li class="flex-col" v-for="(file,index) in files" :key="index" @click="deleteFile(index)">
-            <!-- {{ index }} -->
-              <div style="position: relative;">
-                <span class="delete-mark">×</span>
-                <img class="file_icon" src="../assets/icon.png">
-                <!-- <img class="file_icon" :src="images[index]"> -->
-              </div>
-              <span>{{ file.name }}</span>
-          </li>
-        </ul>
-  
-  </div>
+    <br />
+    <div v-show="files.length">
+      <button class="button" v-on:click="upload">送信</button>
+    </div>
 
-  <br>
-  <div v-show="files.length">
-    <button class="button" v-on:click="upload">送信</button>
-  </div>
-
-  <p>{{ message }}</p>
-  <p>{{ error }}</p>
+    <p>{{ message }}</p>
+    <p>{{ error }}</p>
   </div>
 </template>
 
 <script>
-
-import axios from "axios"
+import axios from "axios";
 export default {
   name: "View",
-  data () {
+  data() {
     return {
-   		avatar: '',
-      message: '',
-      error: '',
+      avatar: "",
+      message: "",
+      error: "",
       isEnter: false,
       files: [],
       images: [],
       min_imgs: [],
-      test: ''
-    }
+      test: "",
+    };
   },
   methods: {
     // setError (error, text) {
@@ -81,18 +82,18 @@ export default {
     dragLeave() {
       this.isEnter = false;
     },
-    getBase64 (file) {
+    getBase64(file) {
       return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = error => reject(error)
-      })
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
     },
-    dropFile: function() {
-      console.log(event.dataTransfer.files)
+    dropFile: function () {
+      console.log(event.dataTransfer.files);
       // console.log(event.dataTransfer.files.length)
-      this.files.push(...event.dataTransfer.files)
+      this.files.push(...event.dataTransfer.files);
       this.isEnter = false;
       // それぞれのファイルに対して変換処理
       this.files.forEach((file) => {
@@ -111,14 +112,13 @@ export default {
           this.min_imgs.push(resizedBase64);
         }.bind(this);
       });
-  
+
       return this.files, this.images;
     },
     deleteFile(index) {
-      this.files.splice(index, 1)
-      this.images.splice(index, 1)
+      this.files.splice(index, 1);
+      this.images.splice(index, 1);
     },
-
 
     // createResizedCanvasElement (originalImg) {
     //   const originalImgWidth = originalImg.width
@@ -157,41 +157,40 @@ export default {
     //   }
     //   return [width, height]
     // },
-    upload: function() {
-      console.log("test")
-        var resStatus
-      var getRequest
+    upload: function () {
+      var resStatus;
+      var getRequest;
       var params = new URLSearchParams();
-      params.append('user_id', 'c8fed8a1-7e15-4516-838a-14a6bc1f703f');
-      params.append('imgs', this.images);
-      console.log(params.values())
+      params.append("user_id", "c8fed8a1-7e15-4516-838a-14a6bc1f703f");
+      params.append("imgs", this.images);
+      console.log(params.values());
 
-      axios.post("http://13.112.197.183:1323/api/trip/save", {
-        user_id: "c8fed8a1-7e15-4516-838a-14a6bc1f703f",
-        imgs: this.images
-      }).then(response => {
-        console.log(response.data)
-            resStatus = response.status, 
-            getRequest = response.data.features[0].properties.trip_id
-            this.message = "アップロードしました"
-            this.error = ""
-        }).catch(error => {
-            console.log("error")
-            console.log(error)
+      axios
+        .post("http://0.0.0.0:1323/api/trip/save", {
+          user_id: "c8fed8a1-7e15-4516-838a-14a6bc1f703f",
+          imgs: this.images,
         })
-        if(resStatus === 200){
-        console.log(this.$store.state.tripid);
-        console.log(getRequest);
-        this.$store.commit('pushid', getRequest);
-        console.log(this.$store.state.tripid);
-        this.$router.push("/about");
-        }
-
+        .then((response) => {
+          resStatus = response.status;
+          getRequest = response.data.trip_id;
+          console.log(getRequest);
+          this.message = "アップロードしました";
+          this.error = "";
+          if (resStatus == 200) {
+            console.log(this.$store.state.tripid);
+            console.log(getRequest);
+            this.$store.commit("pushid", getRequest);
+            console.log(this.$store.state.tripid);
+            this.$router.push("/map");
+          }
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+        });
     },
-
-  }
-
-}
+  },
+};
 </script>
 <style scoped>
 input {
@@ -205,14 +204,13 @@ img:hover {
 #error {
   color: red;
 }
-label{
+label {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .drop_area {
   color: #42b983;
-;
   font-weight: bold;
   font-size: 1.2em;
   display: flex;
@@ -222,48 +220,48 @@ label{
   height: 300px;
   border: 5px solid #42b983;
   border-radius: 15px;
-    }
+}
 .enter {
-    border: 10px dotted #42b983;
+  border: 10px dotted #42b983;
 }
 ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 .flex {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .flex-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0.5em;
-    font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5em;
+  font-size: 10px;
 }
 
 .delete-mark {
-    position: absolute;
-    top: -14px;
-    right: -10px;
-    font-size: 20px;
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  font-size: 20px;
 }
-span{
-    max-width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+span {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .button {
-    padding: 0.5em 1.5em;
-    background-color: #0070a7;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 5px;
-    border-color: #0070a7;
+  padding: 0.5em 1.5em;
+  background-color: #0070a7;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  border-color: #0070a7;
 }
 </style>
