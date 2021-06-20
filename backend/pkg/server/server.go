@@ -11,6 +11,7 @@ import (
 	ip "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/img"
 	lp "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/local"
 	"github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/s3"
+	txp "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/transaction"
 	tp "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/trip"
 	up "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/user"
 	sh "github.com/littletake/supporterz_hackathon_2021/pkg/server/interface/handler/setting"
@@ -38,6 +39,7 @@ func Serve(addr string) {
 	tripPersistence := tp.NewPersistence(db.Conn)
 	localPersistence := lp.NewPersistence()
 	s3Persistence := s3.NewPersistence()
+	txpPersistence := txp.NewPersistence(db.Conn)
 
 	// usecase
 	userUsecase := uu.NewUserUsecase(
@@ -52,6 +54,7 @@ func Serve(addr string) {
 			imgPersistence,
 			tripPersistence,
 			uuid.NewRandom,
+			txpPersistence,
 		)
 		log.Println("local")
 	} else {
@@ -60,6 +63,7 @@ func Serve(addr string) {
 			imgPersistence,
 			tripPersistence,
 			uuid.NewRandom,
+			txpPersistence,
 		)
 		log.Println("aws")
 	}

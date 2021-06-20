@@ -26,8 +26,8 @@ func (tp tripPersistence) SelectTripsByUserID(user_id string) ([]*model.Trip, er
 	return convertToTrips(rows)
 }
 
-func (tp tripPersistence) InsertTrip(record *model.Trip) error {
-	stmt, err := tp.db.Prepare("INSERT INTO trip_table (trip_id, user_id) VALUES (?, ?)")
+func (tp tripPersistence) InsertTrip(record *model.Trip, tx *sql.Tx) error {
+	stmt, err := tx.Prepare("INSERT INTO trip_table (trip_id, user_id) VALUES (?, ?)")
 	if err != nil {
 		return err
 	}
