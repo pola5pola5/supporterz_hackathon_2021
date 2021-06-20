@@ -16,7 +16,7 @@ tags:
   - name: user
     description: ユーザ関連
 paths:
-  /api/setting/get:
+  /setting/get:
     get:
       tags:
         - setting
@@ -42,7 +42,7 @@ paths:
           headers: {}
       parameters: []
     parameters: []
-  /api/trip/save:
+  /trip/save:
     post:
       tags:
         - trip
@@ -76,7 +76,7 @@ paths:
                     type: string
       x-codegen-request-body-name: body
     parameters: []
-  /api/trip/get:
+  /trip/get:
     get:
       summary: 旅情報全体を取得するAPI
       operationId: get-trip-get
@@ -135,7 +135,7 @@ paths:
       tags:
         - trip
     parameters: []
-  '/api/static/{img_url}':
+  '/static/{img_url}':
     get:
       summary: 画像のファイルサーバAPI
       description: |-
@@ -165,7 +165,7 @@ paths:
         name: img_url
         in: path
         required: true
-  /api/user/get:
+  /user/get:
     get:
       summary: ユーザ情報を取得するAPI
       tags:
@@ -197,7 +197,7 @@ paths:
           required: true
       description: ユーザ情報を取得するAPI
     parameters: []
-  /api/user/create:
+  /user/create:
     post:
       summary: ユーザを登録するAPI
       tags:
@@ -240,7 +240,7 @@ paths:
         description: API to create user
       description: ユーザを登録するAPI
     parameters: []
-  /api/user/get_trip:
+  /user/get_trip:
     get:
       summary: 旅の一覧を取得するAPI
       tags:

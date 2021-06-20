@@ -9,7 +9,7 @@
       <h3>早速使ってみる</h3>
     </router-link>
 
-    <h4>チェック用リンク</h4>
+    <!-- <h4>チェック用リンク</h4>
     <ul>
       <li>
         <a href="/getpost" target="_blank" rel="noopener">GetPost</a>
@@ -21,7 +21,7 @@
         <a href="/view" target="_blank" rel="noopener">view</a
         >
       </li>
-    </ul>
+    </ul> -->
     
   </div>
 </template>

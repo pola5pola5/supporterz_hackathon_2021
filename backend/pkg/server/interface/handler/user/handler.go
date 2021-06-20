@@ -39,6 +39,7 @@ func (uh *userHandler) HandleUserGet() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// クエリパラメータからuserID取得
 		userID := c.QueryParam("user_id")
+		fmt.Print("tstß")
 		if userID == "" {
 			errMsg := fmt.Errorf("userID is empty")
 			c.JSON(
