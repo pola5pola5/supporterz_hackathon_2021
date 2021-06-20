@@ -30,11 +30,11 @@ func (ip imgPersistence) SelectImgsByTripID(tripID string) ([]*model.Img, error)
 // TODO: バルクインサートに変更する
 func (ip imgPersistence) InsertImg(img *model.Img) error {
 	stmt, err := ip.db.Prepare(
-		"INSERT INTO img_table (img_id, trip_id, img_url, latitude, longitude, date_time) VALUES (?, ?, ?, ?, ?, ?)")
+		"INSERT INTO img_table (img_id, trip_id, img_url, longitude, latitude, date_time) VALUES (?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
-	_, err = stmt.Exec(img.ImgID, img.TripID, img.ImgUrl, img.Latitude, img.Longitude, img.DataTime)
+	_, err = stmt.Exec(img.ImgID, img.TripID, img.ImgUrl, img.Longitude, img.Latitude, img.DataTime)
 	return err
 }
 
@@ -47,8 +47,8 @@ func convertToImgs(rows *sql.Rows) ([]*model.Img, error) {
 			&img.ImgID,
 			&img.TripID,
 			&img.ImgUrl,
-			&img.Latitude,
 			&img.Longitude,
+			&img.Latitude,
 			&img.DataTime,
 		)
 		if err != nil {

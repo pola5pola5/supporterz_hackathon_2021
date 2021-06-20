@@ -151,8 +151,8 @@ func (th *tripHandler) HandleTripGet() echo.HandlerFunc {
 			geometry := geometry{
 				GeoType: "Point",
 				Coordinates: [...]float64{
-					imgs[i].Latitude,
 					imgs[i].Longitude,
+					imgs[i].Latitude,
 				},
 			}
 			features := features{

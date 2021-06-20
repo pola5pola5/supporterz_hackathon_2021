@@ -105,8 +105,8 @@ func (tu *tripUsecase) RegisterTrip(userID string, imgs [][]byte) (string, error
 			ImgID:     imgID.String(),
 			TripID:    tripID.String(),
 			ImgUrl:    imgUrl,
-			Latitude:  lat,
 			Longitude: lng,
+			Latitude:  lat,
 			DataTime:  time,
 		}
 		if err := tu.imgRepo.InsertImg(img); err != nil {

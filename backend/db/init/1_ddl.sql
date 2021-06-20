@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS `trip_db`.`img_table` (
     `img_id` VARCHAR(128) NOT NULL COMMENT "画像ID",
     `trip_id` VARCHAR(128) NOT NULL COMMENT "旅ID",
     `img_url` VARCHAR(256) NOT NULL COMMENT "画像URL",
-    `latitude` DOUBLE NOT NULL COMMENT "緯度",
     `longitude` DOUBLE NOT NULL COMMENT "経度",
+    `latitude` DOUBLE NOT NULL COMMENT "緯度",
     `date_time` DATETIME NOT NULL COMMENT "撮影日時",
     PRIMARY KEY(`img_id`)
 );
