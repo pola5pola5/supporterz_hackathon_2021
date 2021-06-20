@@ -7,5 +7,5 @@ INSERT INTO `user_table` (`user_id`,`user_name`,`password`,`auth_token`) VALUES 
 INSERT INTO `trip_table` (`trip_id`,`user_id`) VALUES ("ade01599-4acb-40a8-870c-4b9eea358d22","090ae791-9f53-4a84-ad61-0e84aee08634");
 INSERT INTO `trip_table` (`trip_id`,`user_id`) VALUES ("c3780053-40be-4bce-9597-887559d9beee","090ae791-9f53-4a84-ad61-0e84aee08634");
 
-INSERT INTO `img_table` (`img_id`,`trip_id`,`img_url`,`latitude`,`longitude`,`date_time`) VALUES ("922a7cfe-9c95-478c-a3aa-08df6e7bca3c","ade01599-4acb-40a8-870c-4b9eea358d22","url1",139.88769444444443,35.774116666666664,"2021-05-29 18:59:19");
-INSERT INTO `img_table` (`img_id`,`trip_id`,`img_url`,`latitude`,`longitude`,`date_time`) VALUES ("bd81f5a7-2aee-41e9-ad93-c1f3bf7c754e","c3780053-40be-4bce-9597-887559d9beee","url2",139.88769444444443,35.774116666666664,"2021-05-29 18:59:19");
+INSERT INTO `img_table` (`img_id`,`trip_id`,`img_url`,`longitude`,`latitude`,`date_time`) VALUES ("922a7cfe-9c95-478c-a3aa-08df6e7bca3c","ade01599-4acb-40a8-870c-4b9eea358d22","https://photo-tabi.s3.ap-northeast-1.amazonaws.com/281c3066-3c96-44c3-a4f5-c77a69366f61",139.88769444444443,35.774116666666664,"2021-05-29 18:59:19");
+INSERT INTO `img_table` (`img_id`,`trip_id`,`img_url`,`longitude`,`latitude`,`date_time`) VALUES ("bd81f5a7-2aee-41e9-ad93-c1f3bf7c754e","c3780053-40be-4bce-9597-887559d9beee","https://photo-tabi.s3.ap-northeast-1.amazonaws.com/281c3066-3c96-44c3-a4f5-c77a69366f61",139.88769444444443,35.774116666666664,"2021-05-29 18:59:19");
