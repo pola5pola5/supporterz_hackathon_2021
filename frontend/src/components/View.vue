@@ -166,7 +166,7 @@ export default {
       console.log(params.values());
 
       axios
-        .post("http://0.0.0.0:1323/api/trip/save", {
+        .post("/api/trip/save", {
           user_id: "c8fed8a1-7e15-4516-838a-14a6bc1f703f",
           imgs: this.images,
         })
