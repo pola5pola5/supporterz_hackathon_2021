@@ -16,13 +16,8 @@
       >
         ファイルアップロード
         <!-- <div> -->
-        <input
-          type="file"
-          id="avatar_name"
-          accept="image/jpeg, image/png"
-          @change="onImageChange"
-          multiple
-        />
+
+        <input type="file" accept="image/*" @change="onImageChange" multiple />
       </div>
     </label>
 
@@ -112,7 +107,24 @@ export default {
           this.min_imgs.push(resizedBase64);
         }.bind(this);
       });
-
+      return this.files, this.images;
+    },
+    onImageChange(e) {
+      console.log("files");
+      const putImg = e.target.files || e.dataTransfer.files;
+      this.files.push(...putImg);
+      this.files.forEach((file) => {
+        console.log(file);
+        var im = null;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+          im = reader.result;
+          var base64EncodedFile = im.split(",")[1];
+          console.log(base64EncodedFile); // base64にしたデータ
+          this.images.push(base64EncodedFile);
+        }.bind(this);
+      });
       return this.files, this.images;
     },
     deleteFile(index) {
