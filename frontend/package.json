@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "VUE_CLI_SERVICE_CONFIG_PATH=$PWD/src/config/vue.config.js vue-cli-service serve",
+    "build": "VUE_CLI_SERVICE_CONFIG_PATH=$PWD/src/config/vue.config.js vue-cli-service build",
+    "serve_local": "VUE_CLI_SERVICE_CONFIG_PATH=$PWD/src/config/vue.local.config.js vue-cli-service serve",
+    "build_local": "VUE_CLI_SERVICE_CONFIG_PATH=$PWD/src/config/vue.local.config.js vue-cli-service build",
+    "serve_docker": "VUE_CLI_SERVICE_CONFIG_PATH=$PWD/src/config/vue.docker.config.js vue-cli-service serve",
+    "build_docker": "VUE_CLI_SERVICE_CONFIG_PATH=$PWD/src/config/vue.docker.config.js vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
