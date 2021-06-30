@@ -77,6 +77,7 @@ func Serve(addr string) {
 	// user
 	api.GET("/user/get", userHandler.HandleUserGet())
 	api.POST("/user/create", userHandler.HandleUserCreate())
+	api.POST("/user/login", userHandler.HandleUserLogin())
 	api.GET("/user/get_trip", userHandler.HandleUserTripGet())
 	// img
 	api.POST("/trip/save", tripHandler.HandleTripSave())
