@@ -23,6 +23,11 @@ func (up userPersistence) SelectUserByUserID(id string) (*model.User, error) {
 	return convertToUser(row)
 }
 
+func (up userPersistence) SelectUserByAuthToken(token string) (*model.User, error) {
+	row := up.db.QueryRow("SELECT * FROM user_table WHERE auth_token = ?", token)
+	return convertToUser(row)
+}
+
 func (up userPersistence) SelectUserByUserNamePassword(name string, password string) (*model.User, error) {
 	row := up.db.QueryRow("SELECT * FROM user_table WHERE user_name = ? AND password = ?", name, password)
 	return convertToUser(row)

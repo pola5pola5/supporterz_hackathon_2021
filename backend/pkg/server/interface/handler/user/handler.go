@@ -41,10 +41,9 @@ func (uh *userHandler) HandleUserGet() echo.HandlerFunc {
 		// クエリパラメータからuserID取得
 		userID := c.QueryParam("user_id")
 		if userID == "" {
-			errMsg := fmt.Errorf("userID is empty")
 			return echo.NewHTTPError(
 				http.StatusBadRequest,
-				errMsg,
+				fmt.Errorf("userID is empty"),
 			)
 		}
 

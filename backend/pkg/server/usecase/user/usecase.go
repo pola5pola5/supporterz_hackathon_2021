@@ -12,6 +12,7 @@ import (
 
 type UserUsecase interface {
 	GetUserByUserID(userID string) (*model.User, error)
+	GetUserByAuthToken(AuthToken string) (*model.User, error)
 	GetUserByUserNamePassword(userName string, password string) (*model.User, error)
 	RegisterUser(userName string, password string) (string, string, error)
 	GetTripsByUserID(userID string) ([]*tm.Trip, error)
@@ -39,6 +40,18 @@ func (uu *userUsecase) GetUserByUserID(userID string) (*model.User, error) {
 	}
 	if user == nil {
 		err := fmt.Errorf("user not found. userID=%s", userID)
+		return nil, err
+	}
+	return user, nil
+}
+
+func (uu *userUsecase) GetUserByAuthToken(authToken string) (*model.User, error) {
+	user, err := uu.userRepo.SelectUserByAuthToken(authToken)
+	if err != nil {
+		return nil, err
+	}
+	if user == nil {
+		err := fmt.Errorf("user not found. authToken=%s", authToken)
 		return nil, err
 	}
 	return user, nil
