@@ -8,85 +8,175 @@ info:
     email: ritorut18@gmail.com
 servers:
   - url: 'http://localhost:1323'
-  - url: 'http://13.112.197.183:1323'
-  - url: 'http://54.64.77.173:1323'
 tags:
   - name: setting
     description: 設定事項の出力
   - name: trip
-    description: GPS情報抽出
+    description: GPS関連
   - name: user
     description: ユーザ関連
 paths:
-  /api/setting/get:
-    get:
+  /user/create:
+    post:
+      summary: ユーザを登録するAPI
       tags:
-        - setting
-      summary: 設定取得API
-      description: |
-        設定事項の出力
-        TODO: 設定をDBに保存し動的に変えられるようにする
-      operationId: get-settings
+        - user
       responses:
         '200':
-          description: A successful response.
+          description: OK
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  hello:
+                  user_id:
+                    type: string
+                  token:
                     type: string
               examples:
-                example-1:
+                example-1sq:
                   value:
-                    hello: hello
-          headers: {}
-      parameters: []
-    parameters: []
-  /api/trip/save:
-    post:
-      tags:
-        - trip
-      summary: 旅情報保存API
-      description: |
-        アップロードされた写真を保存するAPI
-      operationId: trip-save
+                    user_id: string
+                    token: string
+      operationId: post-user-create
       requestBody:
-        description: Request Body
         content:
           application/json:
             schema:
               type: object
               properties:
-                user_id:
+                user_name:
                   type: string
-                imgs:
-                  type: array
-                  items:
-                    type: string
+                password:
+                  type: string
             examples:
               example-1:
                 value:
-                  user_id: c8fed8a1-7e15-4516-838a-14a6bc1f703f
-                  imgs:
-                    - string
-        required: true
+                  user_name: user3
+                  password: password3
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: API to create user
+      description: ユーザを登録するAPI
+    parameters: []
+  /user/login:
+    post:
+      summary: ログイン機能API
+      tags:
+        - user
       responses:
         '200':
-          description: A successful response.
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  token:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    user_id: c8fed8a1-7e15-4516-838a-14a6bc1f703f
+                    token: 4f272392-a679-4a86-ba92-3ffd96c83ae8
+      operationId: post-api-user-login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                password:
+                  type: string
+            examples:
+              example-1:
+                value:
+                  user_name: ccc
+                  password: '333'
+      parameters: []
+      description: ログイン機能API
+    parameters: []
+  /api/user/get:
+    get:
+      summary: ユーザ情報を取得するAPI
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  user_name:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    user_id: c8fed8a1-7e15-4516-838a-14a6bc1f703f
+                    user_name: aaa
+      operationId: get-user
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: user_id
+          description: ユーザのID
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: X-Token
+          required: true
+      description: ユーザ情報を取得するAPI
+    parameters: []
+  /api/user/get_trip:
+    get:
+      summary: 旅の一覧を取得するAPI
+      tags:
+        - trip
+        - user
+      responses:
+        '200':
+          description: OK
+          headers: {}
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   trip_id:
-                    type: string
+                    type: array
+                    items:
+                      type: string
               examples:
                 example-1:
                   value:
-                    trip_id: string
-      x-codegen-request-body-name: body
+                    trip_id:
+                      - string
+      operationId: get-user-get_trip
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: user_id
+          description: ユーザID
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: X-Token
+          required: true
+      description: 各ユーザごとに保存してある旅を全件取得するAPI
     parameters: []
   /api/trip/get:
     get:
@@ -147,8 +237,94 @@ paths:
           name: trip_id
           description: 旅のID
           required: true
+        - schema:
+            type: string
+          in: header
+          name: X-Token
+          required: true
       tags:
         - trip
+    parameters: []
+  /api/trip/save:
+    post:
+      tags:
+        - trip
+      summary: 旅情報保存API
+      description: |
+        アップロードされた写真を保存するAPI
+      operationId: trip-save
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                imgs:
+                  type: array
+                  items:
+                    type: string
+            examples:
+              example-1:
+                value:
+                  user_id: c8fed8a1-7e15-4516-838a-14a6bc1f703f
+                  imgs:
+                    - string
+        required: true
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trip_id:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    trip_id: string
+      x-codegen-request-body-name: body
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Token
+          required: true
+    parameters: []
+  /api/setting/get:
+    get:
+      tags:
+        - setting
+      summary: 設定取得API
+      description: |
+        設定事項の出力
+        TODO: 設定をDBに保存し動的に変えられるようにする
+      operationId: get-settings
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hello:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    hello: hello
+          headers: {}
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Token
+          required: true
     parameters: []
   '/api/static/{img_url}':
     get:
@@ -163,6 +339,11 @@ paths:
             type: string
           description: S3に保存した画像のURL
           required: true
+        - schema:
+            type: string
+          in: header
+          name: X-Token
+          required: true
       operationId: imgs-get
       responses:
         '200':
@@ -171,7 +352,6 @@ paths:
             application/json:
               schema:
                 type: string
-      x-codegen-request-body-name: body
       tags:
         - setting
     parameters:
@@ -180,117 +360,6 @@ paths:
         name: img_url
         in: path
         required: true
-  /api/user/get:
-    get:
-      summary: ユーザ情報を取得するAPI
-      tags:
-        - user
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  user_id:
-                    type: string
-                  user_name:
-                    type: string
-              examples:
-                example-1:
-                  value:
-                    user_id: c8fed8a1-7e15-4516-838a-14a6bc1f703f
-                    user_name: aaa
-      operationId: get-user
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: user_id
-          description: ユーザのID
-          required: true
-      description: ユーザ情報を取得するAPI
-    parameters: []
-  /api/user/create:
-    post:
-      summary: ユーザを登録するAPI
-      tags:
-        - user
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                  user_id:
-                    type: string
-              examples:
-                example-1:
-                  value:
-                    token: string
-                    user_id: string
-      operationId: post-user-create
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                user_name:
-                  type: string
-                password:
-                  type: string
-            examples:
-              example-1:
-                value:
-                  user_name: ccc
-                  password: '333'
-          application/xml:
-            schema:
-              type: object
-              properties: {}
-        description: API to create user
-      description: ユーザを登録するAPI
-    parameters: []
-  /api/user/get_trip:
-    get:
-      summary: 旅の一覧を取得するAPI
-      tags:
-        - trip
-        - user
-      responses:
-        '200':
-          description: OK
-          headers: {}
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  trip_id:
-                    type: array
-                    items:
-                      type: string
-              examples:
-                example-1:
-                  value:
-                    trip_id:
-                      - string
-      operationId: get-user-get_trip
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: user_id
-          description: ユーザID
-          required: true
-      description: 各ユーザごとに保存してある旅を全件取得するAPI
-    parameters: []
 components:
   schemas: {}
   securitySchemes: {}

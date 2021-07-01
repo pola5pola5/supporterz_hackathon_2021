@@ -13,6 +13,7 @@ import (
 type UserHandler interface {
 	HandleUserGet() echo.HandlerFunc
 	HandleUserCreate() echo.HandlerFunc
+	HandleUserLogin() echo.HandlerFunc
 	HandleUserTripGet() echo.HandlerFunc
 }
 
@@ -40,22 +41,19 @@ func (uh *userHandler) HandleUserGet() echo.HandlerFunc {
 		// クエリパラメータからuserID取得
 		userID := c.QueryParam("user_id")
 		if userID == "" {
-			errMsg := fmt.Errorf("userID is empty")
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusBadRequest,
-				errMsg,
+				fmt.Errorf("userID is empty"),
 			)
-			return errMsg
 		}
 
 		// ユーザ取得
 		user, err := uh.userUsecase.GetUserByUserID(userID)
 		if err != nil {
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusBadRequest,
 				err,
 			)
-			return err
 		}
 
 		// レスポンス
@@ -78,22 +76,37 @@ type userCreateRequest struct {
 
 // userCreateResponse ユーザ作成response
 type userCreateResponse struct {
-	Token  string `json:"token"`
 	UserID string `json:"user_id"`
+	Token  string `json:"token"`
 }
 
-// TODO: tokenの扱い方検討
 // HandleUserCreate　ユーザ作成
 func (uh *userHandler) HandleUserCreate() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// リクエストBodyから更新情報を取得
 		var requestBody userCreateRequest
 		if err := c.Bind(&requestBody); err != nil {
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusBadRequest,
 				err,
 			)
-			return err
+		}
+
+		// ユーザが重複しないように判定処理
+		// TODO: DB側のエラー時に対応できない
+		user, _ := uh.userUsecase.GetUserByUserNamePassword(
+			requestBody.UserName,
+			requestBody.Password,
+		)
+		if user != nil { // 同名かつ同パスワードのユーザが存在
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				fmt.Errorf(
+					"user has already been registered. userName=%s, password=%s",
+					requestBody.UserName,
+					requestBody.Password,
+				),
+			)
 		}
 
 		authToken, userID, err := uh.userUsecase.RegisterUser(
@@ -101,15 +114,68 @@ func (uh *userHandler) HandleUserCreate() echo.HandlerFunc {
 			requestBody.Password,
 		)
 		if err != nil {
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusInternalServerError,
 				err,
 			)
-			return err
 		}
 		res := userCreateResponse{
 			Token:  authToken,
 			UserID: userID,
+		}
+		return c.JSON(
+			http.StatusOK,
+			res,
+		)
+	}
+}
+
+// ログイン機能request
+type userLoginRequest struct {
+	UserName string `json:"user_name"`
+	Password string `json:"password"`
+}
+
+// ログイン機能response
+type userLoginResponse struct {
+	UserID string `json:"user_id"`
+	Token  string `json:"token"`
+}
+
+// ログイン機能
+func (uh *userHandler) HandleUserLogin() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// リクエストBodyからログイン情報を取得
+		var requestBody userLoginRequest
+		if err := c.Bind(&requestBody); err != nil {
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				err,
+			)
+		}
+
+		// ユーザの確認
+		user, err := uh.userUsecase.GetUserByUserNamePassword(
+			requestBody.UserName,
+			requestBody.Password,
+		)
+		// ユーザがいない時
+		if user == nil && err != nil {
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				err,
+			)
+		} else if err != nil { // サーバ上のエラー
+			return echo.NewHTTPError(
+				http.StatusInternalServerError,
+				err,
+			)
+		}
+
+		// レスポンス
+		res := userLoginResponse{
+			UserID: user.UserID,
+			Token:  user.AuthToken,
 		}
 		return c.JSON(
 			http.StatusOK,
@@ -127,22 +193,19 @@ func (uh *userHandler) HandleUserTripGet() echo.HandlerFunc {
 		// クエリパラメータからuserID取得
 		userID := c.QueryParam("user_id")
 		if userID == "" {
-			errMsg := fmt.Errorf("userID is empty")
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusBadRequest,
-				errMsg,
+				fmt.Errorf("userID is empty"),
 			)
-			return errMsg
 		}
 
 		// 旅情報の一覧取得
 		trips, err := uh.userUsecase.GetTripsByUserID(userID)
 		if err != nil {
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusInternalServerError,
 				err,
 			)
-			return err
 		}
 		tripIDSlice := make([]string, len(trips))
 		for i := 0; i < len(trips); i++ {

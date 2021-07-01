@@ -16,18 +16,13 @@ import (
 	sh "github.com/littletake/supporterz_hackathon_2021/pkg/server/interface/handler/setting"
 	th "github.com/littletake/supporterz_hackathon_2021/pkg/server/interface/handler/trip"
 	uh "github.com/littletake/supporterz_hackathon_2021/pkg/server/interface/handler/user"
+	m "github.com/littletake/supporterz_hackathon_2021/pkg/server/interface/middleware"
 	tu "github.com/littletake/supporterz_hackathon_2021/pkg/server/usecase/trip"
 	uu "github.com/littletake/supporterz_hackathon_2021/pkg/server/usecase/user"
 )
 
 func Serve(addr string) {
 	flag := os.Getenv("LOCAL")
-	// Echo instance
-	e := echo.New()
-	// Middleware
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
 
 	// ---
 	// DI
@@ -68,15 +63,26 @@ func Serve(addr string) {
 	settingHandler := sh.NewSettingHandler()
 	userHandler := uh.NewUserHandler(userUsecase, tripUsecase)
 	tripHandler := th.NewTripHandler(tripUsecase, userUsecase)
+	mw := m.NewMyMiddleware(userUsecase)
 	// ---
 	// URL マッピング
 	// ---
+	// Echo instance
+	e := echo.New()
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	e.Use(middleware.CORS())
+
+	e.POST("/user/create", userHandler.HandleUserCreate())
+	e.POST("/user/login", userHandler.HandleUserLogin())
+
 	api := e.Group("/api")
+	api.Use(mw.Authenticate)
 	// setting
 	api.GET("/setting/get", settingHandler.HandleSettingGet())
 	// user
 	api.GET("/user/get", userHandler.HandleUserGet())
-	api.POST("/user/create", userHandler.HandleUserCreate())
 	api.GET("/user/get_trip", userHandler.HandleUserTripGet())
 	// img
 	api.POST("/trip/save", tripHandler.HandleTripSave())

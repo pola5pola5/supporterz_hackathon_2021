@@ -36,32 +36,28 @@ type tripSaveResponse struct {
 	TripID string `json:"trip_id"`
 }
 
-// TODO: 2回ログが出力される問題
+// 旅記録を保存するAPI
 func (th *tripHandler) HandleTripSave() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var requestBody tripSaveRequest
 		if err := c.Bind(&requestBody); err != nil {
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusBadRequest,
 				err,
 			)
-			return err
 		}
 		if requestBody.UserID == "" {
-			errMsg := fmt.Errorf("userID is empty")
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusBadRequest,
-				errMsg,
+				fmt.Errorf("userID is empty"),
 			)
-			return errMsg
 		}
 		_, err := th.userUsecase.GetUserByUserID(requestBody.UserID)
 		if err != nil {
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusBadRequest,
 				err,
 			)
-			return err
 		}
 
 		// decode
@@ -70,22 +66,20 @@ func (th *tripHandler) HandleTripSave() echo.HandlerFunc {
 		for i := 0; i < len(requestBody.Imgs); i++ {
 			imgEncoded, err := base64.StdEncoding.DecodeString(requestBody.Imgs[i])
 			if err != nil {
-				c.JSON(
+				return echo.NewHTTPError(
 					http.StatusInternalServerError,
 					err,
 				)
-				return err
 			}
 			imgDecodedSlice[i] = imgEncoded
 		}
 		// usecase
 		tripID, err := th.tripUsecase.RegisterTrip(requestBody.UserID, imgDecodedSlice)
 		if err != nil {
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusInternalServerError,
 				err,
 			)
-			return err
 		}
 		res := tripSaveResponse{
 			TripID: tripID,
@@ -123,22 +117,19 @@ func (th *tripHandler) HandleTripGet() echo.HandlerFunc {
 		// クエリパラメータからtripID取得
 		tripID := c.QueryParam("trip_id")
 		if tripID == "" {
-			errMsg := fmt.Errorf("tripID is empty")
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusBadRequest,
-				errMsg,
+				fmt.Errorf("tripID is empty"),
 			)
-			return errMsg
 		}
 
 		// Imgオブジェクト取得
 		imgs, err := th.tripUsecase.GetImgsByTripID(tripID)
 		if err != nil {
-			c.JSON(
+			return echo.NewHTTPError(
 				http.StatusInternalServerError,
 				err,
 			)
-			return err
 		}
 
 		// TODO: 並列処理にする
