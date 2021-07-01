@@ -227,8 +227,8 @@ paths:
                         geometry:
                           type: Point
                           coordinates:
-                            - -77.038659
-                            - 38.931567
+                            - 139.88
+                            - 35.77
       description: 旅情報全体を取得するAPI
       parameters:
         - schema:

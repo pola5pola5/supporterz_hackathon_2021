@@ -27,9 +27,8 @@ func (ip imgPersistence) SelectImgsByTripID(tripID string) ([]*model.Img, error)
 	return convertToImgs(rows)
 }
 
-// TODO: バルクインサートに変更する
-func (ip imgPersistence) InsertImg(img *model.Img) error {
-	stmt, err := ip.db.Prepare(
+func (ip imgPersistence) InsertImg(img *model.Img, tx *sql.Tx) error {
+	stmt, err := tx.Prepare(
 		"INSERT INTO img_table (img_id, trip_id, img_url, longitude, latitude, date_time) VALUES (?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err

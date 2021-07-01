@@ -62,6 +62,12 @@ func (th *tripHandler) HandleTripSave() echo.HandlerFunc {
 
 		// decode
 		// TODO: 並列処理を実装する
+		if len(requestBody.Imgs) == 0 {
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				fmt.Errorf("imgs are empty"),
+			)
+		}
 		imgDecodedSlice := make([][]byte, len(requestBody.Imgs))
 		for i := 0; i < len(requestBody.Imgs); i++ {
 			imgEncoded, err := base64.StdEncoding.DecodeString(requestBody.Imgs[i])
