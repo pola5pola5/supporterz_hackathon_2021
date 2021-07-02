@@ -19,6 +19,9 @@ func NewPersistence() file.FileRepo {
 // 画像をサーバに保存する処理
 func (lp localPersistence) SaveFile(filename string, file []byte) (string, error) {
 	// 保存先を作成
+	// if _, err := os.Stat(path); os.IsNotExist(err) {
+	// 	os.Mkdir(path, 0777)
+	// }
 	dst, err := os.Create(path + filename)
 	if err != nil {
 		return "", err
@@ -30,5 +33,12 @@ func (lp localPersistence) SaveFile(filename string, file []byte) (string, error
 	if _, err = dst.Write(file); err != nil {
 		return "", err
 	}
-	return filename, nil
+	return path + filename, nil
+}
+
+func (lp localPersistence) DeleteFile(filename string) error {
+	if err := os.Remove(path + filename); err != nil {
+		return err
+	}
+	return nil
 }
