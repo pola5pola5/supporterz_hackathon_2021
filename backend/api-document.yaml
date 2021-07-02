@@ -287,7 +287,6 @@ paths:
                 example-1:
                   value:
                     trip_id: string
-      x-codegen-request-body-name: body
       parameters:
         - schema:
             type: string
