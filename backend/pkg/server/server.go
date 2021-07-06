@@ -78,21 +78,22 @@ func Serve(addr string) {
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 
-	e.POST("/user/create", userHandler.HandleUserCreate())
-	e.POST("/user/login", userHandler.HandleUserLogin())
-
 	api := e.Group("/api")
-	api.Use(mw.Authenticate)
+	api.POST("/user/create", userHandler.HandleUserCreate())
+	api.POST("/user/login", userHandler.HandleUserLogin())
+
+	apiAuth := api.Group("/auth")
+	apiAuth.Use(mw.Authenticate)
 	// setting
-	api.GET("/setting/get", settingHandler.HandleSettingGet())
+	apiAuth.GET("/setting/get", settingHandler.HandleSettingGet())
 	// user
-	api.GET("/user/get", userHandler.HandleUserGet())
-	api.GET("/user/get_trip", userHandler.HandleUserTripGet())
+	apiAuth.GET("/user/get", userHandler.HandleUserGet())
+	apiAuth.GET("/user/get_trip", userHandler.HandleUserTripGet())
 	// img
-	api.POST("/trip/save", tripHandler.HandleTripSave())
-	api.GET("/trip/get", tripHandler.HandleTripGet())
+	apiAuth.POST("/trip/save", tripHandler.HandleTripSave())
+	apiAuth.GET("/trip/get", tripHandler.HandleTripGet())
 	// html
-	api.Static("/html", "static")
+	apiAuth.Static("/html", "static")
 
 	// Start server
 	e.Logger.Fatal(e.Start(addr))

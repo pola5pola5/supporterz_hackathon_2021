@@ -27,14 +27,20 @@ func NewMyMiddleware(uu uu.UserUsecase) MyMiddleware {
 func (m *myMiddleware) Authenticate(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// tokenの確認
-		token := c.Request().Header["X-Token"][0]
-		if token == "" {
+		token, ok := c.Request().Header["X-Token"]
+		if !ok {
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				fmt.Errorf("X-Token not found"),
+			)
+		}
+		if token[0] == "" {
 			return echo.NewHTTPError(
 				http.StatusBadRequest,
 				fmt.Errorf("X-Token is empty"),
 			)
 		}
-		_, err := m.userUseCase.GetUserByAuthToken(token)
+		_, err := m.userUseCase.GetUserByAuthToken(token[0])
 		if err != nil {
 			return echo.NewHTTPError(
 				http.StatusInternalServerError,
