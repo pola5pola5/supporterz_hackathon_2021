@@ -12,11 +12,11 @@ tags:
   - name: setting
     description: 設定事項の出力
   - name: trip
-    description: GPS関連
+    description: GPS情報抽出
   - name: user
     description: ユーザ関連
 paths:
-  /user/create:
+  /api/user/create:
     post:
       summary: ユーザを登録するAPI
       tags:
@@ -61,7 +61,7 @@ paths:
         description: API to create user
       description: ユーザを登録するAPI
     parameters: []
-  /user/login:
+  /api/user/login:
     post:
       summary: ログイン機能API
       tags:
@@ -102,7 +102,7 @@ paths:
       parameters: []
       description: ログイン機能API
     parameters: []
-  /api/user/get:
+  /api/auth/user/get:
     get:
       summary: ユーザ情報を取得するAPI
       tags:
@@ -139,7 +139,7 @@ paths:
           required: true
       description: ユーザ情報を取得するAPI
     parameters: []
-  /api/user/get_trip:
+  /api/auth/user/get_trip:
     get:
       summary: 旅の一覧を取得するAPI
       tags:
@@ -178,7 +178,7 @@ paths:
           required: true
       description: 各ユーザごとに保存してある旅を全件取得するAPI
     parameters: []
-  /api/trip/get:
+  /api/auth/trip/get:
     get:
       summary: 旅情報全体を取得するAPI
       operationId: get-trip-get
@@ -245,7 +245,7 @@ paths:
       tags:
         - trip
     parameters: []
-  /api/trip/save:
+  /api/auth/trip/save:
     post:
       tags:
         - trip
@@ -294,7 +294,7 @@ paths:
           name: X-Token
           required: true
     parameters: []
-  /api/setting/get:
+  /api/auth/setting/get:
     get:
       tags:
         - setting
@@ -325,7 +325,7 @@ paths:
           name: X-Token
           required: true
     parameters: []
-  '/api/static/{img_url}':
+  '/api/auth/static/{img_url}':
     get:
       summary: 画像のファイルサーバAPI
       description: |-
@@ -359,6 +359,3 @@ paths:
         name: img_url
         in: path
         required: true
-components:
-  schemas: {}
-  securitySchemes: {}
