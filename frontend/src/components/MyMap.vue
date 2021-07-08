@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<!--<script>
 import mapboxgl from "mapbox-gl";
 import axios from "axios";
 
@@ -112,7 +112,105 @@ export default {
     },
   },
 };
+</script>-->
+
+<script>
+import mapboxgl from "mapbox-gl";
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      geojsonData: [],
+      mapData: [],
+    };
+  },
+  mounted: function () {
+    this.getTripId();
+  },
+  computed: function () {
+    this.mapCreate(this.mapData);
+    this.getMapApi();
+  },
+  methods: {
+    //get json
+    getTripId: async function () {
+      const id = {trip_id: this.$store.state.tripid};
+      const header = {"X-Token": "4f272392-a679-4a86-ba92-3ffd96c83ae8"}
+
+      await axios
+        .get("/api/auth/trip/get",{params: id, headers: header})
+        .then((res) => {
+          (this.geojsonData = res.data)
+            this.getMapApi();
+        });
+    },
+
+    getMapApi: async function(){
+      var jsonCoordinates = [];
+      this.geojsonData.features.forEach(function (jsonData, idx, array){
+        jsonCoordinates = jsonCoordinates + jsonData.geometry.coordinates[0] + "," + jsonData.geometry.coordinates[1];
+        if(idx < array.length - 1){
+          jsonCoordinates = jsonCoordinates + ";"
+        }
+      });
+      console.log(jsonCoordinates);
+      await axios
+        .get("https://api.mapbox.com/directions/v5/mapbox/driving/"+ jsonCoordinates + "?access_token=pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA&depart_at=2019-05-02T15:00&overview=full&geometries=geojson")
+        .then((res) => {
+          (this.mapData = res.data)
+          this.mapCreate(this.mapData)
+        });
+    },
+
+    mapCreate: function (mapData) {
+       const data = mapData.routes[0];
+       var route = data.geometry.coordinates;
+       console.log(route)
+
+       //cretate map
+       mapboxgl.accessToken =
+         "pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA";
+       const map = new mapboxgl.Map({
+         container: "map",
+         style: "mapbox://styles/mapbox/streets-v11",
+         center: route[0],
+         zoom: 15,
+       });
+
+      map.on("load", function () {
+        map.addSource("route", {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "LineString",
+              coordinates: route,
+            },
+          },
+        });
+        map.addLayer({
+          id: "route",
+          type: "line",
+          source: "route",
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#888",
+            "line-width": 8,
+          },
+        });
+      });
+
+    }
+  },
+
+}
 </script>
+
 
 <style>
 /*マップサイズ*/

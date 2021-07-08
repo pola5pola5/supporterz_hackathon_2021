@@ -2,7 +2,7 @@
   <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/map">Map</router-link>
-    <!-- <router-link to="/routing">Routing Test</router-link> -->
+    <router-link to="/routing">Routing Test</router-link>
     
   </div>
   <router-view />
