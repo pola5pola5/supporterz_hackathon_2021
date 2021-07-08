@@ -126,7 +126,7 @@ export default {
     };
   },
   mounted: function () {
-    this.getTripId();
+    this.getGeojson();
   },
   computed: function () {
     this.mapCreate(this.mapData);
@@ -134,7 +134,7 @@ export default {
   },
   methods: {
     //get json
-    getTripId: async function () {
+    getGeojson: async function () {
       const id = {trip_id: this.$store.state.tripid};
       const header = {"X-Token": "4f272392-a679-4a86-ba92-3ffd96c83ae8"}
 
