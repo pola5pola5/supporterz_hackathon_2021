@@ -2,60 +2,52 @@
   <div class="SignIn">
     <h2>Sign in</h2>
     <div>
-        <input type="text" placeholder="Username" v-model="username">
+      <input type="text" placeholder="Username" v-model="info.username" />
     </div>
     <div>
-        <input type="password" placeholder="Password" v-model="password">
+      <input type="password" placeholder="Password" v-model="info.password" />
     </div>
     <button @click="signIn">Signin</button>
-    <p>You don't have an account? 
+    <p>
+      You don't have an account?
       <router-link to="/signup">create account now!!</router-link>
     </p>
   </div>
 </template>
 
 <script>
-import axios from "axios"
 export default {
-  name: 'Signin',
-  data () {
+  name: "SignIn",
+  data() {
     return {
-      username: '',
-      password: ''
-    }
+      info: {
+        username: "",
+        password: "",
+      },
+    };
   },
   methods: {
     signIn: function () {
-      var resStatus;
-      var getRequest;
-      axios
-        .post("/api/user/login", {
-          user_name: this.username,
-          password: this.password,
-        })
-        // まだ設定途中
-        .then((response) => {
-          resStatus = response.status;
-          getRequest = response.data;
-          console.log(getRequest);
-          if (resStatus == 200) {
-            console.log(getRequest);
-            this.$router.push("/home");
-          }
-        })
-        .catch((error) => {
-          alert(error.message)
-          console.log("error");
-          console.log(error);
-        });
-    }
-  }
-}
+      this.$store.dispatch("auth/signIn", this.info);
+    },
+  },
+  computed: {
+    token: function () {
+      return this.$store.getters["auth/getToken"];
+    },
+  },
+  watch: {
+    token: function () {
+      this.$router.push("/input");
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 ul {
@@ -75,7 +67,7 @@ a {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 input {
   margin: 10px 0;
