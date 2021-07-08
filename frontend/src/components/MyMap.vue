@@ -129,7 +129,7 @@ export default {
     this.getGeojson();
   },
   computed: function () {
-    this.mapCreate(this.mapData);
+    this.mapCreate(this.mapData, this.geojsonData);
     this.getMapApi();
   },
   methods: {
@@ -154,19 +154,17 @@ export default {
           jsonCoordinates = jsonCoordinates + ";"
         }
       });
-      console.log(jsonCoordinates);
       await axios
         .get("https://api.mapbox.com/directions/v5/mapbox/driving/"+ jsonCoordinates + "?access_token=pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA&depart_at=2019-05-02T15:00&overview=full&geometries=geojson")
         .then((res) => {
           (this.mapData = res.data)
-          this.mapCreate(this.mapData)
+          this.mapCreate(this.mapData, this.geojsonData)
         });
     },
 
-    mapCreate: function (mapData) {
+    mapCreate: function (mapData, geojsonData) {
        const data = mapData.routes[0];
        var route = data.geometry.coordinates;
-       console.log(route)
 
        //cretate map
        mapboxgl.accessToken =
@@ -205,6 +203,34 @@ export default {
         });
       });
 
+            map.on("mouseenter", "places", function () {
+        map.getCanvas().style.cursor = "pointer";
+      });
+
+      //make
+      geojsonData.features.forEach(function (marker) {
+        // create a DOM element for the marker
+        var el = document.createElement("div");
+        el.className = "marker";
+
+        var pop = document.createElement("div");
+        pop.className = "img";
+        pop.style.background = "url(" + marker.properties.img_url + ")";
+        pop.style.width = 300 + "px";
+        pop.style.height = 300 + "px";
+        pop.style.backgroundSize = "cover";
+        console.log(marker.properties.img_url);
+
+        const popup = new mapboxgl.Popup({
+          offset: 25,
+          maxWidth: 1000,
+        }).setDOMContent(pop);
+
+        new mapboxgl.Marker(el)
+          .setLngLat(marker.geometry.coordinates)
+          .setPopup(popup)
+          .addTo(map);
+      });
     }
   },
 
