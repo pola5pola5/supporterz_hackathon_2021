@@ -2,7 +2,7 @@
   <div class="SignIn">
     <h2>Sign in</h2>
     <div>
-      <input type="text" placeholder="Username" v-model="info.username" />
+      <input type="text" placeholder="Username" v-model="info.user_name" />
     </div>
     <div>
       <input type="password" placeholder="Password" v-model="info.password" />
@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       info: {
-        username: "",
+        user_name: "",
         password: "",
       },
     };

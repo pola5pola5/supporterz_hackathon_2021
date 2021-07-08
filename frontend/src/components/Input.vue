@@ -172,27 +172,31 @@ export default {
     upload: function () {
       var resStatus;
       var getRequest;
-      var params = new URLSearchParams();
-      params.append("user_id", "c8fed8a1-7e15-4516-838a-14a6bc1f703f");
-      params.append("imgs", this.images);
-      console.log(params.values());
 
       axios
-        .post("/api/trip/save", {
-          user_id: "c8fed8a1-7e15-4516-838a-14a6bc1f703f",
-          imgs: this.images,
-        })
+        .post(
+          "/api/auth/trip/save",
+          {
+            user_id: this.$store.getters["auth/getUserID"],
+            imgs: this.images,
+          },
+          {
+            headers: {
+              "X-Token": this.$store.getters["auth/getToken"],
+            },
+          }
+        )
         .then((response) => {
           resStatus = response.status;
           getRequest = response.data.trip_id;
-          console.log(getRequest);
+          // console.log(getRequest);
           this.message = "アップロードしました";
           this.error = "";
           if (resStatus == 200) {
-            console.log(this.$store.state.tripid);
-            console.log(getRequest);
+            // console.log(this.$store.state.tripid);
+            // console.log(getRequest);
             this.$store.commit("pushid", getRequest);
-            console.log(this.$store.state.tripid);
+            // console.log(this.$store.state.tripid);
             this.$router.push("/map");
           }
         })

@@ -27,7 +27,11 @@ export default {
     //get json
     init: async function () {
       await axios
-        .get("/api/trip/get?trip_id=" + this.$store.state.tripid)
+        .get("/api/auth/trip/get?trip_id=" + this.$store.state.tripid, {
+          headers: {
+            "X-Token": this.$store.getters["auth/getToken"],
+          },
+        })
         .then((res) => {
           (this.geojsonData = res.data),
             this.mapCreate(this.geojsonData, this.geocoordinate);

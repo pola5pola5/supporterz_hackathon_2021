@@ -1,28 +1,28 @@
-import { createStore } from "vuex"
+import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 
 import auth from "./modules/auth";
 
 const store = createStore({
-    state() {
-        return{
-            tripid: "b0add9e8-cdba-42ee-85d5-be89bd9875f0",
-        }
+  state() {
+    return {
+      tripid: "",
+    };
+  },
+  mutations: {
+    pushid(state, id) {
+      state.tripid = id;
     },
-    mutations: {
-        pushid(state, id){
-            state.tripid = id;
-        },
-    },
-    modules: {
-        auth,
-    },
-    plugins: [
-        createPersistedState({
-            key: "example",
-            storage: window.sessionStorage,
-        })
-    ]
+  },
+  modules: {
+    auth,
+  },
+  plugins: [
+    createPersistedState({
+      key: "example",
+      storage: window.sessionStorage,
+    }),
+  ],
 });
 
 export default store;

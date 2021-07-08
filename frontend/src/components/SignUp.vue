@@ -2,7 +2,7 @@
   <div class="SignUp">
     <h2>Sign up</h2>
     <div>
-      <input type="text" placeholder="Username" v-model="info.username" />
+      <input type="text" placeholder="Username" v-model="info.user_name" />
     </div>
     <div>
       <!-- <input type="password" placeholder="パスワード" v-model="password" v-validate="'required|min:6|max:20'" maxlength="20" name="password"> -->
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       info: {
-        username: "",
+        user_name: "",
         password: "",
       },
     };
