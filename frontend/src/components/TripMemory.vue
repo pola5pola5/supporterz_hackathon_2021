@@ -1,6 +1,10 @@
 <template>
   <div class="TripMemory">
-    <div id="routing"></div>
+    <div id="routing">
+      <div v-for="(value) in tripIds" :key="value.id">
+        <button type="button" @click="onClickMyMap(value)">{{value}}</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -11,15 +15,15 @@ export default {
 
   data(){
     return{
-      tripId: [],
+      tripIds: []
     }
   },
 
-  mounted(){
+  created(){
     this.getTripId();
   },
   computed(){
-    this.showTripMemory(this.tripId);
+    //this.onClickMyMap(value);
   },
   methods: {
     //get trip_id
@@ -30,14 +34,17 @@ export default {
       await axios
         .get("api/auth/user/get_trip",{params: id, headers: header})
         .then((res) => {
-          (this.tripId = res.data)
-          this.showTripMemory(this.tripId);
+          (this.tripIds = res.data.trip_id)
+          //this.showTripMemory(this.tripIds);
         });
     },
 
-    showTripMemory: function (tripId){
-      console.log(tripId);
-    },
+    onClickMyMap: function(value){
+      this.$store.commit("pushid", value);
+      console.log(this.$store.state.tripid)
+      this.$router.push("/map");
+    }
+
   }
 };
 </script>
