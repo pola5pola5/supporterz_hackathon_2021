@@ -1,9 +1,9 @@
 <template>
-  <div class="home">
+  <div class="top">
     <br>
     <img alt="Vue logo" src="../assets/logo.png" />
 
-    <HomeLink msg="こんにちは，ゲストさん" />
+    <TopLink msg="写真の位置情報からマップを作成します．" />
 
   </div>
 
@@ -11,13 +11,13 @@
 
 <script>
 // @ is an alias to /src
-import HomeLink from "@/components/HomeLink.vue";
+import TopLink from "@/components/TopLink.vue";
 
 
 export default {
-  name: "Home",
+  name: "Top",
   components: {
-    HomeLink,
+    TopLink,
   },
 };
 </script>

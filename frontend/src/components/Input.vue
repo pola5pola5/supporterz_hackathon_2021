@@ -1,5 +1,5 @@
 <template>
-  <div class="View">
+  <div class="Input">
     <!-- <input type="file" name="example" ref="preview" accept="image/*" multiple required> -->
     <p id="error" v-show="error">{{ error }}</p>
     <p>クリックまたはドラッグ&ドロップで画像を追加してください．</p>
@@ -54,7 +54,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "View",
+  name: "Input",
   data() {
     return {
       avatar: "",

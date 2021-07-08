@@ -31,21 +31,21 @@ export default {
       // var resStatus;
       // var getRequest;
       axios
-        .post("/user/create", {
+        .post("/api/user/create", {
           user_name: this.username,
           password: this.password,
         })
         // まだ設定途中
         .then((response) => {
           alert('Create account: ', response.data)
-          console.log('Create account: ', response.data)
-          resStatus = response.status;
-          getRequest = response.data;
-          console.log(getRequest);
-          if (resStatus == 200) {
-            console.log(getRequest);
-            this.$router.push("/view");
-          }
+          // console.log('Create account: ', response.data)
+          // resStatus = response.status;
+          // getRequest = response.data;
+          // if (resStatus == 200) {
+            // console.log(resStatus);
+            // console.log(getRequest);
+            // this.$router.push("/home");
+          // }
         })
         .catch((error) => {
           alert(error.message)

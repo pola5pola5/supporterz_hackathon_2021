@@ -29,7 +29,7 @@ export default {
       var resStatus;
       var getRequest;
       axios
-        .post("/user/login", {
+        .post("/api/user/login", {
           user_name: this.username,
           password: this.password,
         })
@@ -40,7 +40,7 @@ export default {
           console.log(getRequest);
           if (resStatus == 200) {
             console.log(getRequest);
-            this.$router.push("/view");
+            this.$router.push("/home");
           }
         })
         .catch((error) => {
