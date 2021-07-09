@@ -39,7 +39,7 @@ export default {
   },
   watch: {
     token: function () {
-      this.$router.push("/input");
+      this.$router.push("/home");
     },
   },
 };

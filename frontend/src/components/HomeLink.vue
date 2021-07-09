@@ -1,16 +1,19 @@
 <template>
-
   <div class="HomeLink">
-    <br>
+    <br />
     <b>{{ msg }}</b>
-    <br>
-         
-    <router-link to='/input'>
+    <br />
+
+    <router-link to="/input">
       <h3 class="to_input">inputに遷移</h3>
     </router-link>
-    <router-link to='/'>
+    <router-link to="/">
       <h3 class="to_top">topに遷移</h3>
     </router-link>
+    <router-link to="/routing">
+      <h3 class="to_top">一覧に遷移</h3>
+    </router-link>
+
     <!-- <router-link to='/signin'>
       <h3 class="to_signin">早速使ってみる</h3>
     </router-link>    
@@ -31,12 +34,10 @@
         >
       </li>
     </ul> -->
-    
   </div>
 </template>
 
 <script>
-
 export default {
   name: "HomeLink",
   props: {
@@ -48,14 +49,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1 {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 40px 0 0;
   color: #42b983;
 }
-.to_input{
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+.to_input {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
@@ -67,10 +68,9 @@ h1 {
 
   margin-left: auto;
   margin-right: auto;
-
 }
-.to_top{
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+.to_top {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
@@ -82,10 +82,9 @@ h1 {
 
   margin-left: auto;
   margin-right: auto;
-
 }
-.to_signin{
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+.to_signin {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
@@ -97,10 +96,9 @@ h1 {
 
   margin-left: auto;
   margin-right: auto;
-
 }
-.to_signup{
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+.to_signup {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
@@ -112,7 +110,6 @@ h1 {
 
   margin-left: auto;
   margin-right: auto;
-
 }
 ul {
   list-style-type: none;

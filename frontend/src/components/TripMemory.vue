@@ -1,8 +1,8 @@
 <template>
   <div class="TripMemory">
     <div id="routing">
-      <div v-for="(value) in tripIds" :key="value.id">
-        <button type="button" @click="onClickMyMap(value)">{{value}}</button>
+      <div v-for="value in tripIds" :key="value.id">
+        <button type="button" @click="onClickMyMap(value)">{{ value }}</button>
       </div>
     </div>
   </div>
@@ -11,41 +11,39 @@
 <script>
 import axios from "axios";
 export default {
-  name: "memory",  
+  name: "memory",
 
-  data(){
-    return{
-      tripIds: []
-    }
+  data() {
+    return {
+      tripIds: [],
+    };
   },
 
-  created(){
+  created() {
     this.getTripId();
   },
-  computed(){
+  computed() {
     //this.onClickMyMap(value);
   },
   methods: {
     //get trip_id
-    getTripId: async function(){
-      const id = {user_id: "090ae791-9f53-4a84-ad61-0e84aee08634"}
-      const header = {"X-Token": "0a5daf57-1fa8-452e-99d9-426718cabe8b"}
+    getTripId: async function () {
+      const id = { user_id: this.$store.getters["auth/getUserID"] };
+      const header = { "X-Token": this.$store.getters["auth/getToken"] };
 
       await axios
-        .get("api/auth/user/get_trip",{params: id, headers: header})
+        .get("api/auth/user/get_trip", { params: id, headers: header })
         .then((res) => {
-          (this.tripIds = res.data.trip_id)
+          this.tripIds = res.data.trip_id;
           //this.showTripMemory(this.tripIds);
         });
     },
 
-    onClickMyMap: function(value){
-      this.$store.commit("pushid", value);
-      console.log(this.$store.state.tripid)
+    onClickMyMap: function (value) {
+      this.$store.commit("trip/setTripID", value);
+      console.log(this.$store.getters["trip/getTripID"]);
       this.$router.push("/map");
-    }
-
-  }
+    },
+  },
 };
 </script>
-

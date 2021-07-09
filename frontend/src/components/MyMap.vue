@@ -25,7 +25,7 @@ export default {
   methods: {
     //get json
     getGeojson: async function () {
-      const id = { trip_id: this.$store.state.tripid };
+      const id = { trip_id: this.$store.getters["trip/getTripID"] };
       const header = { "X-Token": this.$store.getters["auth/getToken"] };
 
       await axios

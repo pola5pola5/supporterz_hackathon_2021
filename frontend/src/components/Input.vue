@@ -195,7 +195,7 @@ export default {
           if (resStatus == 200) {
             // console.log(this.$store.state.tripid);
             // console.log(getRequest);
-            this.$store.commit("pushid", getRequest);
+            this.$store.commit("trip/setTripID", getRequest);
             // console.log(this.$store.state.tripid);
             this.$router.push("/map");
           }

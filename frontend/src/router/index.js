@@ -2,24 +2,24 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import Top from "@/views/Top.vue";
 import Home from "@/views/Home.vue";
-import Map from "@/views/Map.vue"
-import Routing from "@/views/Routing.vue"
+import Map from "@/views/Map.vue";
+import Routing from "@/views/Routing.vue";
 
-import SignIn from '@/components/SignIn.vue'
-import SignUp from '@/components/SignUp.vue'
-import Input from "@/components/Input"
+import SignIn from "@/components/SignIn.vue";
+import SignUp from "@/components/SignUp.vue";
+import Input from "@/components/Input";
 
 import Store from "@/store/index.js";
 
 const routes = [
   {
-     //初めのページ
+    //初めのページ
     path: "/",
     name: "Top",
     component: Top,
     meta: {
-      isPublic: true
-    }
+      isPublic: true,
+    },
   },
   {
     //ログイン後に現れるページ
@@ -32,21 +32,21 @@ const routes = [
     name: "SignIn",
     component: SignIn,
     meta: {
-      isPublic: true
-    }
+      isPublic: true,
+    },
   },
   {
     path: "/signup",
     name: "SignUp",
     component: SignUp,
     meta: {
-      isPublic: true
-    }
+      isPublic: true,
+    },
   },
   {
     //元々viewだったページ
-    path: '/input',
-    name: 'Input',
+    path: "/input",
+    name: "Input",
     component: Input,
   },
   {
@@ -57,8 +57,8 @@ const routes = [
   {
     path: "/routing",
     name: "Routing",
-    component: Routing
-  }
+    component: Routing,
+  },
 ];
 
 const router = createRouter({
@@ -68,11 +68,11 @@ const router = createRouter({
 
 // ログインが必要なページかどうかを判定
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(page => page.meta.isPublic) || Store.state.auth.token) {
-    next()
+  if (to.matched.some((page) => page.meta.isPublic) || Store.state.auth.token) {
+    next();
   } else {
-    next('/signin')
+    next("/signin");
   }
-})
+});
 
 export default router;

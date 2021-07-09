@@ -2,20 +2,12 @@ import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 
 import auth from "./modules/auth";
+import trip from "./modules/trip";
 
 const store = createStore({
-  state() {
-    return {
-      tripid: "",
-    };
-  },
-  mutations: {
-    pushid(state, id) {
-      state.tripid = id;
-    },
-  },
   modules: {
     auth,
+    trip,
   },
   plugins: [
     createPersistedState({
