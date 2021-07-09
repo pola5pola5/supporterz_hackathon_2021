@@ -1,33 +1,63 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import View from "@/components/View"
 
+import Top from "@/views/Top.vue";
+import Home from "@/views/Home.vue";
+import Map from "@/views/Map.vue"
+import Routing from "@/views/Routing.vue"
+
+import SignIn from '@/components/SignIn.vue'
+import SignUp from '@/components/SignUp.vue'
+import Input from "@/components/Input"
+
+import Store from "@/store/index.js";
 
 const routes = [
   {
+     //初めのページ
     path: "/",
+    name: "Top",
+    component: Top,
+    meta: {
+      isPublic: true
+    }
+  },
+  {
+    //ログイン後に現れるページ
+    path: "/home",
     name: "Home",
     component: Home,
   },
   {
-    path: '/view',
-    name: 'View',
-    component: View
+    path: "/signin",
+    name: "SignIn",
+    component: SignIn,
+    meta: {
+      isPublic: true
+    }
+  },
+  {
+    path: "/signup",
+    name: "SignUp",
+    component: SignUp,
+    meta: {
+      isPublic: true
+    }
+  },
+  {
+    //元々viewだったページ
+    path: '/input',
+    name: 'Input',
+    component: Input,
   },
   {
     path: "/map",
     name: "Map",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Map.vue"),
+    component: Map,
   },
   {
     path: "/routing",
     name: "Routing",
-    component: () =>
-      import("../views/Routing.vue"),
+    component: Routing
   }
 ];
 
@@ -35,5 +65,14 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
+// ログインが必要なページかどうかを判定
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(page => page.meta.isPublic) || Store.state.auth.token) {
+    next()
+  } else {
+    next('/signin')
+  }
+})
 
 export default router;
