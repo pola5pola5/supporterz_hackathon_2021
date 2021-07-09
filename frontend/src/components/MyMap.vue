@@ -44,9 +44,12 @@ export default {
         if(idx < array.length - 1){
           jsonCoordinates = jsonCoordinates + ";"
         }
+        if(idx === array.length - 1){
+          jsonCoordinates = jsonCoordinates + ";" + jsonData.geometry.coordinates[0] + "," + jsonData.geometry.coordinates[1];
+        }
       });
       await axios
-        .get("https://api.mapbox.com/directions/v5/mapbox/driving/"+ jsonCoordinates + "?access_token=pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA&depart_at=2019-05-02T15:00&overview=full&geometries=geojson")
+        .get("https://api.mapbox.com/directions/v5/mapbox/cycling/"+ jsonCoordinates + "?access_token=pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA&geometries=geojson")
         .then((res) => {
           (this.mapData = res.data)
           this.mapCreate(this.mapData, this.geojsonData)
@@ -94,7 +97,7 @@ export default {
         });
       });
 
-            map.on("mouseenter", "places", function () {
+        map.on("mouseenter", "places", function () {
         map.getCanvas().style.cursor = "pointer";
       });
 
