@@ -1,5 +1,5 @@
 <template>
-  <div class="MyMap">
+  <div class="Map">
     <div id="map"></div>
   </div>
 </template>
@@ -9,55 +9,71 @@ import mapboxgl from "mapbox-gl";
 import axios from "axios";
 
 export default {
-  name: "MyMap",
-
   data() {
     return {
       geojsonData: [],
-      geocoordinate: [],
+      mapData: [],
     };
   },
   mounted: function () {
-    this.init();
+    this.getGeojson();
   },
   computed: function () {
-    this.mapCreate(this.geojsonData, this.geocoordinate);
+    this.mapCreate(this.mapData, this.geojsonData);
+    this.getMapApi();
   },
   methods: {
     //get json
-    init: async function () {
+    getGeojson: async function () {
+      const id = { trip_id: this.$store.state.tripid };
+      const header = { "X-Token": this.$store.getters["auth/getToken"] };
+
       await axios
-        .get("/api/auth/trip/get?trip_id=" + this.$store.state.tripid, {
-          headers: {
-            "X-Token": this.$store.getters["auth/getToken"],
-          },
-        })
+        .get("/api/auth/trip/get", { params: id, headers: header })
         .then((res) => {
-          (this.geojsonData = res.data),
-            this.mapCreate(this.geojsonData, this.geocoordinate);
+          this.geojsonData = res.data;
+          this.getMapApi();
         });
     },
 
-    //create map
-    mapCreate: function (geojsonData, geocoordinate) {
-      console.log(geojsonData);
+    getMapApi: async function () {
+      var jsonCoordinates = [];
+      this.geojsonData.features.forEach(function (jsonData, idx, array) {
+        jsonCoordinates =
+          jsonCoordinates +
+          jsonData.geometry.coordinates[0] +
+          "," +
+          jsonData.geometry.coordinates[1];
+        if (idx < array.length - 1) {
+          jsonCoordinates = jsonCoordinates + ";";
+        }
+      });
+      await axios
+        .get(
+          "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+            jsonCoordinates +
+            "?access_token=pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA&depart_at=2019-05-02T15:00&overview=full&geometries=geojson"
+        )
+        .then((res) => {
+          this.mapData = res.data;
+          this.mapCreate(this.mapData, this.geojsonData);
+        });
+    },
+
+    mapCreate: function (mapData, geojsonData) {
+      const data = mapData.routes[0];
+      var route = data.geometry.coordinates;
+
+      //cretate map
       mapboxgl.accessToken =
         "pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA";
-      //initialize
       const map = new mapboxgl.Map({
         container: "map",
         style: "mapbox://styles/mapbox/streets-v11",
-        center: geojsonData.features[0].geometry.coordinates,
+        center: route[0],
         zoom: 15,
       });
-      map.addControl(new mapboxgl.NavigationControl());
 
-      //make line coordinate
-      geojsonData.features.forEach(function (json) {
-        geocoordinate.push(json.geometry.coordinates);
-      });
-
-      //make line
       map.on("load", function () {
         map.addSource("route", {
           type: "geojson",
@@ -66,7 +82,7 @@ export default {
             properties: {},
             geometry: {
               type: "LineString",
-              coordinates: geocoordinate,
+              coordinates: route,
             },
           },
         });
