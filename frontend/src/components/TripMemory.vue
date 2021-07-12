@@ -22,9 +22,6 @@ export default {
   created() {
     this.getTripId();
   },
-  computed() {
-    //this.onClickMyMap(value);
-  },
   methods: {
     //get trip_id
     getTripId: async function () {
