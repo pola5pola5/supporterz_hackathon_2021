@@ -69,7 +69,8 @@ export default {
         "pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA";
       const map = new mapboxgl.Map({
         container: "map",
-        style: "mapbox://styles/mapbox/streets-v11",
+        //style: "mapbox://styles/mapbox/streets-v11",
+        style: "mapbox://styles/tpkuma/ckr1c20cv1c4f18qcbsrr2gmm",
         center: route[0],
         zoom: 15,
       });
