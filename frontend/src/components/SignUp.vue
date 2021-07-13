@@ -39,6 +39,7 @@ export default {
   },
   watch: {
     token: function () {
+      this.$store.commit("user/setUserName", this.info.user_name);
       this.$router.push("/home");
     },
   },

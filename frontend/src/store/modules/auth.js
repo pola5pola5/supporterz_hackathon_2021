@@ -19,6 +19,10 @@ export default {
       state.userid = payload.user_id;
       state.token = payload.token;
     },
+    deleteInfo(state) {
+      state.userid = "";
+      state.token = "";
+    },
   },
   actions: {
     async signUp(context, payload) {

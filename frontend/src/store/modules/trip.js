@@ -12,5 +12,8 @@ export default {
     setTripID(state, id) {
       state.tripid = id;
     },
+    deleteTripID(state) {
+      state.tripid = "";
+    },
   },
 };
