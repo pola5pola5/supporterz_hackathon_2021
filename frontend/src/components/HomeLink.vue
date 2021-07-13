@@ -1,7 +1,7 @@
 <template>
   <div class="HomeLink">
     <br />
-    <b>{{ msg }}</b>
+    <b>こんにちは、{{ getUserName }}さん</b>
     <br />
 
     <router-link to="/input">
@@ -42,6 +42,11 @@ export default {
   name: "HomeLink",
   props: {
     msg: String,
+  },
+  computed: {
+    getUserName: function () {
+      return this.$store.getters["user/getUserName"];
+    },
   },
 };
 </script>
