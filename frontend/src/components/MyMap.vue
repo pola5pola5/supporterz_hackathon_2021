@@ -47,17 +47,22 @@ export default {
         if (idx < array.length - 1) {
           jsonCoordinates = jsonCoordinates + ";";
         }
-        if(idx === array.length - 1){
-          jsonCoordinates = jsonCoordinates + ";" 
-          + jsonData.geometry.coordinates[0] + "," 
-          + jsonData.geometry.coordinates[1];
+        if (idx === array.length - 1) {
+          jsonCoordinates =
+            jsonCoordinates +
+            ";" +
+            jsonData.geometry.coordinates[0] +
+            "," +
+            jsonData.geometry.coordinates[1];
         }
       });
       await axios
         .get(
           "https://api.mapbox.com/directions/v5/mapbox/driving/" +
             jsonCoordinates +
-            "?access_token=pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA&depart_at=2019-05-02T15:00&overview=full&geometries=geojson"
+            "?access_token=" +
+            process.env.VUE_APP_MAPBOX_API_KEY +
+            "&depart_at=2019-05-02T15:00&overview=full&geometries=geojson"
         )
         .then((res) => {
           this.mapData = res.data;
@@ -70,8 +75,7 @@ export default {
       var route = data.geometry.coordinates;
 
       //cretate map
-      mapboxgl.accessToken =
-        "pk.eyJ1IjoidHBrdW1hIiwiYSI6ImNrb3gzbGE5aDBhZ2cyd28xb3R5cG1jZXIifQ.jI7aje2MHl9teidoNmYDPA";
+      mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_API_KEY;
       const map = new mapboxgl.Map({
         container: "map",
         style: "mapbox://styles/tpkuma/ckr1c20cv1c4f18qcbsrr2gmm",
