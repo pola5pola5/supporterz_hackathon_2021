@@ -1,8 +1,8 @@
 <template>
   <div class="TripMemory">
     <div id="routing">
-      <div v-for="value in tripIds" :key="value.id">
-        <button type="button" @click="onClickMyMap(value)">{{ value }}</button>
+      <div v-for="(value, index) in tripIds" :key="value.id">
+        <button type="button" @click="onClickMyMap(value)">その{{ index }}</button>
       </div>
     </div>
   </div>
@@ -21,9 +21,6 @@ export default {
 
   created() {
     this.getTripId();
-  },
-  computed() {
-    //this.onClickMyMap(value);
   },
   methods: {
     //get trip_id
