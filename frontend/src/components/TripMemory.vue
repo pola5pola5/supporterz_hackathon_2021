@@ -2,7 +2,7 @@
   <div class="TripMemory">
     <div id="routing">
       <div v-for="(value, index) in tripIds" :key="value.id">
-        <button type="button" @click="onClickMyMap(value)">その{{ index }}</button>
+        <button type="button" @click="onClickMyMap(value)">旅{{ index + 1 }}</button>
       </div>
     </div>
   </div>

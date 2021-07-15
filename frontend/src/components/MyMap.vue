@@ -1,12 +1,16 @@
 <template>
   <div class="Map">
     <div id="map"></div>
+    <div class="overlay">
+       <button id="replay">Replay</button>
+    </div>
   </div>
 </template>
 
 <script>
 import mapboxgl from "mapbox-gl";
 import axios from "axios";
+//import turf from "@turf/turf"
 
 export default {
   data() {
@@ -83,6 +87,23 @@ export default {
         zoom: 15,
       });
 
+      var point = {
+        'type': 'FeatureCollection',
+        'features': [
+          {
+            'type': 'Feature',
+            'properties': {},
+            'geometry': {
+              'type': 'Point',
+              'coordinates': route[0]
+            }
+          }
+        ]
+      };
+
+      var counter = 0;
+      var steps = route.length;
+
       map.on("load", function () {
         map.addSource("route", {
           type: "geojson",
@@ -94,6 +115,10 @@ export default {
               coordinates: route,
             },
           },
+        });
+        map.addSource("point", {
+          type: "geojson",
+          data: point
         });
         map.addLayer({
           id: "route",
@@ -108,7 +133,68 @@ export default {
             "line-width": 8,
           },
         });
+        map.addLayer({
+          'id': 'point',
+          'source': 'point',
+          'type': 'symbol',
+          'layout': {
+            'icon-image': 'car-15',
+            'icon-rotate': ['get', 'bearing'],
+            'icon-rotation-alignment': 'map',
+            'icon-allow-overlap': true,
+            'icon-ignore-placement': true,
+            'icon-size': 2.5
+          }
+        });
+        function animate() {
+          var start =
+            route[
+              counter >= steps ? counter - 1 : counter
+            ];
+          var end =
+            route[
+              counter >= steps ? counter : counter + 1
+            ];
+          if (!start || !end) return;
+          
+          point.features[0].geometry.coordinates =
+          route[counter];
+          
+          // Calculate the bearing to ensure the icon is rotated to match the route arc
+          // The bearing is calculated between the current point and the next point, except
+          // at the end of the arc, which uses the previous point and the current point
+          // point.features[0].properties.bearing = turf.bearing(
+          //   turf.point(start),
+          //   turf.point(end)
+          // );
+          
+          map.getSource('point').setData(point);
+          
+          if (counter < steps) {
+            requestAnimationFrame(animate);
+          }
+          
+          counter = counter + 1;
+        }
+        document
+          .getElementById('replay')
+          .addEventListener('click', function () {
+            // Set the coordinates of the original point back to origin
+            point.features[0].geometry.coordinates = origin;
+            
+            // Update the source layer
+            map.getSource('point').setData(point);
+            
+            // Reset the counter
+            counter = 0;
+            
+            // Restart the animation
+            animate(counter);
+          });
+ 
+        animate(counter);
       });
+
 
       map.on("mouseenter", "places", function () {
         map.getCanvas().style.cursor = "pointer";
@@ -126,19 +212,22 @@ export default {
         pop.style.width = 300 + "px";
         pop.style.height = 300 + "px";
         pop.style.backgroundSize = "cover";
-        console.log(marker.properties.img_url);
 
         const popup = new mapboxgl.Popup({
           offset: 25,
           maxWidth: 1000,
         }).setDOMContent(pop);
 
-        new mapboxgl.Marker(el)
+        new mapboxgl.Marker({
+            element: el,
+            anchor: 'bottom'
+          })
           .setLngLat(marker.geometry.coordinates)
           .setPopup(popup)
           .addTo(map);
       });
     },
+    
   },
 };
 </script>
@@ -150,11 +239,31 @@ export default {
   height: 800px;
 }
 .marker {
-  background-image: url("../assets/mapbox-icon.png");
+  background-image: url("../assets/marker.jpg");
   background-size: cover;
   width: 50px;
   height: 50px;
   border-radius: 50%;
   cursor: pointer;
+}
+.overlay {
+  position: absolute;
+  top: 100px;
+  left: 30px;
+}
+.overlay button {
+  font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  background-color: #3386c0;
+  color: #fff;
+  display: inline-block;
+  margin: 0;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
+ 
+.overlay button:hover {
+  background-color: #4ea0da;
 }
 </style>
