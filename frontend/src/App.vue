@@ -1,37 +1,36 @@
 <template>
   <div v-if="isToken" id="nav">
-    <router-link @click="checkToken" to="/home">Home</router-link> |
-    <router-link @click="checkToken" to="/routing">Trip List</router-link> |
-    <router-link @click="checkToken" to="/map">Map</router-link> |         
-    <router-link @click="checkToken" to="/home">logout</router-link>
+    <router-link to="/home">Home</router-link> |
+    <router-link to="/routing">Trip List</router-link> |
+    <router-link to="/map">Map</router-link> |
+    <router-link to="/home">logout</router-link>
   </div>
   <div v-else id="nav">
-    <router-link @click="checkToken" to="/">Top</router-link> |
-    <router-link @click="checkToken" to="/signin">Sign in</router-link>
+    <router-link to="/">Top</router-link> |
+    <router-link to="/signin">Sign in</router-link>
   </div>
   <router-view />
 </template>
 
 <script>
-import Store from "@/store/index.js";
 export default {
   name: "Header",
   data() {
     return {
       isToken: false,
-    }
+    };
   },
-  methods: {
-    checkToken: function() {
-      if (Store.state.auth.token) {
-        this.isToken = true
-      } else {
-        this.isToken = false
-      }
-    }
-  }
-
-}
+  computed: {
+    token: function () {
+      return this.$store.getters["auth/getToken"];
+    },
+  },
+  watch: {
+    token: function () {
+      this.isToken = true;
+    },
+  },
+};
 </script>
 
 <style>
