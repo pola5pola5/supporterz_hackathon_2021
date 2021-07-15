@@ -41,7 +41,7 @@
 export default {
   name: "HomeLink",
   props: {
-    msg: String,
+    // msg: String,
   },
   computed: {
     getUserName: function () {
