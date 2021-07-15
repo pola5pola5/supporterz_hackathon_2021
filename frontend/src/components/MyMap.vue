@@ -227,7 +227,6 @@ export default {
           .addTo(map);
       });
     },
-    
   },
 };
 </script>
