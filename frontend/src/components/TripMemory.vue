@@ -35,13 +35,11 @@ export default {
         .get("api/auth/user/get_trip", { params: id, headers: header })
         .then((res) => {
           this.tripIds = res.data.trip_id;
-          //this.showTripMemory(this.tripIds);
         });
     },
 
     onClickMyMap: function (value) {
       this.$store.commit("trip/setTripID", value);
-      console.log(this.$store.getters["trip/getTripID"]);
       this.$router.push("/map");
     },
   },
