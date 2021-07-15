@@ -41,7 +41,7 @@ export default {
 
     onClickMyMap: function (value) {
       this.$store.commit("trip/setTripID", value);
-      console.log(this.$store.getters["trip/getTripID"]);
+      // console.log(this.$store.getters["trip/getTripID"]);
       this.$router.push("/map");
     },
   },
