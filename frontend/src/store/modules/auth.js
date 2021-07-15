@@ -30,12 +30,12 @@ export default {
       return axios
         .post(url, payload)
         .then(function (response) {
-          console.log("signUp_response", response.data);
+          // console.log("signUp_response", response.data);
           context.commit("setInfo", response.data);
           return response.data;
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
         });
     },
     async signIn(context, payload) {
@@ -43,12 +43,12 @@ export default {
       return axios
         .post(url, payload)
         .then(function (response) {
-          console.log("signIn_response", response.data);
+          // console.log("signIn_response", response.data);
           context.commit("setInfo", response.data);
           return response.data;
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
         });
     },
   },
