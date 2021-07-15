@@ -1,9 +1,9 @@
 <template>
   <div v-if="isToken" id="nav">
     <router-link to="/home">Home</router-link> |
-    <router-link to="/routing">Trip List</router-link> |
-    <router-link to="/map">Map</router-link> |
-    <router-link to="/home">logout</router-link>
+    <router-link to="/routing">Trip List</router-link>
+    <!-- <router-link to="/map">Map</router-link> -->
+    <!-- <router-link to="/home">logout</router-link> -->
   </div>
   <div v-else id="nav">
     <router-link to="/">Top</router-link> |

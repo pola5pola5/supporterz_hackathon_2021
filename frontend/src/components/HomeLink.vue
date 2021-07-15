@@ -4,14 +4,14 @@
     <b>こんにちは、{{ getUserName }}さん</b>
     <br />
 
+    <!-- <router-link to="/">
+      <h3 class="to_top">Homeに戻る</h3>
+    </router-link> -->
     <router-link to="/input">
-      <h3 class="to_input">inputに遷移</h3>
-    </router-link>
-    <router-link to="/">
-      <h3 class="to_top">topに遷移</h3>
+      <h3 class="to_input">旅の追加</h3>
     </router-link>
     <router-link to="/routing">
-      <h3 class="to_top">一覧に遷移</h3>
+      <h3 class="to_top">旅の一覧</h3>
     </router-link>
 
     <!-- <router-link to='/signin'>
