@@ -3,7 +3,10 @@
     <br />
     <img alt="Vue logo" src="../assets/logo.png" />
 
-    <HomeLink msg="こんにちは，ゲストさん" />
+    <HomeLink />
+    <!-- <HomeLink msg="こんにちは，ゲストさん" /> -->
+
+    <h3 @click="signOut">sign out</h3>
   </div>
 </template>
 
@@ -16,6 +19,12 @@ export default {
   components: {
     HomeLink,
   },
+  methods: {
+    signOut: function () {
+      this.$store.commit("auth/deleteInfo");
+      this.$router.push("/");
+    }
+  }
 };
 </script>
 <style scoped>
