@@ -86,20 +86,20 @@ export default {
       });
     },
     dropFile: function () {
-      console.log(event.dataTransfer.files);
+      // console.log(event.dataTransfer.files);
       // console.log(event.dataTransfer.files.length)
       this.files.push(...event.dataTransfer.files);
       this.isEnter = false;
       // それぞれのファイルに対して変換処理
       this.files.forEach((file) => {
-        console.log(file);
+        // console.log(file);
         var im = null;
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function () {
           im = reader.result;
           var base64EncodedFile = im.split(",")[1];
-          console.log(base64EncodedFile); // base64にしたデータ
+          // console.log(base64EncodedFile); // base64にしたデータ
           this.images.push(base64EncodedFile);
           // 小さくする処理いれる
           const resizedCanvas = this.createResizedCanvasElement(im);
@@ -110,18 +110,18 @@ export default {
       return this.files, this.images;
     },
     onImageChange(e) {
-      console.log("files");
+      // console.log("files");
       const putImg = e.target.files || e.dataTransfer.files;
       this.files.push(...putImg);
       this.files.forEach((file) => {
-        console.log(file);
+        // console.log(file);
         var im = null;
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function () {
           im = reader.result;
           var base64EncodedFile = im.split(",")[1];
-          console.log(base64EncodedFile); // base64にしたデータ
+          // console.log(base64EncodedFile); // base64にしたデータ
           this.images.push(base64EncodedFile);
         }.bind(this);
       });
@@ -201,8 +201,8 @@ export default {
           }
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
+          // console.log("error");
+          // console.log(error);
         });
     },
   },
