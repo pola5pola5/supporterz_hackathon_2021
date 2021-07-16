@@ -199,11 +199,11 @@ export default {
             // console.log(this.$store.state.tripid);
             this.$router.push("/map");
           }
-        })
-        .catch((error) => {
-          // console.log("error");
-          // console.log(error);
         });
+      // .catch((error) => {
+      //   // console.log("error");
+      //   // console.log(error);
+      // });
     },
   },
 };
