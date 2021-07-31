@@ -34,9 +34,9 @@ export default {
           context.commit("setInfo", response.data);
           return response.data;
         })
-        .catch((error) => {
-          //console.log(error);
-        });
+        // .catch((error) => {
+        //   //console.log(error);
+        // });
     },
     async signIn(context, payload) {
       const url = "/api/user/login";
@@ -47,9 +47,9 @@ export default {
           context.commit("setInfo", response.data);
           return response.data;
         })
-        .catch((error) => {
-          //console.log(error);
-        });
+        // .catch((error) => {
+        //   //console.log(error);
+        // });
     },
   },
 };
