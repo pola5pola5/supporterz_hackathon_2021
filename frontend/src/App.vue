@@ -1,13 +1,13 @@
 <template>
   <div v-if="isToken" id="nav">
-    <router-link to="/home">Home</router-link> |
-    <router-link to="/routing">Trip List</router-link>
+    <!-- <router-link to="/home">Home</router-link> |
+    <router-link to="/routing">Trip List</router-link> -->
     <!-- <router-link to="/map">Map</router-link> -->
     <!-- <router-link to="/home">logout</router-link> -->
   </div>
   <div v-else id="nav">
-    <router-link to="/">Top</router-link> |
-    <router-link to="/signin">Sign in</router-link>
+    <!-- <router-link to="/">Top</router-link> |
+    <router-link to="/signin">Sign in</router-link> -->
   </div>
   <router-view />
 </template>
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style>
-#app {
+/* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -53,5 +53,5 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
-}
+} */
 </style>
