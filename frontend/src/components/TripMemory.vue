@@ -1,5 +1,11 @@
 <template>
-  <div class="TripMemory">
+  <div v-if="tripIds.length == 0">
+    ぜひ新しい旅を記録しましょう！
+    <router-link to="/input">
+      <h3 class="to_input">新しい旅を記録する</h3>
+    </router-link>
+  </div>
+  <div v-else class="TripMemory">
     <div id="routing">
       <div v-for="(value, index) in tripIds" :key="value.id">
         <button type="button" @click="onClickMyMap(value)">
@@ -45,3 +51,37 @@ export default {
   },
 };
 </script>
+<style scoped>
+h1 {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 40px 0 0;
+  color: #42b983;
+}
+.to_input {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  color: white;
+  background-color: #42b983;
+  width: 200px;
+  height: 40px;
+  border-radius: 8px;
+  line-height: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+</style>
