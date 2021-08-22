@@ -1,10 +1,8 @@
 <template>
   <div class="Input">
-    <!-- <input type="file" name="example" ref="preview" accept="image/*" multiple required> -->
     <p id="error" v-show="error">{{ error }}</p>
     <p>クリックまたはドラッグ&ドロップで画像を追加してください．</p>
     <label>
-      <!-- <img :src="avatar" alt="Avatar" class="image"> -->
       <div
         class="drop_area"
         @dragenter="dragEnter"
@@ -58,13 +56,11 @@ export default {
   name: "Input",
   data() {
     return {
-      avatar: "",
       message: "",
       error: "",
       isEnter: false,
       files: [],
       images: [],
-      min_imgs: [],
       test: "",
     };
   },
@@ -86,6 +82,10 @@ export default {
         reader.onerror = (error) => reject(error);
       });
     },
+    deleteFile(index) {
+      this.files.splice(index, 1);
+      this.images.splice(index, 1);
+    },
     dropFile: function () {
       // console.log(event.dataTransfer.files);
       // console.log(event.dataTransfer.files.length)
@@ -98,11 +98,16 @@ export default {
         loadImage.parseMetaData(
           file,
           function(data) {
-          // console.log("data.exif")
-          // console.log(data.exif)
           console.log("data.exif.get('GPSInfo')")
           console.log(data.exif.get('GPSInfo'))
+          var gpsInfo = data.exif && data.exif.get('GPSInfo');
+          if (!gpsInfo){
+            alert("GPS情報を含む画像をアップロードしてください")
+            console.log(file.index)  
+          }
+
         });
+
         var im = null;
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -111,10 +116,7 @@ export default {
           var base64EncodedFile = im.split(",")[1];
           // console.log(base64EncodedFile); // base64にしたデータ
           this.images.push(base64EncodedFile);
-          // 小さくする処理いれる
-          const resizedCanvas = this.createResizedCanvasElement(im);
-          const resizedBase64 = resizedCanvas.toDataURL(file.type);
-          this.min_imgs.push(resizedBase64);
+
         }.bind(this);
       });
       return this.files, this.images;
@@ -137,10 +139,7 @@ export default {
       });
       return this.files, this.images;
     },
-    deleteFile(index) {
-      this.files.splice(index, 1);
-      this.images.splice(index, 1);
-    },
+
 
     // createResizedCanvasElement (originalImg) {
     //   const originalImgWidth = originalImg.width
