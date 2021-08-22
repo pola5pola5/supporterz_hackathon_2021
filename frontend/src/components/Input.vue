@@ -17,7 +17,7 @@
         ファイルアップロード
         <!-- <div> -->
 
-        <input type="file" accept="image/*" @change="onImageChange" multiple />
+        <!-- <input type="file" accept="image/*" @change="onImageChange" multiple /> -->
       </div>
     </label>
 
@@ -53,6 +53,7 @@
 
 <script>
 import axios from "axios";
+import loadImage from "blueimp-load-image";
 export default {
   name: "Input",
   data() {
@@ -92,7 +93,16 @@ export default {
       this.isEnter = false;
       // それぞれのファイルに対して変換処理
       this.files.forEach((file) => {
-        // console.log(file);
+        console.log("file");
+        console.log(file);
+        loadImage.parseMetaData(
+          file,
+          function(data) {
+          // console.log("data.exif")
+          // console.log(data.exif)
+          console.log("data.exif.get('GPSInfo')")
+          console.log(data.exif.get('GPSInfo'))
+        });
         var im = null;
         const reader = new FileReader();
         reader.readAsDataURL(file);
