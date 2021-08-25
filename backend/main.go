@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"fmt"
 	"log"
-	"io"
 	"io/ioutil"
 	"net/http"
 	
@@ -18,7 +17,7 @@ import (
 const region = "ap-northeast-1"
 const bucket = "photo-tabi-dev"
 
-func GetFile(filename string) (io.ReadCloser, error){
+func GetFile(filename string) ([]byte, error){
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region),
 	})
@@ -38,7 +37,13 @@ func GetFile(filename string) (io.ReadCloser, error){
 		log.Fatal(err)
 		return nil, err
 	}
-	return obj.Body, nil
+	
+	rc := obj.Body
+	content, err := ioutil.ReadAll(rc)
+	defer rc.Close()
+	if err != nil { log.Fatal(err) }
+
+	return content, nil
 }
 
 type imgGetRequest struct {
@@ -65,12 +70,10 @@ func HandleImgGet(c echo.Context) error {
 
 
 	// filename := "img1.jpg"
-	rc, _ := GetFile(requestBody.ImgPath)
-	defer rc.Close()
-	content, err := ioutil.ReadAll(rc)
+	content, _ := GetFile(requestBody.ImgPath)
+	
 	enc := base64.StdEncoding.EncodeToString(content)
 	
-	if err != nil { log.Fatal(err) }
 	return c.String(http.StatusOK, enc)
 }
 
