@@ -50,31 +50,31 @@ type imgGetRequest struct {
 	ImgPath string `json:"img_path"`
 }
 
+func HandleImgGet() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var requestBody imgGetRequest
+		if err := c.Bind(&requestBody); err != nil {
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				err,
+			)
+		}
+
+		if requestBody.ImgPath == "" {
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				fmt.Errorf("img name is empty"),
+			)
+		}
 
 
-func HandleImgGet(c echo.Context) error {
-	var requestBody imgGetRequest
-	if err := c.Bind(&requestBody); err != nil {
-		return echo.NewHTTPError(
-			http.StatusBadRequest,
-			err,
-		)
+		// filename := "img1.jpg"
+		content, _ := GetFile(requestBody.ImgPath)
+		
+		enc := base64.StdEncoding.EncodeToString(content)
+		
+		return c.String(http.StatusOK, enc)
 	}
-
-	if requestBody.ImgPath == "" {
-		return echo.NewHTTPError(
-			http.StatusBadRequest,
-			fmt.Errorf("img name is empty"),
-		)
-	}
-
-
-	// filename := "img1.jpg"
-	content, _ := GetFile(requestBody.ImgPath)
-	
-	enc := base64.StdEncoding.EncodeToString(content)
-	
-	return c.String(http.StatusOK, enc)
 }
 
 
@@ -102,7 +102,7 @@ func main(){
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	e.GET("/jsoncheck", HandleJsonCheck)
-	e.GET("/trip/get_img", HandleImgGet)
+	e.GET("/trip/get_img", HandleImgGet())
 	e.Logger.Fatal(e.Start(":1323"))	
 }
 
