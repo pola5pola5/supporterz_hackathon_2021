@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/model/img"
 	"github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/model/trip"
+	"github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/s3"
 	fr "github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/repository/file"
 	ir "github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/repository/img"
 	txr "github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/repository/transaction"
@@ -20,6 +21,7 @@ const layout = "2006:01:02 15:04:05"
 type TripUsecase interface {
 	RegisterTrip(userID string, img [][]byte) (string, error)
 	GetImgsByTripID(tripID string) ([]*img.Img, error)
+	GetImgByUrl(imgUrl string) ([]byte, error)
 }
 
 type tripUsecase struct {
@@ -90,6 +92,16 @@ func (tu *tripUsecase) GetImgsByTripID(tripID string) ([]*img.Img, error) {
 	}
 	return imgs, nil
 }
+
+// 画像のurlを受け取り、外部ストレージから画像を取得
+func (tu *tripUsecase) GetImgByUrl(imgUrl string) ([]byte, error) {
+	imgByte, err := s3.GetFile(imgUrl)
+	if err != nil {
+		return nil, err
+	}
+	return imgByte, nil
+}
+
 
 // 画像から必要な情報抜き取り、外部ストレージとDBに保存
 func ExtractInfoAndSave(

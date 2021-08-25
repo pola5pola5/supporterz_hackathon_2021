@@ -2,6 +2,7 @@ package s3
 
 import (
 	"bytes"
+	"io/ioutil"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -12,7 +13,8 @@ import (
 )
 
 const region = "ap-northeast-1"
-const bucket = "photo-tabi"
+// const bucket = "photo-tabi"
+const bucket = "photo-tabi-dev"
 
 type s3Persistence struct {
 }
@@ -41,6 +43,37 @@ func (sp s3Persistence) SaveFile(filename string, file []byte) (string, error) {
 	}
 	return output.Location, nil
 }
+
+// s3からファイルを取得する処理
+func GetFile(filename string) ([]byte, error){
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String(region),
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	svc := s3.New(sess)
+	
+
+	obj, err := svc.GetObject(&s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key: 	aws.String(filename),
+	})
+	if err != nil {
+		return nil, err
+	}
+	
+	rc := obj.Body
+	content, err := ioutil.ReadAll(rc)
+	defer rc.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return content, nil
+}
+
 
 func (sp s3Persistence) DeleteFile(filename string) error {
 	sess, err := session.NewSession(&aws.Config{

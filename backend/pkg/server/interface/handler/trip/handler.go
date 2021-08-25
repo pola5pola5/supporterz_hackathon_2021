@@ -13,6 +13,7 @@ import (
 type TripHandler interface {
 	HandleTripSave() echo.HandlerFunc
 	HandleTripGet() echo.HandlerFunc
+	HandleImgGet() echo.HandlerFunc
 }
 
 type tripHandler struct {
@@ -168,5 +169,35 @@ func (th *tripHandler) HandleTripGet() echo.HandlerFunc {
 			http.StatusOK,
 			res,
 		)
+	}
+}
+
+
+type imgGetRequest struct {
+	ImgPath string `json:"img_path"`
+}
+
+func (th *tripHandler) HandleImgGet() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var requestBody imgGetRequest
+		if err := c.Bind(&requestBody); err != nil {
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				err,
+			)
+		}
+
+		if requestBody.ImgPath == "" {
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				fmt.Errorf("img name is empty"),
+			)
+		}
+
+		content, _ := th.tripUsecase.GetImgByUrl(requestBody.ImgPath)
+		
+		enc := base64.StdEncoding.EncodeToString(content)
+		
+		return c.String(http.StatusOK, enc)
 	}
 }
