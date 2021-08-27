@@ -2,24 +2,12 @@
   <div class="TripMemory">
     <div id="routing">
       <div class="header">
-        <div class="header_title" @click="onClickTitle()">フォト旅</div>
+        <div class="headerTitle" @click="onClickTitle()">フォト旅</div>
         <div class="border"></div>
         <div class="username">Hello {{username}}!</div>
         <div class="addtrip" @click="onClickAddtrip()">Add trip</div>
-        <div class="user_setting">hoge</div>
-
-        <div class="example-modal-window">
-          <p>ボタンを押すとモーダルウィンドウが開きます</p>
-          <button @click="openModal">開く</button>
-
-          <!-- コンポーネント MyModal -->
-          <MyModal @close="closeModal" v-if="modal">
-            <!-- default スロットコンテンツ -->
-            <p>Vue.js Modal Window!</p>
-            <div><input v-model="message"></div>
-            <!-- /default -->
-          </MyModal>
-        </div>
+        <div class="userSetting" @click="onClickOpenPopup()">{{username.slice(0,1).toUpperCase()}}</div>
+        <Popup :isopen='popup' :user='this.username' :tripnum='this.tripIds.length' @close="onClickClosePopup"></Popup>
       </div>
 
       <div class="title">Trip List</div>
@@ -38,10 +26,10 @@
 <script>
 import axios from "axios";
 import mapboxgl from "mapbox-gl";
-import MyModal from './MyModal.vue'
+import Popup from "@/components/UserPopup.vue";
 
 export default {
-  components: { MyModal },
+  components: { Popup },
   name: "memory",
 
   data() {
@@ -49,9 +37,8 @@ export default {
       tripIds: [],
       geojsonData: [],
       mapData: [],
-      username: [],
-      modal: false,
-      message: ''
+      username: "hoge",
+      popup: false,
     };
   },
 
@@ -95,20 +82,16 @@ export default {
       this.$router.push("/input");
     },
 
-    openModal() {
-      this.modal = true
+    onClickOpenPopup: function () {
+      this.popup = true
     },
-    closeModal() {
-      this.modal = false
+
+    onClickClosePopup: function () {
+      this.popup = false
     },
-    doSend() {
-      if (this.message.length > 0) {
-        alert(this.message)
-        this.message = ''
-        this.closeModal()
-      } else {
-        alert('メッセージを入力してください')
-      }
+
+    onClickOpenModal: function () {
+      this.modal = true;
     },
 
     getTripData: async function (tripID, idx) {
@@ -118,23 +101,23 @@ export default {
       await axios
         .get("/api/auth/trip/get", { params: id, headers: header })
         .then((res) => {
-          this.geojsonData = res.data;
+          this.geojsonData[idx] = res.data;
           this.getMap(idx);
         });
     },
 
     getMap: async function (idx) {
       var jsonCoordinates = [];
-      this.geojsonData.features.forEach(function (jsonData, idx, array) {
+      this.geojsonData[idx].features.forEach(function (jsonData, index, array) {
         jsonCoordinates =
           jsonCoordinates +
           jsonData.geometry.coordinates[0] +
           "," +
           jsonData.geometry.coordinates[1];
-        if (idx < array.length - 1) {
+        if (index < array.length - 1) {
           jsonCoordinates = jsonCoordinates + ";";
         }
-        if (idx === array.length - 1) {
+        if (index === array.length - 1) {
           jsonCoordinates =
             jsonCoordinates +
             ";" +
@@ -152,8 +135,8 @@ export default {
             "&depart_at=2019-05-02T15:00&overview=full&geometries=geojson"
         )
         .then((res) => {
-          this.mapData = res.data;
-          this.createMap(this.mapData, this.geojsonData, idx);
+          this.mapData[idx] = res.data;
+          this.createMap(this.mapData[idx], this.geojsonData[idx], idx);
         });
     },
 
@@ -241,9 +224,9 @@ export default {
         if(i > 5) break
         const photo = photos[i].properties.img_url
         var photoel = document.createElement("img")
-        photoel.src =  photo
-        photoel.style.width = 80 + "px"
-        photoel.style.height = 80 + "px"
+        photoel.src = photo
+        photoel.style.width = 5 + "rem"
+        photoel.style.height = 5 + "rem"
         tripParent.appendChild(photoel)
       }
     },
@@ -262,7 +245,7 @@ export default {
     align-items: center;
   }
 
-  .header_title{
+  .headerTitle{
     width: 170px;
     font-family: serif;
     font-size: 30px;
@@ -305,34 +288,22 @@ export default {
     border-radius: 10px;
   }
 
-  .user_setting{
+  .userSetting{
     color: white;
     margin-left: 40px;
     margin-right: 20px;
-  }
-
-  #overlay{
-    z-index:1;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background-color:rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #content{
-    z-index:2;
-    width:50%;
-    padding: 1em;
-    background:#fff;
+    cursor: pointer;
+    background-color: #C850BC;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
   }
 
   .container{
     display: flex;
+    flex-wrap: wrap;
   }
 
   .name{
@@ -345,7 +316,7 @@ export default {
 
   .tripParent{
     color: white;
-    width: 50%;
+    width: calc(50% - 2em);
     height: 303px;
     margin: 1em;
     cursor: pointer;
