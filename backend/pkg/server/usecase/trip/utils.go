@@ -74,7 +74,7 @@ func ExtractExifContent(img []byte) (map[string]interface{}, error) {
 }
 
 func stringToTime(str string) (*time.Time, error) {
-	t, err := time.Parse(layout, str)
+	t, err := time.Parse(imgLayout, str)
 	if err != nil {
 		return nil, err
 	}

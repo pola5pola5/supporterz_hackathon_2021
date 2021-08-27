@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,11 +16,13 @@ import (
 	tr "github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/repository/trip"
 )
 
-const layout = "2006:01:02 15:04:05"
+const imgLayout = "2006:01:02 15:04:05"
+const dbLayout = "2006-01-02 15:04:05"
 
 type TripUsecase interface {
 	RegisterTrip(userID string, img [][]byte) (string, error)
 	GetImgsByTripID(tripID string) ([]*img.Img, error)
+	GetDatesByTripID(tripID string) (*[2]string, error)
 }
 
 type tripUsecase struct {
@@ -89,6 +92,23 @@ func (tu *tripUsecase) GetImgsByTripID(tripID string) ([]*img.Img, error) {
 		return nil, errMsg
 	}
 	return imgs, nil
+}
+
+func (tu *tripUsecase) GetDatesByTripID(tripID string) (*[2]string, error) {
+	dates, err := tu.imgRepo.SelectDatesByTripID(tripID)
+	if err != nil {
+		return nil, err
+	}
+	if dates == nil {
+		errMsg := fmt.Errorf("img not found. tripID=%s", tripID)
+		return nil, errMsg
+	}
+	// 出力用に型変換
+	var dateArr [2]string
+	for i, date := range dates {
+		dateArr[i] = changeTypeAndexceptTime(*date)
+	}
+	return &dateArr, nil
 }
 
 // 画像から必要な情報抜き取り、外部ストレージとDBに保存
@@ -165,4 +185,11 @@ func ExtractInfoAndSave(
 	}
 
 	return nil
+}
+
+// 型変換し日時情報をまとめる処理
+func changeTypeAndexceptTime(t time.Time) string {
+	dateString := t.Format(dbLayout)
+	dateExceptTime := strings.Split(dateString, " ")[0]
+	return dateExceptTime
 }
