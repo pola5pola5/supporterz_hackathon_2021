@@ -73,14 +73,6 @@ export default {
     dragLeave() {
       this.isEnter = false;
     },
-    getBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
-    },
     deleteFile(index) {
       this.files.splice(index, 1);
       this.images.splice(index, 1);
@@ -88,7 +80,7 @@ export default {
 
     checkGPS(gps_files) {
       console.log(gps_files)
-      return new Promise((gps_files) => {
+      return new Promise((files) => {
         const new_gps_files = gps_files.filter(file => {
           var gps_info_is
           loadImage.parseMetaData(file)
@@ -105,27 +97,15 @@ export default {
           })
           return gps_info_is
         })
-        return gps_files
+        files(new_gps_files)
       })
     },
-
-
-    // dropFile: async function () {
-    //   this.files.push(...event.dataTransfer.files);
-    //   this.isEnter = false;
-
-    //   this.files = this.files.filter((file,index) => {
-    //     const gps_info_is = await checkGPS(file)
-    //     return gps_info_is
-    //   })
-    //   console.log("3: ",this.files)
-
 
     async dropFile() {
       this.files.push(...event.dataTransfer.files);
       this.isEnter = false;
       const gps_files = await this.checkGPS(this.files)
-
+      console.log(gps_files)
       gps_files.forEach((file) => {
         console.log("4: imagesを抜き出す処理")
         console.log("5: ",file)
@@ -163,44 +143,6 @@ export default {
       return this.files, this.images;
     },
 
-
-    // createResizedCanvasElement (originalImg) {
-    //   const originalImgWidth = originalImg.width
-    //   const orifinalImgHeight = originalImg.height
-
-    //   // resizeWidthAndHeight関数については下記参照
-    //   const [resizedWidth, resizedHeight] = this.resizeWidthAndHeight(originalImgWidth, orifinalImgHeight)
-    //   const canvas = document.createElement('canvas')
-    //   const ctx = canvas.getContext('2d')
-    //   canvas.width = resizedWidth
-    //   canvas.height = resizedHeight
-
-    //   // drawImage関数の仕様はcanvasAPIのドキュメントを参照下さい
-    //   ctx.drawImage(originalImg, 0, 0, resizedWidth, resizedHeight)
-    //   return canvas
-    // },
-
-    // 縦横の比率を変えず、定めた大きさを超えないWidthとHeightの値を割り出す関数
-    // resizeWidthAndHeight (width, height) {
-
-    //   // 今回は400x400のサイズにしましたが、ここはプロジェクトによって柔軟に変更してよいと思います
-    //   const MAX_WIDTH = 400
-    //   const MAX_HEIGHT = 400
-
-    //   // 縦と横の比率を保つ
-    //   if (width > height) {
-    //     if (width > MAX_WIDTH) {
-    //       height *= MAX_WIDTH / width
-    //       width = MAX_WIDTH
-    //     }
-    //   } else {
-    //     if (height > MAX_HEIGHT) {
-    //       width *= MAX_HEIGHT / height
-    //       height = MAX_HEIGHT
-    //     }
-    //   }
-    //   return [width, height]
-    // },
     upload: function () {
       var resStatus;
       var getRequest;
