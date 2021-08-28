@@ -116,7 +116,6 @@ export default {
       this.checkGPS(files);
     },
     onImageChange(e) {
-      console.log("2")
       // console.log("files");
       const files = e.target.files || e.dataTransfer.files;
       this.checkGPS(files);
