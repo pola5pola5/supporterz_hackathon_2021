@@ -10,12 +10,11 @@
         @dragover.prevent
         @drop.prevent="dropFile()"
         :class="{ enter: isEnter }"
-        @change="onImageChange"
       >
         ファイルアップロード
         <!-- <div> -->
 
-        <!-- <input type="file" accept="image/*" @change="onImageChange" multiple /> -->
+        <input type="file" accept="image/*" @change="onImageChange" multiple />
       </div>
     </label>
 
@@ -86,42 +85,66 @@ export default {
       this.files.splice(index, 1);
       this.images.splice(index, 1);
     },
-    dropFile: function () {
-      // console.log(event.dataTransfer.files);
-      // console.log(event.dataTransfer.files.length)
+
+    checkGPS(gps_files) {
+      console.log(gps_files)
+      return new Promise((gps_files) => {
+        const new_gps_files = gps_files.filter(file => {
+          var gps_info_is
+          loadImage.parseMetaData(file)
+          .then(function(data) {
+            console.log("8: data.exif",data.exif)
+            console.log("9: data.exif.get('GPSInfo')",data.exif.get('GPSInfo'))
+            var getGPSdata = data.exif && data.exif.get('GPSInfo')
+            if(getGPSdata){
+              console.log("10: GPS取得できてる")
+              gps_info_is = true
+            }else{
+              gps_info_is = false
+            }
+          })
+          return gps_info_is
+        })
+        return gps_files
+      })
+    },
+
+
+    // dropFile: async function () {
+    //   this.files.push(...event.dataTransfer.files);
+    //   this.isEnter = false;
+
+    //   this.files = this.files.filter((file,index) => {
+    //     const gps_info_is = await checkGPS(file)
+    //     return gps_info_is
+    //   })
+    //   console.log("3: ",this.files)
+
+
+    async dropFile() {
       this.files.push(...event.dataTransfer.files);
       this.isEnter = false;
-      // それぞれのファイルに対して変換処理
-      this.files.forEach((file) => {
-        console.log("file");
-        console.log(file);
-        loadImage.parseMetaData(
-          file,
-          function(data) {
-          console.log("data.exif.get('GPSInfo')")
-          console.log(data.exif.get('GPSInfo'))
-          var gpsInfo = data.exif && data.exif.get('GPSInfo');
-          if (!gpsInfo){
-            alert("GPS情報を含む画像をアップロードしてください")
-            console.log(file.index)  
-          }
+      const gps_files = await this.checkGPS(this.files)
 
-        });
-
+      gps_files.forEach((file) => {
+        console.log("4: imagesを抜き出す処理")
+        console.log("5: ",file)
         var im = null;
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function () {
           im = reader.result;
           var base64EncodedFile = im.split(",")[1];
-          // console.log(base64EncodedFile); // base64にしたデータ
-          this.images.push(base64EncodedFile);
-
+          console.log(base64EncodedFile); // base64にしたデータ
+           this.images.push(base64EncodedFile);
         }.bind(this);
       });
+      console.log("6: ",this.files)
+      console.log("7: ", this.images)
       return this.files, this.images;
     },
     onImageChange(e) {
+      console.log("2")
       // console.log("files");
       const putImg = e.target.files || e.dataTransfer.files;
       this.files.push(...putImg);
@@ -134,7 +157,7 @@ export default {
           im = reader.result;
           var base64EncodedFile = im.split(",")[1];
           // console.log(base64EncodedFile); // base64にしたデータ
-          this.images.push(base64EncodedFile);
+          this.images.push("10: ",base64EncodedFile);
         }.bind(this);
       });
       return this.files, this.images;
