@@ -77,70 +77,117 @@ export default {
       this.files.splice(index, 1);
       this.images.splice(index, 1);
     },
-
-    checkGPS(gps_files) {
-      console.log(gps_files)
-      return new Promise((files) => {
-        const new_gps_files = gps_files.filter(file => {
-          var gps_info_is
-          loadImage.parseMetaData(file)
-          .then(function(data) {
-            console.log("8: data.exif",data.exif)
-            console.log("9: data.exif.get('GPSInfo')",data.exif.get('GPSInfo'))
-            var getGPSdata = data.exif && data.exif.get('GPSInfo')
-            if(getGPSdata){
-              console.log("10: GPS取得できてる")
-              gps_info_is = true
-            }else{
-              gps_info_is = false
+    // checkGPS(gps_files) {
+    //   console.log(gps_files)
+    //   return new Promise((resolve) => {
+    //     const new_gps_files = gps_files.filter(file => {
+    //       let flag;
+    //       loadImage.parseMetaData(file)
+    //           .then(function(data) {
+    //             console.log("8: data.exif",data.exif)
+    //             console.log("9: data.exif.get('GPSInfo')",data.exif.get('GPSInfo'))
+    //             const containGPS = data.exif && data.exif.get('GPSInfo');
+    //             if(containGPS){
+    //               this.temp(containGPS);
+    //               console.log("10: GPS取得できてる");
+    //               flag = true;
+    //             }else{
+    //               this.temp(containGPS);
+    //               flag = false;
+    //             }
+    //           })
+    //       return flag;
+    //     })
+    //     console.log("new_gps_files", new_gps_files);
+    //     resolve(new_gps_files);
+    //   })
+    // },
+    checkGPS(files) {
+      return new Promise((resolve) => {
+        files.forEach(file => {
+          loadImage.parseMetaData(file, (data) => {
+            // console.log("1: data.exif", data.exif)
+            // console.log("2: data.exif.get('GPSInfo')", data.exif.get('GPSInfo'))
+            // if (!data.exif) {
+            //   alert("");
+            //   return;
+            //
+            // }
+            // const fileWithGPS = data.exif.get('GPSInfo');
+            if (data.exif && data.exif.get('GPSInfo')) {
+              // console.log("fileWithGPS ", fileWithGPS);
+              console.log("3: GPS取得できてる");
+              this.processFile(file);
+            } else {
+              // console.log("だめぽ");
+              alert("エラー: " + file.name + "\n位置情報を含む画像を選択してください");
+              // TODO: アラート出す
             }
-          })
-          return gps_info_is
+          });
         })
-        files(new_gps_files)
+        resolve();
       })
     },
 
-    async dropFile() {
-      this.files.push(...event.dataTransfer.files);
+    processFile(file) {
+      console.log("4: imagesを抜き出す処理")
+      console.log("5: ",file)
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const im = reader.result;
+        const base64EncodedFile = im.split(",")[1];
+        console.log(base64EncodedFile); // base64にしたデータ
+        this.images.push(base64EncodedFile);
+        this.files.push(file);
+      }
+    },
+
+    dropFile() {
+      // this.files.push(...event.dataTransfer.files);
       this.isEnter = false;
-      const gps_files = await this.checkGPS(this.files)
-      console.log(gps_files)
-      gps_files.forEach((file) => {
-        console.log("4: imagesを抜き出す処理")
-        console.log("5: ",file)
-        var im = null;
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-          im = reader.result;
-          var base64EncodedFile = im.split(",")[1];
-          console.log(base64EncodedFile); // base64にしたデータ
-           this.images.push(base64EncodedFile);
-        }.bind(this);
-      });
-      console.log("6: ",this.files)
-      console.log("7: ", this.images)
-      return this.files, this.images;
+      const files = [...event.dataTransfer.files];
+      this.checkGPS(files);
+      // const gps_files = this.checkGPS(this.files);
+      // const gps_files = [];
+      // console.log(gps_files)
+      // gps_files.forEach((file) => {
+      //   console.log("4: imagesを抜き出す処理")
+      //   console.log("5: ",file)
+      //   var im = null;
+      //   const reader = new FileReader();
+      //   reader.readAsDataURL(file);
+      //   reader.onload = function () {
+      //     im = reader.result;
+      //     var base64EncodedFile = im.split(",")[1];
+      //     console.log(base64EncodedFile); // base64にしたデータ
+      //      this.images.push(base64EncodedFile);
+      //   }.bind(this);
+      // });
+      // console.log("6: ",this.files)
+      // console.log("7: ", this.images)
+      // return this.files, this.images;
     },
     onImageChange(e) {
       console.log("2")
       // console.log("files");
-      const putImg = e.target.files || e.dataTransfer.files;
-      this.files.push(...putImg);
-      this.files.forEach((file) => {
-        // console.log(file);
-        var im = null;
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-          im = reader.result;
-          var base64EncodedFile = im.split(",")[1];
-          // console.log(base64EncodedFile); // base64にしたデータ
-          this.images.push("10: ",base64EncodedFile);
-        }.bind(this);
-      });
-      return this.files, this.images;
+      const files = e.target.files || e.dataTransfer.files;
+      this.checkGPS(files);
+
+      // this.files.push(...putImg);
+      // this.files.forEach((file) => {
+      //   // console.log(file);
+      //   var im = null;
+      //   const reader = new FileReader();
+      //   reader.readAsDataURL(file);
+      //   reader.onload = function () {
+      //     im = reader.result;
+      //     var base64EncodedFile = im.split(",")[1];
+      //     // console.log(base64EncodedFile); // base64にしたデータ
+      //     this.images.push("10: ",base64EncodedFile);
+      //   }.bind(this);
+      // });
+      // return this.files, this.images;
     },
 
     upload: function () {
