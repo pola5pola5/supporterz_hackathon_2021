@@ -179,22 +179,15 @@ type imgGetRequest struct {
 
 func (th *tripHandler) HandleImgGet() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var requestBody imgGetRequest
-		if err := c.Bind(&requestBody); err != nil {
+		imgPath := c.QueryParam("img_path")
+		if imgPath == "" {
 			return echo.NewHTTPError(
 				http.StatusBadRequest,
-				err,
+				fmt.Errorf("img_path is empty"),
 			)
 		}
 
-		if requestBody.ImgPath == "" {
-			return echo.NewHTTPError(
-				http.StatusBadRequest,
-				fmt.Errorf("img name is empty"),
-			)
-		}
-
-		content, _ := th.tripUsecase.GetImgByUrl(requestBody.ImgPath)
+		content, _ := th.tripUsecase.GetImgByUrl(imgPath)
 		
 		enc := base64.StdEncoding.EncodeToString(content)
 		
