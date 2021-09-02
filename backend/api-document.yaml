@@ -245,6 +245,42 @@ paths:
       tags:
         - trip
     parameters: []
+  /api/auth/trip/get_date:
+    get:
+      summary: 日時情報を返すAPI
+      tags:
+        - trip
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  start_date:
+                    type: string
+                  end_date:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    start_date: '2021-08-03'
+                    end_date: '2021-08-04'
+      operationId: get-api-auth-trip-get_date
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: trip_id
+          description: 旅のID
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: X-Token
+          required: true
+
   /api/auth/trip/save:
     post:
       tags:

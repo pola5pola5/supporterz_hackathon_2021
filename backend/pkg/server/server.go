@@ -92,6 +92,7 @@ func Serve(addr string) {
 	// img
 	apiAuth.POST("/trip/save", tripHandler.HandleTripSave())
 	apiAuth.GET("/trip/get", tripHandler.HandleTripGet())
+	apiAuth.GET("/trip/get_date", tripHandler.HandleDateGet())
 	// html
 	apiAuth.Static("/html", "static")
 

@@ -13,6 +13,7 @@ import (
 type TripHandler interface {
 	HandleTripSave() echo.HandlerFunc
 	HandleTripGet() echo.HandlerFunc
+	HandleDateGet() echo.HandlerFunc
 }
 
 type tripHandler struct {
@@ -118,6 +119,7 @@ type properties struct {
 	ImgURL string `json:"img_url"`
 }
 
+// 旅情報を取得するAPI
 func (th *tripHandler) HandleTripGet() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// クエリパラメータからtripID取得
@@ -163,6 +165,43 @@ func (th *tripHandler) HandleTripGet() echo.HandlerFunc {
 		res := tripGetResponse{
 			ResponseType: "FeatureCollection",
 			Features:     resSlice,
+		}
+		return c.JSON(
+			http.StatusOK,
+			res,
+		)
+	}
+}
+
+type DateGetResponse struct {
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
+}
+
+// 旅の日時を返す処理
+func (th *tripHandler) HandleDateGet() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// クエリパラメータからtripID取得
+		tripID := c.QueryParam("trip_id")
+		if tripID == "" {
+			return echo.NewHTTPError(
+				http.StatusBadRequest,
+				fmt.Errorf("tripID is empty"),
+			)
+		}
+
+		// 開始日時と終了日時を取得
+		dates, err := th.tripUsecase.GetDatesByTripID(tripID)
+		if err != nil {
+			return echo.NewHTTPError(
+				http.StatusInternalServerError,
+				err,
+			)
+		}
+
+		res := DateGetResponse{
+			StartDate: dates[0],
+			EndDate:   dates[1],
 		}
 		return c.JSON(
 			http.StatusOK,
