@@ -174,8 +174,8 @@ func (th *tripHandler) HandleTripGet() echo.HandlerFunc {
 }
 
 type DateGetResponse struct {
-	startDate string `json:"start_date"`
-	endDate   string `json:"end_date"`
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
 }
 
 // 旅の日時を返す処理
@@ -200,8 +200,8 @@ func (th *tripHandler) HandleDateGet() echo.HandlerFunc {
 		}
 
 		res := DateGetResponse{
-			startDate: dates[0],
-			endDate:   dates[1],
+			StartDate: dates[0],
+			EndDate:   dates[1],
 		}
 		return c.JSON(
 			http.StatusOK,

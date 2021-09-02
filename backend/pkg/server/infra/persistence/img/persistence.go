@@ -2,7 +2,6 @@ package img
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"time"
 
@@ -42,14 +41,12 @@ func (ip imgPersistence) InsertImg(img *model.Img, tx *sql.Tx) error {
 func (ip imgPersistence) SelectDatesByTripID(trip_id string) ([]*time.Time, error) {
 	// 開始日時の取得
 	row := ip.db.QueryRow("SELECT date_time FROM img_table WHERE trip_id = ? ORDER BY date_time LIMIT 1", trip_id)
-	fmt.Print(row)
 	start_date, err := convertToTime(row)
 	if err != nil {
 		return nil, err
 	}
 	// 終了日時の取得
 	row = ip.db.QueryRow("SELECT date_time FROM img_table WHERE trip_id = ? ORDER BY date_time DESC LIMIT 1", trip_id)
-	fmt.Print(row)
 	end_date, err := convertToTime(row)
 	if err != nil {
 		return nil, err

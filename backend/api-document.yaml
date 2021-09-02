@@ -271,13 +271,16 @@ paths:
       parameters:
         - schema:
             type: string
-          in: header
-          name: X-Token
-        - schema:
-            type: string
           in: query
           name: trip_id
           description: 旅のID
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: X-Token
+          required: true
+
   /api/auth/trip/save:
     post:
       tags:
