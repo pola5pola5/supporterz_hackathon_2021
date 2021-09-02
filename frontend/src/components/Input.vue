@@ -1,10 +1,8 @@
 <template>
   <div class="Input">
-    <!-- <input type="file" name="example" ref="preview" accept="image/*" multiple required> -->
     <p id="error" v-show="error">{{ error }}</p>
     <p>クリックまたはドラッグ&ドロップで画像を追加してください．</p>
     <label>
-      <!-- <img :src="avatar" alt="Avatar" class="image"> -->
       <div
         class="drop_area"
         @dragenter="dragEnter"
@@ -12,7 +10,6 @@
         @dragover.prevent
         @drop.prevent="dropFile()"
         :class="{ enter: isEnter }"
-        @change="onImageChange"
       >
         ファイルアップロード
         <!-- <div> -->
@@ -53,17 +50,16 @@
 
 <script>
 import axios from "axios";
+import loadImage from "blueimp-load-image";
 export default {
   name: "Input",
   data() {
     return {
-      avatar: "",
       message: "",
       error: "",
       isEnter: false,
       files: [],
       images: [],
-      min_imgs: [],
       test: "",
     };
   },
@@ -77,98 +73,54 @@ export default {
     dragLeave() {
       this.isEnter = false;
     },
-    getBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
-    },
-    dropFile: function () {
-      // console.log(event.dataTransfer.files);
-      // console.log(event.dataTransfer.files.length)
-      this.files.push(...event.dataTransfer.files);
-      this.isEnter = false;
-      // それぞれのファイルに対して変換処理
-      this.files.forEach((file) => {
-        // console.log(file);
-        var im = null;
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-          im = reader.result;
-          var base64EncodedFile = im.split(",")[1];
-          // console.log(base64EncodedFile); // base64にしたデータ
-          this.images.push(base64EncodedFile);
-          // 小さくする処理いれる
-          const resizedCanvas = this.createResizedCanvasElement(im);
-          const resizedBase64 = resizedCanvas.toDataURL(file.type);
-          this.min_imgs.push(resizedBase64);
-        }.bind(this);
-      });
-      return this.files, this.images;
-    },
-    onImageChange(e) {
-      // console.log("files");
-      const putImg = e.target.files || e.dataTransfer.files;
-      this.files.push(...putImg);
-      this.files.forEach((file) => {
-        // console.log(file);
-        var im = null;
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-          im = reader.result;
-          var base64EncodedFile = im.split(",")[1];
-          // console.log(base64EncodedFile); // base64にしたデータ
-          this.images.push(base64EncodedFile);
-        }.bind(this);
-      });
-      return this.files, this.images;
-    },
     deleteFile(index) {
       this.files.splice(index, 1);
       this.images.splice(index, 1);
     },
 
-    // createResizedCanvasElement (originalImg) {
-    //   const originalImgWidth = originalImg.width
-    //   const orifinalImgHeight = originalImg.height
+    checkGPS(files) {
+      return new Promise((resolve) => {
+        files.forEach(file => {
+          loadImage.parseMetaData(file, (data) => {
 
-    //   // resizeWidthAndHeight関数については下記参照
-    //   const [resizedWidth, resizedHeight] = this.resizeWidthAndHeight(originalImgWidth, orifinalImgHeight)
-    //   const canvas = document.createElement('canvas')
-    //   const ctx = canvas.getContext('2d')
-    //   canvas.width = resizedWidth
-    //   canvas.height = resizedHeight
+            if (data.exif && data.exif.get('GPSInfo')) {
+              // console.log("fileWithGPS ", fileWithGPS);
+              // console.log("3: GPS取得できてる");
+              this.processFile(file);
+            } else {
+              alert("エラー: " + file.name + "\n位置情報を含む画像を選択してください");
+            }
+          });
+        })
+        resolve();
+      })
+    },
 
-    //   // drawImage関数の仕様はcanvasAPIのドキュメントを参照下さい
-    //   ctx.drawImage(originalImg, 0, 0, resizedWidth, resizedHeight)
-    //   return canvas
-    // },
+    processFile(file) {
+      // console.log("4: imagesを抜き出す処理")
+      // console.log("5: ",file)
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const im = reader.result;
+        const base64EncodedFile = im.split(",")[1];
+        // console.log(base64EncodedFile); // base64にしたデータ
+        this.images.push(base64EncodedFile);
+        this.files.push(file);
+      }
+    },
 
-    // 縦横の比率を変えず、定めた大きさを超えないWidthとHeightの値を割り出す関数
-    // resizeWidthAndHeight (width, height) {
+    dropFile() {
+      this.isEnter = false;
+      const files = [...event.dataTransfer.files];
+      this.checkGPS(files);
+    },
+    onImageChange(e) {
+      // console.log("files");
+      const files = e.target.files || e.dataTransfer.files;
+      this.checkGPS(files);
+    },
 
-    //   // 今回は400x400のサイズにしましたが、ここはプロジェクトによって柔軟に変更してよいと思います
-    //   const MAX_WIDTH = 400
-    //   const MAX_HEIGHT = 400
-
-    //   // 縦と横の比率を保つ
-    //   if (width > height) {
-    //     if (width > MAX_WIDTH) {
-    //       height *= MAX_WIDTH / width
-    //       width = MAX_WIDTH
-    //     }
-    //   } else {
-    //     if (height > MAX_HEIGHT) {
-    //       width *= MAX_HEIGHT / height
-    //       height = MAX_HEIGHT
-    //     }
-    //   }
-    //   return [width, height]
-    // },
     upload: function () {
       var resStatus;
       var getRequest;
