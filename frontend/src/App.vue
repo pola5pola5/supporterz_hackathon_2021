@@ -7,7 +7,8 @@
   </div>
   <div v-else id="nav">
     <router-link to="/">Top</router-link> |
-    <router-link to="/signin">Sign in</router-link>
+    <router-link to="/signin">Sign in</router-link> |
+    <router-link to="/test">Test</router-link>
   </div>
   <router-view />
 </template>
