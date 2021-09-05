@@ -23,7 +23,7 @@ export default {
             this.answer = "送受信中"
             await axios({
                     method: 'get',
-                    url: 'http://13.231.129.55/api/auth/trip/get_img', 
+                    url: '/api/auth/trip/get_img', 
                     params: { "img_path": "img1.jpg" },
                     headers: { "X-Token": "4f272392-a679-4a86-ba92-3ffd96c83ae8"},
                 })

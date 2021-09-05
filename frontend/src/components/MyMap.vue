@@ -17,6 +17,7 @@ export default {
     return {
       geojsonData: [],
       mapData: [],
+      imgName: "",
     };
   },
   mounted: function () {
@@ -25,6 +26,7 @@ export default {
   computed: function () {
     this.mapCreate(this.mapData, this.geojsonData);
     this.getMapApi();
+    this.getOneImgFromS3(this.imgName);
   },
   methods: {
     //get json
@@ -39,6 +41,23 @@ export default {
           this.getMapApi();
         });
     },
+
+    getOneImgFromS3: async function(imgName) {
+        await axios({
+                  method: 'get',
+                  url: '/api/auth/trip/get_img', 
+                  params: { "img_path": imgName },
+                  headers: { "X-Token": this.$store.getters["auth/getToken"] },
+              })
+              .then(response => {
+                  return "data:image/jpg;base64," + response.data
+              })
+              .catch(error => {
+                  console.log("error!" + error)
+                  return null
+              });
+    },
+    
 
     getMapApi: async function () {
       var jsonCoordinates = [];
@@ -202,13 +221,15 @@ export default {
 
       //make
       geojsonData.features.forEach(function (marker) {
+        console.log(marker.properties.img_url)
+        var imgBase64 = "data:image/jpg;base64," + this.getOneImgFromS3(marker.properties.img_url)
         // create a DOM element for the marker
         var el = document.createElement("div");
         el.className = "marker";
 
         var pop = document.createElement("div");
         pop.className = "img";
-        pop.style.background = "url(" + marker.properties.img_url + ")";
+        pop.style.background = "url(" + imgBase64 + ")";
         pop.style.width = 300 + "px";
         pop.style.height = 300 + "px";
         pop.style.backgroundSize = "cover";
