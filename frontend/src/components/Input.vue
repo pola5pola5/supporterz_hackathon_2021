@@ -12,9 +12,13 @@
         :class="{ enter: isEnter }"
       >
         ファイルアップロード
-        <!-- <div> -->
 
-        <input type="file" accept="image/*" @change="onImageChange" multiple />
+        <input
+          type="file"
+          accept="image/jpeg"
+          @change="onImageChange"
+          multiple
+        />
       </div>
     </label>
 
@@ -78,22 +82,34 @@ export default {
       this.images.splice(index, 1);
     },
 
-    checkGPS(files) {
+    checkTypeAndGPS(files) {
       return new Promise((resolve) => {
-        files.forEach(file => {
+        files.forEach((file) => {
+          // 拡張子のチェック
+          const type = file.type;
+          if (type != "image/jpeg") {
+            alert(
+              "エラー: " + file.name + "\n拡張子がjpegの画像を選択してください"
+            );
+            return;
+          }
+          // GPSのチェック
           loadImage.parseMetaData(file, (data) => {
-
-            if (data.exif && data.exif.get('GPSInfo')) {
+            if (data.exif && data.exif.get("GPSInfo")) {
               // console.log("fileWithGPS ", fileWithGPS);
               // console.log("3: GPS取得できてる");
               this.processFile(file);
             } else {
-              alert("エラー: " + file.name + "\n位置情報を含む画像を選択してください");
+              alert(
+                "エラー: " +
+                  file.name +
+                  "\n位置情報を含む画像を選択してください"
+              );
             }
           });
-        })
+        });
         resolve();
-      })
+      });
     },
 
     processFile(file) {
@@ -107,18 +123,17 @@ export default {
         // console.log(base64EncodedFile); // base64にしたデータ
         this.images.push(base64EncodedFile);
         this.files.push(file);
-      }
+      };
     },
 
     dropFile() {
       this.isEnter = false;
       const files = [...event.dataTransfer.files];
-      this.checkGPS(files);
+      this.checkTypeAndGPS(files);
     },
     onImageChange(e) {
-      // console.log("files");
       const files = e.target.files || e.dataTransfer.files;
-      this.checkGPS(files);
+      this.checkTypeAndGPS(files);
     },
 
     upload: function () {
