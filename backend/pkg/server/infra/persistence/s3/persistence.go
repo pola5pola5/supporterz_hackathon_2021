@@ -14,8 +14,9 @@ import (
 )
 
 const region = "ap-northeast-1"
-// const bucket = "photo-tabi"
-const bucket = "photo-tabi-dev"
+const bucket = "photo-tabi"
+// const bucket = "photo-tabi-dev"
+
 
 type s3Persistence struct {
 }
