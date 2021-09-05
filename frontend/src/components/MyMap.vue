@@ -26,7 +26,6 @@ export default {
   computed: function () {
     this.mapCreate(this.mapData, this.geojsonData);
     this.getMapApi();
-    this.getOneImgFromS3(this.imgName);
   },
   methods: {
     //get json
@@ -42,7 +41,7 @@ export default {
         });
     },
 
-    getOneImgFromS3: async function(imgName) {
+    setOneImgFromS3: async function(imgName, map, marker) {
         await axios({
                   method: 'get',
                   url: '/api/auth/trip/get_img', 
@@ -50,11 +49,32 @@ export default {
                   headers: { "X-Token": this.$store.getters["auth/getToken"] },
               })
               .then(response => {
-                  return "data:image/jpg;base64," + response.data
+                  var el = document.createElement("div");
+                  el.className = "marker";
+
+                  var pop = document.createElement("div");
+                  pop.className = "img";
+                  pop.style.background = "url(" + "data:image/jpg;base64," + response.data + ")";
+                  pop.style.width = 300 + "px";
+                  pop.style.height = 300 + "px";
+                  pop.style.backgroundSize = "cover";
+
+                  const popup = new mapboxgl.Popup({
+                    offset: 25,
+                    maxWidth: 1000,
+                  }).setDOMContent(pop);
+
+                  new mapboxgl.Marker({
+                      element: el,
+                      anchor: 'bottom'
+                    })
+                    .setLngLat(marker.geometry.coordinates)
+                    .setPopup(popup)
+                    .addTo(map);
+      
               })
               .catch(error => {
                   console.log("error!" + error)
-                  return null
               });
     },
     
@@ -220,33 +240,11 @@ export default {
       });
 
       //make
-      geojsonData.features.forEach(function (marker) {
-        console.log(marker.properties.img_url)
-        var imgBase64 = "data:image/jpg;base64," + this.getOneImgFromS3(marker.properties.img_url)
+      for (let i = 0; i < geojsonData.features.length; i++){
+        var marker = geojsonData.features[i];
+        this.setOneImgFromS3(marker.properties.img_url, map, marker);
         // create a DOM element for the marker
-        var el = document.createElement("div");
-        el.className = "marker";
-
-        var pop = document.createElement("div");
-        pop.className = "img";
-        pop.style.background = "url(" + imgBase64 + ")";
-        pop.style.width = 300 + "px";
-        pop.style.height = 300 + "px";
-        pop.style.backgroundSize = "cover";
-
-        const popup = new mapboxgl.Popup({
-          offset: 25,
-          maxWidth: 1000,
-        }).setDOMContent(pop);
-
-        new mapboxgl.Marker({
-            element: el,
-            anchor: 'bottom'
-          })
-          .setLngLat(marker.geometry.coordinates)
-          .setPopup(popup)
-          .addTo(map);
-      });
+      }
     },
   },
 };

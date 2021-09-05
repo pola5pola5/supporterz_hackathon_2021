@@ -9,7 +9,6 @@ import SignIn from "@/components/SignIn.vue";
 import SignUp from "@/components/SignUp.vue";
 import Input from "@/components/Input";
 
-import Test from "@/components/Test";
 import Store from "@/store/index.js";
 
 const routes = [
@@ -27,14 +26,6 @@ const routes = [
     path: "/home",
     name: "Home",
     component: Home,
-  },
-  {
-    path: "/test",
-    name: "Test",
-    component: Test,
-    meta: {
-      isPublic: true,
-    },
   },
   {
     path: "/signin",
