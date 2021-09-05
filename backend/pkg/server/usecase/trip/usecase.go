@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"time"
+	"path"
 
 	"github.com/google/uuid"
 	"github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/model/img"
@@ -131,6 +132,7 @@ func ExtractInfoAndSave(
 	if err != nil {
 		return err
 	}
+	imgUrl = path.Base(imgUrl)
 
 	defer func() {
 		if flag > 0 {
