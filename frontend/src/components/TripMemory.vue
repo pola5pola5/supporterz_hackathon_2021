@@ -1,24 +1,21 @@
 <template>
   <div class="TripMemory">
-    <div id="routing">
-      <div class="header">
-        <div class="headerTitle" @click="onClickTitle()">フォト旅</div>
-        <div class="border"></div>
-        <div class="username">Hello {{username}}!</div>
-        <div class="addtrip" @click="onClickAddtrip()">Add trip</div>
-        <div class="userSetting" @click="onClickOpenPopup()">{{username.slice(0,1).toUpperCase()}}</div>
-        <Popup :isopen='popup' :user='this.username' :tripnum='this.tripIds.length' @close="onClickClosePopup"></Popup>
-      </div>
+    <div class="header">
+      <div class="headerTitle" @click="onClickTitle()">フォト旅</div>
+      <div class="border"></div>
+      <div class="username">Hello {{username}}!</div>
+      <div class="addtrip" @click="onClickAddtrip()">Add trip</div>
+      <div class="userSetting" @click="onClickOpenPopup()">{{username.slice(0,1).toUpperCase()}}</div>
+      <Popup v-bind:isopen="popup" v-bind:user="this.username" v-bind:tripnum="this.tripIds.length" @close="onClickClosePopup"></Popup>
+    </div>
 
-      <div class="title">Trip List</div>
-      <div class="container">
-        <div v-for="(value, index) in tripIds" :key="value.id" @click="onClickMyMap(value)" class="tripParent" >
-          <div class="name_bg">
-            <div class="name">旅{{index + 1}}</div>
-          </div>
+    <div class="title">Trip List</div>
+    <div class="container">
+      <div v-for="(value, index) in tripIds" :key="value.id" @click="onClickMyMap(value)" class="tripParent" >
+        <div class="name_bg">
+          <div class="name">旅{{index + 1}}</div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -321,7 +318,6 @@ export default {
     margin: 1em;
     cursor: pointer;
     box-shadow: 5px 2.5px 2.5px gray;
-    /* background-color: #f1f0f0; */
   }
 
   *{

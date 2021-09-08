@@ -1,14 +1,16 @@
 <template>
-  <div id="overlay" v-show="isopen" @click.self="closePopup">
-    <div id="content">
-      <div class="userIcon">{{user.slice(0,1).toUpperCase()}}</div>
-      <div class="name">{{user}}</div>
-      <div class="line"></div>
-      <div class="name">{{tripnum}} Trip</div>
-      <div class="line"></div>
-      <div class="btn">Setting</div>
-      <div class="btn" @click="onClickLogout">Log out</div>
-      <div><button class="btn" @click="closePopup">close</button></div>
+  <div>
+    <div id="overlay" v-show="isopen" @click.self="closePopup">
+      <div id="content">
+        <div class="userIcon">{{user.slice(0,1).toUpperCase()}}</div>
+        <div class="name">{{user}}</div>
+        <div class="line"></div>
+        <div class="name">{{tripnum}} Trip</div>
+        <div class="line"></div>
+        <div class="btn">Setting</div>
+        <div class="btn" @click="onClickLogout">Log out</div>
+        <div><button class="btn" @click="closePopup">close</button></div>
+      </div>
     </div>
   </div>
 </template>

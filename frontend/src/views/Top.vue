@@ -19,11 +19,11 @@ export default {
 };
 </script>
 <style scoped>
-p {
+/* p {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 40px 0 0;
   color: #42b983;
-}
+} */
 </style>

@@ -2,7 +2,10 @@
   <div class="Map">
     <div id="map"></div>
     <div class="overlay">
-       <button id="replay">Replay</button>
+      <div class="header">
+        hoge
+      </div>
+      <button id="replay">Replay</button>
     </div>
   </div>
 </template>
@@ -19,14 +22,22 @@ export default {
       mapData: [],
     };
   },
+
   mounted: function () {
     this.getGeojson();
   },
+
   computed: function () {
     this.mapCreate(this.mapData, this.geojsonData);
     this.getMapApi();
   },
+
   methods: {
+
+    onClickTitle: function () {
+      this.$router.push("/routing");
+    },
+
     //get json
     getGeojson: async function () {
       const id = { trip_id: this.$store.getters["trip/getTripID"] };
@@ -231,38 +242,49 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /*マップサイズ*/
-#map {
-  z-index: 0;
-  height: 800px;
-}
-.marker {
-  background-image: url("../assets/marker.jpg");
-  background-size: cover;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.overlay {
-  position: absolute;
-  top: 100px;
-  left: 30px;
-}
-.overlay button {
-  font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  background-color: #3386c0;
-  color: #fff;
-  display: inline-block;
-  margin: 0;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  border-radius: 3px;
-}
- 
-.overlay button:hover {
-  background-color: #4ea0da;
-}
+  #map {
+    z-index: 0;
+    height: 800px;
+  }
+  .marker {
+    background-image: url("../assets/marker.jpg");
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+  .overlay button {
+    font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    background-color: #3386c0;
+    color: #fff;
+    display: inline-block;
+    margin-left: 30px;
+    margin-top: 300px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .overlay button:hover {
+    background-color: #4ea0da;
+  }
+
+  .header{
+    height: 100px;
+    width: 100%;
+    background-image: url("~@/assets/header.jpg");
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    align-items: center;
+  }
 </style>
