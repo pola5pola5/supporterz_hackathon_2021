@@ -2,9 +2,9 @@
   <div class="Map">
     <div id="map"></div>
     <div class="overlay">
-      <div class="header">
+      <!-- <div class="header">
         hoge
-      </div>
+      </div> -->
       <button id="replay">Replay</button>
     </div>
   </div>
@@ -248,6 +248,17 @@ export default {
     z-index: 0;
     height: 800px;
   }
+
+  /* .header{
+    height: 100px;
+    width: 100%;
+    background-image: url("~@/assets/header.jpg");
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    align-items: center;
+  } */
+
   .marker {
     background-image: url("../assets/marker.jpg");
     background-size: cover;
@@ -256,7 +267,7 @@ export default {
     border-radius: 50%;
     cursor: pointer;
   }
-  .overlay {
+  /* .overlay {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -276,15 +287,5 @@ export default {
   
   .overlay button:hover {
     background-color: #4ea0da;
-  }
-
-  .header{
-    height: 100px;
-    width: 100%;
-    background-image: url("~@/assets/header.jpg");
-    background-size: cover;
-    background-position: center center;
-    display: flex;
-    align-items: center;
-  }
+  } */
 </style>

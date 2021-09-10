@@ -13,7 +13,7 @@
       <div class="username">Hello {{username}}!</div>
       <div class="addtrip" v-on:click="onClickAddtrip()">Add trip</div>
       <div class="userSetting" v-on:click="onClickOpenPopup()">{{username.slice(0,1).toUpperCase()}}</div>
-      <Popup :isopen='popup' :user='this.username' :tripnum='this.tripIds.length' @close="onClickClosePopup"></Popup>
+      <Popup :isopen='popup' :user='username' :tripnum='tripIds.length' @close="onClickClosePopup"></Popup>
     </div>
 
     <div class="title">Trip List</div>
@@ -181,19 +181,19 @@ export default {
         zoom: 15,
       });
 
-      var point = {
-        'type': 'FeatureCollection',
-        'features': [
-          {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-              'type': 'Point',
-              'coordinates': route[0]
-            }
-          }
-        ]
-      };
+      // var point = {
+      //   'type': 'FeatureCollection',
+      //   'features': [
+      //     {
+      //       'type': 'Feature',
+      //       'properties': {},
+      //       'geometry': {
+      //         'type': 'Point',
+      //         'coordinates': route[0]
+      //       }
+      //     }
+      //   ]
+      // };
 
       map.on("load", function () {
         map.addSource("route", {
@@ -207,10 +207,10 @@ export default {
             },
           },
         });
-        map.addSource("point", {
-          type: "geojson",
-          data: point
-        });
+        // map.addSource("point", {
+        //   type: "geojson",
+        //   data: point
+        // });
         map.addLayer({
           id: "route",
           type: "line",
@@ -262,7 +262,7 @@ export default {
   margin: 40px 0 0;
   color: #42b983;
 } */
-.header{
+  .header{
     height: 100px;
     width: 100%;
     background-image: url("~@/assets/header.jpg");
