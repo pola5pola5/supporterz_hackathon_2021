@@ -2,9 +2,17 @@
   <div class="Map">
     <div id="map"></div>
     <div class="overlay">
-      <!-- <div class="header">
-        hoge
-      </div> -->
+      <div class="map_header">
+        <div class="title">
+          <div class="headerTitle" v-on:click="onClickTitle">フォト旅</div>
+        </div>
+        <div class="menu">
+          <div class="toHome" v-on:click="onClickTitle">Home</div>
+          <div class="addtrip" v-on:click="onClickAddtrip">Add trip</div>
+          <div class="userSetting" v-on:click="onClickOpenPopup">{{ username_upper }}</div>
+        </div>
+        <Popup :isopen='popup' :user='username' :tripnum='tripIdNum' @close="onClickClosePopup"></Popup>
+      </div>
       <button id="replay">Replay</button>
     </div>
   </div>
@@ -13,13 +21,21 @@
 <script>
 import mapboxgl from "mapbox-gl";
 import axios from "axios";
+import Popup from "@/components/UserPopup.vue";
 //import turf from "@turf/turf"
 
 export default {
+  components: {Popup} ,
+  name: "Mymap",
+
   data() {
     return {
       geojsonData: [],
       mapData: [],
+      tripIdNum: "",
+      popup: false,
+      username: "undefined user",
+      username_upper: "A"
     };
   },
 
@@ -33,13 +49,31 @@ export default {
   },
 
   methods: {
-
     onClickTitle: function () {
-      this.$router.push("/routing");
+      this.$router.push("/home");
+    },
+
+    onClickAddtrip: function () {
+      this.$router.push("/input");
+    },
+
+    onClickOpenPopup: function () {
+      this.popup = true
+    },
+
+    onClickClosePopup: function () {
+      this.popup = false
+    },
+
+    onClickOpenModal: function () {
+      this.modal = true;
     },
 
     //get json
     getGeojson: async function () {
+      this.tripIdNum = this.$store.getters["trip/getNumTripID"];
+      this.username = this.$store.getters["user/getUserName"];
+      this.username_upper = this.username.slice(0,1).toUpperCase()
       const id = { trip_id: this.$store.getters["trip/getTripID"] };
       const header = { "X-Token": this.$store.getters["auth/getToken"] };
 
@@ -215,7 +249,7 @@ export default {
       geojsonData.features.forEach(function (marker) {
         // create a DOM element for the marker
         var el = document.createElement("div");
-        el.className = "marker";
+        el.className = "map_marker";
 
         var pop = document.createElement("div");
         pop.className = "img";
@@ -249,17 +283,88 @@ export default {
     height: 800px;
   }
 
-  /* .header{
+  .map_header{
     height: 100px;
     width: 100%;
-    background-image: url("~@/assets/header.jpg");
+    background-color: #060B38;
+    opacity: 0.67;
     background-size: cover;
     background-position: center center;
     display: flex;
     align-items: center;
-  } */
+  }
 
-  .marker {
+  .title{
+    margin-right: auto;
+  }
+
+  .menu{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: 50%;
+  }
+
+  .toHome{
+    font-family: serif;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    text-align: center;
+    line-height: 40px;
+  }
+
+  .addtrip{
+    font-family: serif;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    background-color: #52A7F4;
+    padding: 8px;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .userSetting{
+    color: white;
+    cursor: pointer;
+    background-color: #C850BC;
+    margin-left: 0px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+  }
+  .overlay button {
+    font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    background-color: #F45252;
+    color: #fff;
+    display: inline-block;
+    margin-left: 30px;
+    margin-top: 40px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    z-index: 1;
+  }
+  
+  .overlay button:hover {
+    background-color: #e94040;
+  }
+</style>
+
+<style>
+  .map_marker {
     background-image: url("../assets/marker.jpg");
     background-size: cover;
     width: 50px;
@@ -267,25 +372,4 @@ export default {
     border-radius: 50%;
     cursor: pointer;
   }
-  /* .overlay {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-  }
-  .overlay button {
-    font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    background-color: #3386c0;
-    color: #fff;
-    display: inline-block;
-    margin-left: 30px;
-    margin-top: 300px;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
-  }
-  
-  .overlay button:hover {
-    background-color: #4ea0da;
-  } */
 </style>

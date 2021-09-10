@@ -77,6 +77,7 @@ export default {
         .get("api/auth/user/get_trip", { params: id, headers: header })
         .then((res) => {
           this.tripIds = res.data.trip_id;
+          this.$store.commit("trip/setNumTripID", this.tripIds.length);
           this.makeEachMap()
         });
     },
@@ -94,7 +95,7 @@ export default {
     },
 
     onClickTitle: function () {
-      this.$router.push("/routing");
+      this.$router.push("/home");
     },
 
     onClickAddtrip: function () {
@@ -178,7 +179,7 @@ export default {
         container: el.id,
         style: "mapbox://styles/tpkuma/ckr1c20cv1c4f18qcbsrr2gmm",
         center: route[0],
-        zoom: 15,
+        zoom: 10,
       });
 
       // var point = {
@@ -254,7 +255,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style module>
 /* p {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -353,5 +354,16 @@ export default {
   *{
     margin: 0%;
     padding: 0%;
+  }
+</style>
+
+<style>
+  .marker {
+    background-image: url("../assets/marker.jpg");
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
   }
 </style>

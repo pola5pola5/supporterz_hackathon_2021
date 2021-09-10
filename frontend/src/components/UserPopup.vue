@@ -58,7 +58,7 @@ export default{
     width:200px;
     height: 280px;
     float: right;
-    background:gray;
+    background:#2F2F2F;
     margin-top: 70px;
     margin-right: 30px;
     border-radius: 10px;
