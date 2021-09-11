@@ -12,7 +12,6 @@
         :class="{ enter: isEnter }"
       >
         ファイルアップロード
-        <!-- <div> -->
 
         <input type="file" accept="image/*" @change="onImageChange" multiple />
       </div>
@@ -40,11 +39,10 @@
 
     <br />
     <div v-show="files.length">
-      <button class="button" v-on:click="upload">送信</button>
+      <button class="button" v-on:click="upload" v-bind:disabled="isPushed">
+        {{ button_text }}
+      </button>
     </div>
-
-    <p>{{ message }}</p>
-    <p>{{ error }}</p>
   </div>
 </template>
 
@@ -55,18 +53,23 @@ export default {
   name: "Input",
   data() {
     return {
-      message: "",
       error: "",
       isEnter: false,
       files: [],
       images: [],
       test: "",
+      isPushed: false,
+      button_text: "送信",
     };
   },
   methods: {
     // setError (error, text) {
     //   this.error = (error.response && error.response.data && error.response.data.error) || text
     // },
+    changeButton() {
+      this.isPushed = true;
+      this.button_text = "送信中";
+    },
     dragEnter() {
       this.isEnter = true;
     },
@@ -80,20 +83,23 @@ export default {
 
     checkGPS(files) {
       return new Promise((resolve) => {
-        files.forEach(file => {
+        files.forEach((file) => {
           loadImage.parseMetaData(file, (data) => {
-
-            if (data.exif && data.exif.get('GPSInfo')) {
+            if (data.exif && data.exif.get("GPSInfo")) {
               // console.log("fileWithGPS ", fileWithGPS);
               // console.log("3: GPS取得できてる");
               this.processFile(file);
             } else {
-              alert("エラー: " + file.name + "\n位置情報を含む画像を選択してください");
+              alert(
+                "エラー: " +
+                  file.name +
+                  "\n位置情報を含む画像を選択してください"
+              );
             }
           });
-        })
+        });
         resolve();
-      })
+      });
     },
 
     processFile(file) {
@@ -107,7 +113,7 @@ export default {
         // console.log(base64EncodedFile); // base64にしたデータ
         this.images.push(base64EncodedFile);
         this.files.push(file);
-      }
+      };
     },
 
     dropFile() {
@@ -122,6 +128,7 @@ export default {
     },
 
     upload: function () {
+      this.changeButton();
       var resStatus;
       var getRequest;
 
@@ -142,7 +149,6 @@ export default {
           resStatus = response.status;
           getRequest = response.data.trip_id;
           // console.log(getRequest);
-          this.message = "アップロードしました";
           this.error = "";
           if (resStatus == 200) {
             // console.log(this.$store.state.tripid);

@@ -2,7 +2,7 @@
   <div class="Map">
     <div id="map"></div>
     <div class="overlay">
-       <button id="replay">Replay</button>
+      <button id="replay">Replay</button>
     </div>
   </div>
 </template>
@@ -88,17 +88,17 @@ export default {
       });
 
       var point = {
-        'type': 'FeatureCollection',
-        'features': [
+        type: "FeatureCollection",
+        features: [
           {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-              'type': 'Point',
-              'coordinates': route[0]
-            }
-          }
-        ]
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "Point",
+              coordinates: route[0],
+            },
+          },
+        ],
       };
 
       var counter = 0;
@@ -118,7 +118,7 @@ export default {
         });
         map.addSource("point", {
           type: "geojson",
-          data: point
+          data: point,
         });
         map.addLayer({
           id: "route",
@@ -134,32 +134,25 @@ export default {
           },
         });
         map.addLayer({
-          'id': 'point',
-          'source': 'point',
-          'type': 'symbol',
-          'layout': {
-            'icon-image': 'car-15',
-            'icon-rotate': ['get', 'bearing'],
-            'icon-rotation-alignment': 'map',
-            'icon-allow-overlap': true,
-            'icon-ignore-placement': true,
-            'icon-size': 2.5
-          }
+          id: "point",
+          source: "point",
+          type: "symbol",
+          layout: {
+            "icon-image": "car-15",
+            "icon-rotate": ["get", "bearing"],
+            "icon-rotation-alignment": "map",
+            "icon-allow-overlap": true,
+            "icon-ignore-placement": true,
+            "icon-size": 2.5,
+          },
         });
         function animate() {
-          var start =
-            route[
-              counter >= steps ? counter - 1 : counter
-            ];
-          var end =
-            route[
-              counter >= steps ? counter : counter + 1
-            ];
+          var start = route[counter >= steps ? counter - 1 : counter];
+          var end = route[counter >= steps ? counter : counter + 1];
           if (!start || !end) return;
-          
-          point.features[0].geometry.coordinates =
-          route[counter];
-          
+
+          point.features[0].geometry.coordinates = route[counter];
+
           // Calculate the bearing to ensure the icon is rotated to match the route arc
           // The bearing is calculated between the current point and the next point, except
           // at the end of the arc, which uses the previous point and the current point
@@ -167,34 +160,33 @@ export default {
           //   turf.point(start),
           //   turf.point(end)
           // );
-          
-          map.getSource('point').setData(point);
-          
+
+          map.getSource("point").setData(point);
+
           if (counter < steps) {
             requestAnimationFrame(animate);
           }
-          
+
           counter = counter + 1;
         }
         document
-          .getElementById('replay')
-          .addEventListener('click', function () {
+          .getElementById("replay")
+          .addEventListener("click", function () {
             // Set the coordinates of the original point back to origin
             point.features[0].geometry.coordinates = origin;
-            
+
             // Update the source layer
-            map.getSource('point').setData(point);
-            
+            map.getSource("point").setData(point);
+
             // Reset the counter
             counter = 0;
-            
+
             // Restart the animation
             animate(counter);
           });
- 
+
         animate(counter);
       });
-
 
       map.on("mouseenter", "places", function () {
         map.getCanvas().style.cursor = "pointer";
@@ -219,9 +211,9 @@ export default {
         }).setDOMContent(pop);
 
         new mapboxgl.Marker({
-            element: el,
-            anchor: 'bottom'
-          })
+          element: el,
+          anchor: "bottom",
+        })
           .setLngLat(marker.geometry.coordinates)
           .setPopup(popup)
           .addTo(map);
@@ -251,7 +243,7 @@ export default {
   left: 30px;
 }
 .overlay button {
-  font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font: 600 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
   background-color: #3386c0;
   color: #fff;
   display: inline-block;
@@ -261,7 +253,7 @@ export default {
   cursor: pointer;
   border-radius: 3px;
 }
- 
+
 .overlay button:hover {
   background-color: #4ea0da;
 }
