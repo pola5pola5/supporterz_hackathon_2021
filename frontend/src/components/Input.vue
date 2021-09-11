@@ -40,7 +40,7 @@
     <br />
     <div v-show="files.length">
       <button class="button" v-on:click="upload" v-bind:disabled="isPushed">
-        {{ button_message }}
+        {{ button_text }}
       </button>
     </div>
   </div>
@@ -59,7 +59,7 @@ export default {
       images: [],
       test: "",
       isPushed: false,
-      button_message: "送信",
+      button_text: "送信",
     };
   },
   methods: {
@@ -68,7 +68,7 @@ export default {
     // },
     changeButton() {
       this.isPushed = true;
-      this.button_message = "送信中";
+      this.button_text = "送信中";
     },
     dragEnter() {
       this.isEnter = true;
