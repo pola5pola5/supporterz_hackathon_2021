@@ -9,7 +9,7 @@
     <!-- <h3 @click="signOut">sign out</h3> -->
     <div class="header">
       <div class="headerTitle" v-on:click="onClickTitle()">フォト旅</div>
-      <div class="border"></div>
+      <!-- <div class="border"></div> -->
       <div class="username">Hello {{username}}!</div>
       <div class="addtrip" v-on:click="onClickAddtrip()">Add trip</div>
       <div class="userSetting" v-on:click="onClickOpenPopup()">{{username.slice(0,1).toUpperCase()}}</div>
@@ -23,6 +23,10 @@
           <div class="name">旅{{index + 1}}</div>
         </div>
       </div>
+    </div>
+    <div v-if="tripIds.length === 0" class="noTripMemory">
+      <div>There is no trip Memory</div>
+      <div>Let's add your trip!</div>
     </div>
   </div>
 </template>
@@ -255,7 +259,7 @@ export default {
 </script>
 
 
-<style module>
+<style scoped>
 /* p {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -264,9 +268,9 @@ export default {
   color: #42b983;
 } */
   .header{
-    height: 100px;
+    height: 50px;
     width: 100%;
-    background-image: url("~@/assets/header.jpg");
+    background-color: #2D2D2D;
     background-size: cover;
     background-position: center center;
     display: flex;
@@ -293,16 +297,17 @@ export default {
   .username{
     font-family: serif;
     color: white;
-    font-size: 25px;
+    font-size: 20px;
+    margin-top: 10px;
   }
 
   .title{
     font-family: "Times New Roman";
     font-size: 40px;
-    margin-top: 20px;
+    margin-top: 40px;
     margin-bottom: 20px;
     text-align: center;
-    color: #060B38;
+    color: #2D2D2D;
   }
 
   .addtrip{
@@ -311,9 +316,11 @@ export default {
     cursor: pointer;
     font-size: 20px;
     margin-left: auto;
-    background-color: #52A7F4;
-    padding: 8px;
-    border-radius: 10px;
+    border-color: white;
+    /* border-bottom: thin solid; */
+    /* padding-left: 8px;
+    padding-right: 8px; */
+    /* text-decoration: underline; */
   }
 
   .userSetting{
@@ -332,6 +339,14 @@ export default {
   .container{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .container::after{
+    content: "";
+    display: block;
+    width: calc(50% - 2em);
+    margin: 0.5em;
   }
 
   .name{
@@ -339,21 +354,30 @@ export default {
   }
 
   .name_bg{
-    background-color: #060B38;
+    background-color: #2D2D2D;
   }
 
   .tripParent{
     color: white;
     width: calc(50% - 2em);
     height: 303px;
-    margin: 1em;
+    margin: 0.5em;
     cursor: pointer;
-    box-shadow: 5px 2.5px 2.5px gray;
+    border-left: solid #2D2D2D;
+    border-right: solid #2D2D2D;
+    border-bottom: solid #2D2D2D;
+    /* box-shadow: 5px 2.5px 2.5px gray; */
   }
 
-  *{
-    margin: 0%;
-    padding: 0%;
+  .noTripMemory{
+    color: #535353;
+    margin-top: 40px;
+    font-family: serif;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    text-align: center;
   }
 </style>
 
@@ -365,5 +389,10 @@ export default {
     height: 50px;
     border-radius: 50%;
     cursor: pointer;
+  }
+
+  *{
+    margin: 0%;
+    padding: 0%;
   }
 </style>

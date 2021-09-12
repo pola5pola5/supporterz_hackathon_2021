@@ -284,14 +284,25 @@ export default {
   }
 
   .map_header{
-    height: 100px;
+    height: 50px;
     width: 100%;
-    background-color: #060B38;
-    opacity: 0.67;
+    background-color: black;
     background-size: cover;
     background-position: center center;
     display: flex;
     align-items: center;
+    opacity: 0.67;
+  }
+
+  .headerTitle{
+    width: 170px;
+    font-family: serif;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    display:table-cell;
+    vertical-align:middle;
+    text-align: center;
   }
 
   .title{
@@ -311,26 +322,24 @@ export default {
     cursor: pointer;
     font-size: 20px;
     text-align: center;
-    line-height: 40px;
   }
 
   .addtrip{
     font-family: serif;
     color: white;
+    margin-left: 40px;
     cursor: pointer;
     font-size: 20px;
-    background-color: #52A7F4;
-    padding: 8px;
-    border-radius: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
+    /* margin-left: auto; */
+    border-color: white;
   }
 
   .userSetting{
     color: white;
+    margin-left: 40px;
+    margin-right: 20px;
     cursor: pointer;
     background-color: #C850BC;
-    margin-left: 0px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -350,7 +359,7 @@ export default {
     color: #fff;
     display: inline-block;
     margin-left: 30px;
-    margin-top: 40px;
+    margin-top: 20px;
     padding: 10px 20px;
     border: none;
     cursor: pointer;

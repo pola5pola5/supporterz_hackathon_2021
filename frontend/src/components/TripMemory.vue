@@ -17,6 +17,9 @@
         </div>
       </div>
     </div>
+    <p v-show="true">
+      There is no trip Memory
+    </p>
   </div>
 </template>
 
@@ -36,6 +39,7 @@ export default {
       mapData: [],
       username: "hoge",
       popup: false,
+      nonemap: false
     };
   },
 
@@ -56,7 +60,16 @@ export default {
         .then((res) => {
           this.tripIds = res.data.trip_id;
           this.makeEachMap()
-        });
+        })
+    },
+
+    isnoneMap: function(){
+      if(this.tripIds.length === 0){
+        return true
+      }
+      else{
+        return false
+      }
     },
 
     makeEachMap: function (){
@@ -231,7 +244,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
   .header{
     height: 100px;
     width: 100%;

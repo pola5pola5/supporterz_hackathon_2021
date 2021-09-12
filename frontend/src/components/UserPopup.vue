@@ -7,7 +7,6 @@
         <div class="line"></div>
         <div class="name">{{tripnum}} Trip</div>
         <div class="line"></div>
-        <div class="btn">Setting</div>
         <div class="btn" @click="onClickLogout">Log out</div>
         <div><button class="btn" @click="closePopup">close</button></div>
       </div>
@@ -56,7 +55,7 @@ export default{
   #content{
     z-index:2;
     width:200px;
-    height: 280px;
+    height: 250px;
     float: right;
     background:#2F2F2F;
     margin-top: 70px;

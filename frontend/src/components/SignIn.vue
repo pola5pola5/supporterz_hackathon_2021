@@ -21,18 +21,6 @@
         </div>
       </div>
     </div>
-    <!-- <h2>Sign in</h2>
-    <div>
-      <input type="text" placeholder="Username" v-model="info.user_name" />
-    </div>
-    <div>
-      <input type="password" placeholder="Password" v-model="info.password" />
-    </div>
-    <button @click="signIn">Signin</button>
-    <p>
-      You don't have an account?
-      <router-link to="/signup">create account now!!</router-link>
-    </p> -->
   </div>
 </template>
 
@@ -100,10 +88,10 @@ export default {
   .center_area{
     width: 80%;
     font-family: serif;
-    color: #060B38;
+    color: #2D2D2D;
   }
  .bg{
-   background-color: #060B38;
+   background-color: #2D2D2D;
    width: 50%;
    height: 100vh;
    margin: 0%;
@@ -116,7 +104,7 @@ export default {
    cursor: pointer;
    font-family: serif;
    font-size: 15px;
-   background-color: #060B38;
+   background-color: #2D2D2D;
    width: 100px;
    height: 30px;
    border: 0px;

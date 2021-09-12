@@ -1,17 +1,5 @@
 <template>
   <div class="SignUp">
-    <!-- <h2>Sign up</h2>
-    <div>
-      <input type="text" placeholder="Username" v-model="info.user_name" />
-    </div>
-    <div>
-      <input type="password" placeholder="Password" v-model="info.password" />
-    </div>
-    <button @click="signUp">Register</button>
-    <p>
-      Do you have an account?
-      <router-link to="/signin">sign in now!!</router-link>
-    </p> -->
     <div class="content">
       <div class="input_area">
         <div class="center_area">
@@ -100,10 +88,10 @@ h1,
   .center_area{
     width: 80%;
     font-family: serif;
-    color: #060B38;
+    color: #2D2D2D;
   }
  .bg{
-   background-color: #060B38;
+   background-color: #2D2D2D;
    width: 50%;
    height: 100vh;
    margin: 0%;
@@ -116,7 +104,7 @@ h1,
    cursor: pointer;
    font-family: serif;
    font-size: 15px;
-   background-color: #060B38;
+   background-color: #2D2D2D;
    width: 100px;
    height: 30px;
    border: 0px;
