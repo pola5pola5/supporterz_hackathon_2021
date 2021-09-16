@@ -10,17 +10,29 @@
     <div class="header">
       <div class="headerTitle" v-on:click="onClickTitle()">フォト旅</div>
       <!-- <div class="border"></div> -->
-      <div class="username">Hello {{username}}!</div>
+      <div class="username">Hello {{ username }}!</div>
       <div class="addtrip" v-on:click="onClickAddtrip()">Add trip</div>
-      <div class="userSetting" v-on:click="onClickOpenPopup()">{{username.slice(0,1).toUpperCase()}}</div>
-      <Popup :isopen='popup' :user='username' :tripnum='tripIds.length' @close="onClickClosePopup"></Popup>
+      <div class="userSetting" v-on:click="onClickOpenPopup()">
+        {{ username.slice(0, 1).toUpperCase() }}
+      </div>
+      <Popup
+        :isopen="popup"
+        :user="username"
+        :tripnum="tripIds.length"
+        @close="onClickClosePopup"
+      ></Popup>
     </div>
 
     <div class="title">Trip List</div>
     <div class="container">
-      <div v-for="(value, index) in tripIds" :key="value.id" v-on:click="onClickMyMap(value)" class="tripParent" >
+      <div
+        v-for="(value, index) in tripIds"
+        :key="value.id"
+        v-on:click="onClickMyMap(value)"
+        class="tripParent"
+      >
         <div class="name_bg">
-          <div class="name">旅{{index + 1}}</div>
+          <div class="name">旅{{ index + 1 }}</div>
         </div>
       </div>
     </div>
@@ -52,7 +64,7 @@ import mapboxgl from "mapbox-gl";
 import Popup from "@/components/UserPopup.vue";
 
 export default {
-  components: {Popup} ,
+  components: { Popup },
   name: "memory",
 
   data() {
@@ -70,7 +82,6 @@ export default {
   },
 
   methods: {
-
     //get trip_id
     getTripId: async function () {
       this.username = this.$store.getters["user/getUserName"];
@@ -82,14 +93,14 @@ export default {
         .then((res) => {
           this.tripIds = res.data.trip_id;
           this.$store.commit("trip/setNumTripID", this.tripIds.length);
-          this.makeEachMap()
+          this.makeEachMap();
         });
     },
 
-    makeEachMap: function (){
-      let self = this
-      for(const [idx, tripID] of this.tripIds.entries()){
-        self.getTripData(tripID, idx)
+    makeEachMap: function () {
+      let self = this;
+      for (const [idx, tripID] of this.tripIds.entries()) {
+        self.getTripData(tripID, idx);
       }
     },
 
@@ -107,11 +118,11 @@ export default {
     },
 
     onClickOpenPopup: function () {
-      this.popup = true
+      this.popup = true;
     },
 
     onClickClosePopup: function () {
-      this.popup = false
+      this.popup = false;
     },
 
     onClickOpenModal: function () {
@@ -167,15 +178,15 @@ export default {
     createMap: function (mapData, geojsonData, idx) {
       const data = mapData.routes[0];
       var route = data.geometry.coordinates;
-      const photos = geojsonData.features
+      const photos = geojsonData.features;
 
-      var tripParent = document.getElementsByClassName("tripParent")[idx]
-      var el = document.createElement("div")
-      el.id = "map" + idx
-      el.textContent = "loading"
-      el.style.width= 100 + "%";
-      el.style.height = 200 + "px"
-      tripParent.appendChild(el)
+      var tripParent = document.getElementsByClassName("tripParent")[idx];
+      var el = document.createElement("div");
+      el.id = "map" + idx;
+      el.textContent = "loading";
+      el.style.width = 100 + "%";
+      el.style.height = 200 + "px";
+      tripParent.appendChild(el);
 
       //cretate map
       mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_API_KEY;
@@ -236,28 +247,27 @@ export default {
         el.className = "marker";
 
         new mapboxgl.Marker({
-            element: el,
-            anchor: 'bottom'
-          })
+          element: el,
+          anchor: "bottom",
+        })
           .setLngLat(marker.geometry.coordinates)
           .addTo(map);
       });
 
-      const len = photos.length
-      for(let i = 0; i < len; i++){
-        if(i > 5) break
-        const photo = photos[i].properties.img_url
-        var photoel = document.createElement("img")
-        photoel.src = photo
-        photoel.style.width = 5 + "rem"
-        photoel.style.height = 5 + "rem"
-        tripParent.appendChild(photoel)
+      const len = photos.length;
+      for (let i = 0; i < len; i++) {
+        if (i > 5) break;
+        const photo = photos[i].properties.img_url;
+        var photoel = document.createElement("img");
+        photoel.src = photo;
+        photoel.style.width = 5 + "rem";
+        photoel.style.height = 5 + "rem";
+        tripParent.appendChild(photoel);
       }
     },
   },
 };
 </script>
-
 
 <style scoped>
 /* p {
@@ -267,132 +277,132 @@ export default {
   margin: 40px 0 0;
   color: #42b983;
 } */
-  .header{
-    height: 50px;
-    width: 100%;
-    background-color: #2D2D2D;
-    background-size: cover;
-    background-position: center center;
-    display: flex;
-    align-items: center;
-  }
+.header {
+  height: 50px;
+  width: 100%;
+  background-color: #2d2d2d;
+  background-size: cover;
+  background-position: center center;
+  display: flex;
+  align-items: center;
+}
 
-  .headerTitle{
-    width: 170px;
-    font-family: serif;
-    font-size: 30px;
-    cursor: pointer;
-    color: white;
-    display:table-cell;
-    vertical-align:middle;
-    text-align: center;
-  }
+.headerTitle {
+  width: 170px;
+  font-family: serif;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
 
-  .border{
-    border-left: solid #C4C4C4;
-    padding-left: 10px;
-    height: 70px;
-  }
+.border {
+  border-left: solid #c4c4c4;
+  padding-left: 10px;
+  height: 70px;
+}
 
-  .username{
-    font-family: serif;
-    color: white;
-    font-size: 20px;
-    margin-top: 10px;
-  }
+.username {
+  font-family: serif;
+  color: white;
+  font-size: 20px;
+  margin-top: 10px;
+}
 
-  .title{
-    font-family: "Times New Roman";
-    font-size: 40px;
-    margin-top: 40px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #2D2D2D;
-  }
+.title {
+  font-family: "Times New Roman";
+  font-size: 40px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #2d2d2d;
+}
 
-  .addtrip{
-    font-family: serif;
-    color: white;
-    cursor: pointer;
-    font-size: 20px;
-    margin-left: auto;
-    border-color: white;
-    /* border-bottom: thin solid; */
-    /* padding-left: 8px;
+.addtrip {
+  font-family: serif;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: auto;
+  border-color: white;
+  /* border-bottom: thin solid; */
+  /* padding-left: 8px;
     padding-right: 8px; */
-    /* text-decoration: underline; */
-  }
+  /* text-decoration: underline; */
+}
 
-  .userSetting{
-    color: white;
-    margin-left: 40px;
-    margin-right: 20px;
-    cursor: pointer;
-    background-color: #C850BC;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 40px;
-  }
+.userSetting {
+  color: white;
+  margin-left: 40px;
+  margin-right: 20px;
+  cursor: pointer;
+  background-color: #c850bc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+}
 
-  .container{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
 
-  .container::after{
-    content: "";
-    display: block;
-    width: calc(50% - 2em);
-    margin: 0.5em;
-  }
+.container::after {
+  content: "";
+  display: block;
+  width: calc(50% - 2em);
+  margin: 0.5em;
+}
 
-  .name{
-    margin-left: 5px;
-  }
+.name {
+  margin-left: 5px;
+}
 
-  .name_bg{
-    background-color: #2D2D2D;
-  }
+.name_bg {
+  background-color: #2d2d2d;
+}
 
-  .tripParent{
-    color: white;
-    width: calc(50% - 2em);
-    height: 303px;
-    margin: 0.5em;
-    cursor: pointer;
-    border-left: solid #2D2D2D;
-    border-right: solid #2D2D2D;
-    border-bottom: solid #2D2D2D;
-    /* box-shadow: 5px 2.5px 2.5px gray; */
-  }
+.tripParent {
+  color: white;
+  width: calc(50% - 2em);
+  height: 303px;
+  margin: 0.5em;
+  cursor: pointer;
+  border-left: solid #2d2d2d;
+  border-right: solid #2d2d2d;
+  border-bottom: solid #2d2d2d;
+  /* box-shadow: 5px 2.5px 2.5px gray; */
+}
 
-  .noTripMemory{
-    color: #535353;
-    margin-top: 40px;
-    font-family: serif;
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    flex-flow: column;
-    text-align: center;
-  }
+.noTripMemory {
+  color: #535353;
+  margin-top: 40px;
+  font-family: serif;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+  text-align: center;
+}
 </style>
 
 <style>
-  .marker {
-    background-image: url("../assets/marker.jpg");
-    background-size: cover;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
+.marker {
+  background-image: url("../assets/marker.jpg");
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
 
-  *{
-    margin: 0%;
-    padding: 0%;
-  }
+* {
+  margin: 0%;
+  padding: 0%;
+}
 </style>

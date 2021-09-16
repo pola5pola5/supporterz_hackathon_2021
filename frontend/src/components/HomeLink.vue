@@ -37,17 +37,29 @@
     <div class="header">
       <div class="headerTitle" v-on:click="onClickTitle()">フォト旅</div>
       <div class="border"></div>
-      <div class="username">Hello {{username}}!</div>
+      <div class="username">Hello {{ username }}!</div>
       <div class="addtrip" v-on:click="onClickAddtrip()">Add trip</div>
-      <div class="userSetting" v-on:click="onClickOpenPopup()">{{username.slice(0,1).toUpperCase()}}</div>
-      <Popup :isopen='popup' :user='this.username' :tripnum='this.tripIds.length' @close="onClickClosePopup"></Popup>
+      <div class="userSetting" v-on:click="onClickOpenPopup()">
+        {{ username.slice(0, 1).toUpperCase() }}
+      </div>
+      <Popup
+        :isopen="popup"
+        :user="this.username"
+        :tripnum="this.tripIds.length"
+        @close="onClickClosePopup"
+      ></Popup>
     </div>
 
     <div class="title">Trip List</div>
     <div class="container">
-      <div v-for="(value, index) in tripIds" :key="value.id" v-on:click="onClickMyMap(value)" class="tripParent" >
+      <div
+        v-for="(value, index) in tripIds"
+        :key="value.id"
+        v-on:click="onClickMyMap(value)"
+        class="tripParent"
+      >
         <div class="name_bg">
-          <div class="name">旅{{index + 1}}</div>
+          <div class="name">旅{{ index + 1 }}</div>
         </div>
       </div>
     </div>
@@ -89,7 +101,6 @@ export default {
   },
 
   methods: {
-
     //get trip_id
     getTripId: async function () {
       this.username = this.$store.getters["user/getUserName"];
@@ -100,14 +111,14 @@ export default {
         .get("api/auth/user/get_trip", { params: id, headers: header })
         .then((res) => {
           this.tripIds = res.data.trip_id;
-          this.makeEachMap()
+          this.makeEachMap();
         });
     },
 
-    makeEachMap: function (){
-      let self = this
-      for(const [idx, tripID] of this.tripIds.entries()){
-        self.getTripData(tripID, idx)
+    makeEachMap: function () {
+      let self = this;
+      for (const [idx, tripID] of this.tripIds.entries()) {
+        self.getTripData(tripID, idx);
       }
     },
 
@@ -125,11 +136,11 @@ export default {
     },
 
     onClickOpenPopup: function () {
-      this.popup = true
+      this.popup = true;
     },
 
     onClickClosePopup: function () {
-      this.popup = false
+      this.popup = false;
     },
 
     onClickOpenModal: function () {
@@ -185,15 +196,15 @@ export default {
     createMap: function (mapData, geojsonData, idx) {
       const data = mapData.routes[0];
       var route = data.geometry.coordinates;
-      const photos = geojsonData.features
+      const photos = geojsonData.features;
 
-      var tripParent = document.getElementsByClassName("tripParent")[idx]
-      var el = document.createElement("div")
-      el.id = "map" + idx
-      el.textContent = "loading"
-      el.style.width= 100 + "%";
-      el.style.height = 200 + "px"
-      tripParent.appendChild(el)
+      var tripParent = document.getElementsByClassName("tripParent")[idx];
+      var el = document.createElement("div");
+      el.id = "map" + idx;
+      el.textContent = "loading";
+      el.style.width = 100 + "%";
+      el.style.height = 200 + "px";
+      tripParent.appendChild(el);
 
       //cretate map
       mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_API_KEY;
@@ -205,17 +216,17 @@ export default {
       });
 
       var point = {
-        'type': 'FeatureCollection',
-        'features': [
+        type: "FeatureCollection",
+        features: [
           {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-              'type': 'Point',
-              'coordinates': route[0]
-            }
-          }
-        ]
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "Point",
+              coordinates: route[0],
+            },
+          },
+        ],
       };
 
       map.on("load", function () {
@@ -232,7 +243,7 @@ export default {
         });
         map.addSource("point", {
           type: "geojson",
-          data: point
+          data: point,
         });
         map.addLayer({
           id: "route",
@@ -254,22 +265,22 @@ export default {
         el.className = "marker";
 
         new mapboxgl.Marker({
-            element: el,
-            anchor: 'bottom'
-          })
+          element: el,
+          anchor: "bottom",
+        })
           .setLngLat(marker.geometry.coordinates)
           .addTo(map);
       });
 
-      const len = photos.length
-      for(let i = 0; i < len; i++){
-        if(i > 5) break
-        const photo = photos[i].properties.img_url
-        var photoel = document.createElement("img")
-        photoel.src = photo
-        photoel.style.width = 5 + "rem"
-        photoel.style.height = 5 + "rem"
-        tripParent.appendChild(photoel)
+      const len = photos.length;
+      for (let i = 0; i < len; i++) {
+        if (i > 5) break;
+        const photo = photos[i].properties.img_url;
+        var photoel = document.createElement("img");
+        photoel.src = photo;
+        photoel.style.width = 5 + "rem";
+        photoel.style.height = 5 + "rem";
+        tripParent.appendChild(photoel);
       }
     },
   },
@@ -352,96 +363,96 @@ li {
 a {
   color: #42b983;
 } */
-.header{
-    height: 100px;
-    width: 100%;
-    background-image: url("~@/assets/header.jpg");
-    background-size: cover;
-    background-position: center center;
-    display: flex;
-    align-items: center;
-  }
+.header {
+  height: 100px;
+  width: 100%;
+  background-image: url("~@/assets/header.jpg");
+  background-size: cover;
+  background-position: center center;
+  display: flex;
+  align-items: center;
+}
 
-  .headerTitle{
-    width: 170px;
-    font-family: serif;
-    font-size: 30px;
-    cursor: pointer;
-    color: white;
-    display:table-cell;
-    vertical-align:middle;
-    text-align: center;
-  }
+.headerTitle {
+  width: 170px;
+  font-family: serif;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
 
-  .border{
-    border-left: solid #C4C4C4;
-    padding-left: 10px;
-    height: 70px;
-  }
+.border {
+  border-left: solid #c4c4c4;
+  padding-left: 10px;
+  height: 70px;
+}
 
-  .username{
-    font-family: serif;
-    color: white;
-    font-size: 25px;
-  }
+.username {
+  font-family: serif;
+  color: white;
+  font-size: 25px;
+}
 
-  .title{
-    font-family: "Times New Roman";
-    font-size: 40px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #060B38;
-  }
+.title {
+  font-family: "Times New Roman";
+  font-size: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #060b38;
+}
 
-  .addtrip{
-    font-family: serif;
-    color: white;
-    cursor: pointer;
-    font-size: 20px;
-    margin-left: auto;
-    background-color: #52A7F4;
-    padding: 8px;
-    border-radius: 10px;
-  }
+.addtrip {
+  font-family: serif;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: auto;
+  background-color: #52a7f4;
+  padding: 8px;
+  border-radius: 10px;
+}
 
-  .userSetting{
-    color: white;
-    margin-left: 40px;
-    margin-right: 20px;
-    cursor: pointer;
-    background-color: #C850BC;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 40px;
-  }
+.userSetting {
+  color: white;
+  margin-left: 40px;
+  margin-right: 20px;
+  cursor: pointer;
+  background-color: #c850bc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+}
 
-  .container{
-    display: flex;
-    flex-wrap: wrap;
-  }
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
 
-  .name{
-    margin-left: 5px;
-  }
+.name {
+  margin-left: 5px;
+}
 
-  .name_bg{
-    background-color: #060B38;
-  }
+.name_bg {
+  background-color: #060b38;
+}
 
-  .tripParent{
-    color: white;
-    width: calc(50% - 2em);
-    height: 303px;
-    margin: 1em;
-    cursor: pointer;
-    box-shadow: 5px 2.5px 2.5px gray;
-  }
+.tripParent {
+  color: white;
+  width: calc(50% - 2em);
+  height: 303px;
+  margin: 1em;
+  cursor: pointer;
+  box-shadow: 5px 2.5px 2.5px gray;
+}
 
-  *{
-    margin: 0%;
-    padding: 0%;
-  }
+* {
+  margin: 0%;
+  padding: 0%;
+}
 </style>

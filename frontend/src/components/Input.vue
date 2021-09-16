@@ -6,9 +6,16 @@
       </div>
       <div class="menu">
         <div class="toHome" v-on:click="onClickTitle">Home</div>
-        <div class="userSetting" v-on:click="onClickOpenPopup">{{ username_upper }}</div>
+        <div class="userSetting" v-on:click="onClickOpenPopup">
+          {{ username_upper }}
+        </div>
       </div>
-      <Popup :isopen='popup' :user='username' :tripnum='tripIdNum' @close="onClickClosePopup"></Popup>
+      <Popup
+        :isopen="popup"
+        :user="username"
+        :tripnum="tripIdNum"
+        @close="onClickClosePopup"
+      ></Popup>
     </div>
     <div class="input_body">
       <div class="input_area">
@@ -28,12 +35,15 @@
             Drop files here or click to upload
             <!-- <div> -->
 
-            <input type="file" accept="image/*" @change="onImageChange" multiple />
+            <input
+              type="file"
+              accept="image/*"
+              @change="onImageChange"
+              multiple
+            />
           </div>
         </label>
-        <div id="howToUse">
-          JPEG, PNG format can use this application
-        </div>
+        <div id="howToUse">JPEG, PNG format can use this application</div>
 
         <br />
         <div>
@@ -72,7 +82,7 @@ import loadImage from "blueimp-load-image";
 import Popup from "@/components/UserPopup.vue";
 
 export default {
-  components: {Popup} ,
+  components: { Popup },
   name: "Input",
   data() {
     return {
@@ -86,13 +96,13 @@ export default {
       username: "undefined user",
       tripIdNum: "",
       popup: false,
-      username_upper: ""
+      username_upper: "",
     };
   },
-  mounted: function(){
+  mounted: function () {
     this.tripIdNum = this.$store.getters["trip/getNumTripID"];
     this.username = this.$store.getters["user/getUserName"];
-    this.username_upper = this.username.slice(0,1).toUpperCase()
+    this.username_upper = this.username.slice(0, 1).toUpperCase();
   },
 
   methods: {
@@ -200,13 +210,12 @@ export default {
       this.$router.push("/home");
     },
 
-
     onClickOpenPopup: function () {
-      this.popup = true
+      this.popup = true;
     },
 
     onClickClosePopup: function () {
-      this.popup = false
+      this.popup = false;
     },
   },
 };
@@ -223,7 +232,7 @@ img:hover {
 #error {
   color: red;
 }
-#howToUse{
+#howToUse {
   text-align: center;
   font-family: serif;
   color: #5c5c5c;
@@ -291,98 +300,98 @@ span {
   border-color: #0070a7;
 }
 
-  .header{
-    height: 50px;
-    width: 100%;
-    background-color: #2D2D2D;
-    background-size: cover;
-    background-position: center center;
-    display: flex;
-    align-items: center;
-  }
+.header {
+  height: 50px;
+  width: 100%;
+  background-color: #2d2d2d;
+  background-size: cover;
+  background-position: center center;
+  display: flex;
+  align-items: center;
+}
 
-  .headerTitle{
-    width: 170px;
-    font-family: serif;
-    font-size: 30px;
-    cursor: pointer;
-    color: white;
-    display:table-cell;
-    vertical-align:middle;
-    text-align: center;
-  }
+.headerTitle {
+  width: 170px;
+  font-family: serif;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
 
-  .title{
-    margin-right: auto;
-  }
+.title {
+  margin-right: auto;
+}
 
-  .menu{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-left: 50%;
-  }
+.menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-left: 50%;
+}
 
-  .toHome{
-    font-family: serif;
-    color: white;
-    cursor: pointer;
-    font-size: 20px;
-    text-align: center;
-    line-height: 40px;
-  }
+.toHome {
+  font-family: serif;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  text-align: center;
+  line-height: 40px;
+}
 
-  .addtrip{
-    font-family: serif;
-    color: white;
-    cursor: pointer;
-    font-size: 20px;
-    background-color: #52A7F4;
-    padding: 8px;
-    border-radius: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
+.addtrip {
+  font-family: serif;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  background-color: #52a7f4;
+  padding: 8px;
+  border-radius: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
 
-  .userSetting{
-    color: white;
-    margin-left: 40px;
-    margin-right: 20px;
-    cursor: pointer;
-    background-color: #C850BC;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 40px;
-  }
+.userSetting {
+  color: white;
+  margin-left: 40px;
+  margin-right: 20px;
+  cursor: pointer;
+  background-color: #c850bc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+}
 
-  .headerTitle{
-    width: 170px;
-    font-family: serif;
-    font-size: 30px;
-    cursor: pointer;
-    color: white;
-    display:table-cell;
-    vertical-align:middle;
-    text-align: center;
-  }
+.headerTitle {
+  width: 170px;
+  font-family: serif;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
 
-  .input_body{
-    background-color: rgb(219, 215, 215);
-    height: 100vh;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-  }
+.input_body {
+  background-color: rgb(219, 215, 215);
+  height: 100vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 
-  .input_area{
-    background-color: rgb(241, 241, 241);
-    height: 80vh;
-    width:90%;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-  }
+.input_area {
+  background-color: rgb(241, 241, 241);
+  height: 80vh;
+  width: 90%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
 </style>
