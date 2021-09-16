@@ -1,47 +1,67 @@
 <template>
   <div class="Input">
-    <p id="error" v-show="error">{{ error }}</p>
-    <p>クリックまたはドラッグ&ドロップで画像を追加してください．</p>
-    <label>
-      <div
-        class="drop_area"
-        @dragenter="dragEnter"
-        @dragleave="dragLeave"
-        @dragover.prevent
-        @drop.prevent="dropFile()"
-        :class="{ enter: isEnter }"
-      >
-        ファイルアップロード
-
-        <input type="file" accept="image/*" @change="onImageChange" multiple />
+    <div class="header">
+      <div class="title">
+        <div class="headerTitle" v-on:click="onClickTitle">フォト旅</div>
       </div>
-    </label>
-
-    <br />
-    <div>
-      <ul class="flex">
-        <li
-          class="flex-col"
-          v-for="(file, index) in files"
-          :key="index"
-          @click="deleteFile(index)"
-        >
-          <!-- {{ index }} -->
-          <div style="position: relative">
-            <span class="delete-mark">×</span>
-            <img class="file_icon" src="../assets/icon.png" />
-            <!-- <img class="file_icon" :src="images[index]"> -->
-          </div>
-          <span>{{ file.name }}</span>
-        </li>
-      </ul>
+      <div class="menu">
+        <div class="toHome" v-on:click="onClickTitle">Home</div>
+        <div class="userSetting" v-on:click="onClickOpenPopup">{{ username_upper }}</div>
+      </div>
+      <Popup :isopen='popup' :user='username' :tripnum='tripIdNum' @close="onClickClosePopup"></Popup>
     </div>
+    <div class="input_body">
+      <div class="input_area">
+        <!-- <input type="file" name="example" ref="preview" accept="image/*" multiple required> -->
+        <p id="error" v-show="error">{{ error }}</p>
+        <label>
+          <!-- <img :src="avatar" alt="Avatar" class="image"> -->
+          <div
+            class="drop_area"
+            @dragenter="dragEnter"
+            @dragleave="dragLeave"
+            @dragover.prevent
+            @drop.prevent="dropFile()"
+            :class="{ enter: isEnter }"
+            @change="onImageChange"
+          >
+            Drop files here or click to upload
+            <!-- <div> -->
 
-    <br />
-    <div v-show="files.length">
-      <button class="button" v-on:click="upload" v-bind:disabled="isPushed">
-        {{ button_text }}
-      </button>
+            <input type="file" accept="image/*" @change="onImageChange" multiple />
+          </div>
+        </label>
+        <div id="howToUse">
+          JPEG, PNG format can use this application
+        </div>
+
+        <br />
+        <div>
+          <ul class="flex">
+            <li
+              class="flex-col"
+              v-for="(file, index) in files"
+              :key="index"
+              @click="deleteFile(index)"
+            >
+              <!-- {{ index }} -->
+              <div style="position: relative">
+                <span class="delete-mark">×</span>
+                <img class="file_icon" src="../assets/icon.png" />
+                <!-- <img class="file_icon" :src="images[index]"> -->
+              </div>
+              <span>{{ file.name }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <br />
+        <div v-show="files.length">
+          <button class="button" v-on:click="upload" v-bind:disabled="isPushed">
+            {{ button_text }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -49,7 +69,10 @@
 <script>
 import axios from "axios";
 import loadImage from "blueimp-load-image";
+import Popup from "@/components/UserPopup.vue";
+
 export default {
+  components: {Popup} ,
   name: "Input",
   data() {
     return {
@@ -60,8 +83,18 @@ export default {
       test: "",
       isPushed: false,
       button_text: "送信",
+      username: "undefined user",
+      tripIdNum: "",
+      popup: false,
+      username_upper: ""
     };
   },
+  mounted: function(){
+    this.tripIdNum = this.$store.getters["trip/getNumTripID"];
+    this.username = this.$store.getters["user/getUserName"];
+    this.username_upper = this.username.slice(0,1).toUpperCase()
+  },
+
   methods: {
     // setError (error, text) {
     //   this.error = (error.response && error.response.data && error.response.data.error) || text
@@ -163,6 +196,18 @@ export default {
       //   // console.log(error);
       // });
     },
+    onClickTitle: function () {
+      this.$router.push("/home");
+    },
+
+
+    onClickOpenPopup: function () {
+      this.popup = true
+    },
+
+    onClickClosePopup: function () {
+      this.popup = false
+    },
   },
 };
 </script>
@@ -178,6 +223,12 @@ img:hover {
 #error {
   color: red;
 }
+#howToUse{
+  text-align: center;
+  font-family: serif;
+  color: #5c5c5c;
+  margin-top: 10px;
+}
 label {
   display: flex;
   justify-content: center;
@@ -186,6 +237,7 @@ label {
 .drop_area {
   color: #42b983;
   font-weight: bold;
+  font-family: serif;
   font-size: 1.2em;
   display: flex;
   justify-content: center;
@@ -238,4 +290,99 @@ span {
   border-radius: 5px;
   border-color: #0070a7;
 }
+
+  .header{
+    height: 50px;
+    width: 100%;
+    background-color: #2D2D2D;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    align-items: center;
+  }
+
+  .headerTitle{
+    width: 170px;
+    font-family: serif;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    display:table-cell;
+    vertical-align:middle;
+    text-align: center;
+  }
+
+  .title{
+    margin-right: auto;
+  }
+
+  .menu{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: 50%;
+  }
+
+  .toHome{
+    font-family: serif;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    text-align: center;
+    line-height: 40px;
+  }
+
+  .addtrip{
+    font-family: serif;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    background-color: #52A7F4;
+    padding: 8px;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .userSetting{
+    color: white;
+    margin-left: 40px;
+    margin-right: 20px;
+    cursor: pointer;
+    background-color: #C850BC;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+  }
+
+  .headerTitle{
+    width: 170px;
+    font-family: serif;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    display:table-cell;
+    vertical-align:middle;
+    text-align: center;
+  }
+
+  .input_body{
+    background-color: rgb(219, 215, 215);
+    height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .input_area{
+    background-color: rgb(241, 241, 241);
+    height: 80vh;
+    width:90%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+  }
 </style>
