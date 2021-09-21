@@ -19,7 +19,7 @@
           <li class="close" v-on:click='isActive=!isActive'><span>閉じる</span></li>
         </ul>
       </nav>
-      <div id="hamburger" class="hamburger" v-on:click='isActive=!isActive'>
+      <div id="hamburger" v-on:click='isActive=!isActive'>
         <span></span>
       </div>
     </header>
@@ -96,11 +96,7 @@ li {
     display: none;
   }
 }
-@media screen and (min-width: 641px){
-  .hamburger {
-    display: none;
-  }
-}
+
 #hamburger {
   position: relative;
   display: block;
@@ -200,10 +196,13 @@ li {
   background: #ffffff;
   transform: rotate( -45deg );
 }
-
 .toggle {
   transform: translateY( 0 );
   opacity: 1;
 }
-
+@media screen and (min-width: 641px){
+  #hamburger {
+    display: none;
+  }
+}
 </style>
