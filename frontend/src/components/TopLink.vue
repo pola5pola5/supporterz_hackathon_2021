@@ -21,16 +21,17 @@ export default {
 }
 
 h2{
-  margin-top: 20px;
-  margin-bottom: 50px;
+  margin-top: 40px;
+  margin-bottom: 30px;
   font-size: 40px;
   font-weight: normal;
   color: #ffffff;
   letter-spacing : 0.2em;
   text-align: center;
+  line-height: 1.6;
 }
 .TopLink{
-  background: #2d2d2d top center / cover no-repeat;
+  background: #2d2d2d;
   display: flex;
   flex-flow: column;
   justify-content: center;
