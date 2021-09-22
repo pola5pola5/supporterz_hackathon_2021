@@ -2,6 +2,7 @@ package s3
 
 import (
 	"bytes"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -42,6 +43,7 @@ func (sp s3Persistence) SaveFile(filename string, file []byte) (string, error) {
 	return output.Location, nil
 }
 
+// s3のファイルを削除する処理
 func (sp s3Persistence) DeleteFile(filename string) error {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region),
@@ -66,4 +68,28 @@ func (sp s3Persistence) DeleteFile(filename string) error {
 		}
 	}
 	return nil
+}
+
+// 画像のpre-signed urlを発行する処理
+func (sp s3Persistence) CreatepreSignedURL(filename string) (string, error) {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String(region)},
+	)
+	if err != nil {
+		return "", err
+	}
+
+	// S3ServiceClientの作成
+	svc := s3.New(sess)
+	req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(filename),
+	})
+	// 制限時間は1分
+	preSignedURL, err := req.Presign(1 * time.Minute)
+	if err != nil {
+		return "", err
+	}
+	return preSignedURL, nil
+
 }

@@ -2,14 +2,12 @@ package server
 
 import (
 	"log"
-	"os"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/db"
 	ip "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/img"
-	lp "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/local"
 	"github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/s3"
 	txp "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/transaction"
 	tp "github.com/littletake/supporterz_hackathon_2021/pkg/server/infra/persistence/trip"
@@ -23,7 +21,6 @@ import (
 )
 
 func Serve(addr string) {
-	flag := os.Getenv("LOCAL")
 
 	// ---
 	// DI
@@ -32,7 +29,6 @@ func Serve(addr string) {
 	userPersistence := up.NewPersistence(db.Conn)
 	imgPersistence := ip.NewPersistence(db.Conn)
 	tripPersistence := tp.NewPersistence(db.Conn)
-	localPersistence := lp.NewPersistence()
 	s3Persistence := s3.NewPersistence()
 	txpPersistence := txp.NewPersistence(db.Conn)
 
@@ -42,26 +38,14 @@ func Serve(addr string) {
 		tripPersistence,
 		uuid.NewRandom,
 	)
-	var tripUsecase tu.TripUsecase
-	if flag == "local" {
-		tripUsecase = tu.NewTripUsecase(
-			localPersistence,
-			imgPersistence,
-			tripPersistence,
-			uuid.NewRandom,
-			txpPersistence,
-		)
-		log.Println("local")
-	} else {
-		tripUsecase = tu.NewTripUsecase(
-			s3Persistence,
-			imgPersistence,
-			tripPersistence,
-			uuid.NewRandom,
-			txpPersistence,
-		)
-		log.Println("aws")
-	}
+	tripUsecase := tu.NewTripUsecase(
+		s3Persistence,
+		imgPersistence,
+		tripPersistence,
+		uuid.NewRandom,
+		txpPersistence,
+	)
+	log.Println("aws")
 
 	// interface
 	settingHandler := sh.NewSettingHandler()

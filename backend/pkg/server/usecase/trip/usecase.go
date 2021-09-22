@@ -83,6 +83,7 @@ func (tu *tripUsecase) RegisterTrip(userID string, imgs [][]byte) (string, error
 }
 
 func (tu *tripUsecase) GetImgsByTripID(tripID string) ([]*img.Img, error) {
+	// DBから画像情報を取得
 	imgs, err := tu.imgRepo.SelectImgsByTripID(tripID)
 	if err != nil {
 		return nil, err
@@ -90,6 +91,20 @@ func (tu *tripUsecase) GetImgsByTripID(tripID string) ([]*img.Img, error) {
 	if imgs == nil {
 		errMsg := fmt.Errorf("img not found. tripID=%s", tripID)
 		return nil, errMsg
+	}
+	// --- アクセス制限のためのpre-signed urlの発行
+	// TODO: urlに関しては毎回urlを発行するのでDBに保存しなくても良いのでは？
+
+	// s3にアクセスして指定の画像のpre-signed urlを発行しオブジェクトの情報を修正
+	for _, img := range imgs {
+		preSignedURL, err := tu.fileRepo.CreatepreSignedURL(img.ImgID)
+		log.Println("presigned: " + preSignedURL)
+
+		if err != nil {
+			return nil, err
+		}
+		img.ImgUrl = preSignedURL
+		log.Println("saved: " + img.ImgUrl)
 	}
 	return imgs, nil
 }
