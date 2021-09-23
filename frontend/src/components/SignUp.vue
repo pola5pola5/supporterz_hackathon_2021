@@ -128,4 +128,44 @@ h1,
     margin: 0%;
     padding: 0%;
   }
+
+@media screen and (max-width: 500px){
+  .bg{
+   width: 0%;
+   height: 0vh;
+   margin: 0%;
+  }
+
+  .content{
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+  }
+
+  .input_area{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   height: 100vh;
+ }
+
+ .center_area{
+    width: 90%;
+    font-family: serif;
+    color: #2D2D2D;
+  }
+
+  .input_user{
+    margin-top: 0;
+    width: 90%;
+    margin-bottom: 30px;
+    display: table-cell;
+  }
+  .input_password{
+    margin-top: 0;
+    width: 90%;
+  }
+}
 </style>

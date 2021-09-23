@@ -245,7 +245,7 @@ export default {
 
       const len = photos.length
       for(let i = 0; i < len; i++){
-        if(i > 5) break
+        if(i > 3) break
         const photo = photos[i].properties.img_url
         var photoel = document.createElement("img")
         photoel.src = photo
@@ -260,13 +260,10 @@ export default {
 
 
 <style scoped>
-/* p {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin: 40px 0 0;
-  color: #42b983;
-} */
+  /* img{
+    width: 50px;
+    height: 50px;
+  } */
   .header{
     height: 50px;
     width: 100%;
@@ -278,7 +275,9 @@ export default {
   }
 
   .headerTitle{
-    width: 170px;
+    /* width: 170px; */
+    margin-left: 10px;
+    margin-right: 10px;
     font-family: serif;
     font-size: 30px;
     cursor: pointer;
@@ -297,8 +296,8 @@ export default {
   .username{
     font-family: serif;
     color: white;
-    font-size: 20px;
-    margin-top: 10px;
+    font-size: 1em;
+    /* margin-top: 10px; */
   }
 
   .title{
@@ -314,18 +313,15 @@ export default {
     font-family: serif;
     color: white;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 1em;
     margin-left: auto;
     border-color: white;
-    /* border-bottom: thin solid; */
-    /* padding-left: 8px;
-    padding-right: 8px; */
-    /* text-decoration: underline; */
+    text-align: center;
   }
 
   .userSetting{
     color: white;
-    margin-left: 40px;
+    margin-left: 10px;
     margin-right: 20px;
     cursor: pointer;
     background-color: #C850BC;
@@ -334,6 +330,7 @@ export default {
     border-radius: 50%;
     text-align: center;
     line-height: 40px;
+    min-width: 40px;
   }
 
   .container{
@@ -366,6 +363,7 @@ export default {
     border-left: solid #2D2D2D;
     border-right: solid #2D2D2D;
     border-bottom: solid #2D2D2D;
+    min-width: 330px;
     /* box-shadow: 5px 2.5px 2.5px gray; */
   }
 
@@ -379,6 +377,122 @@ export default {
     flex-flow: column;
     text-align: center;
   }
+
+@media screen and (max-width: 440px){
+  .header{
+    height: 50px;
+    width: 100%;
+    background-color: #2D2D2D;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    align-items: center;
+  }
+
+  .headerTitle{
+    width: 100px;
+    font-family: serif;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: white;
+    display:table-cell;
+    vertical-align:middle;
+    text-align: center;
+  }
+
+  .border{
+    border-left: solid #C4C4C4;
+    padding-left: 10px;
+    height: 70px;
+  }
+
+  .username{
+    font-family: serif;
+    color: white;
+    font-size: 0.8em;
+    width: 50%;
+    /* font-size: 20px; */
+    margin-top: 3px;
+  }
+
+  .title{
+    font-family: "Times New Roman";
+    font-size: 40px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #2D2D2D;
+  }
+
+  .addtrip{
+    font-family: serif;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8em;
+    width: 20%;
+    margin-left: auto;
+    border-color: white;
+    
+  }
+
+  .userSetting{
+    color: white;
+    margin-left: 0;
+    margin-right: 20px;
+    cursor: pointer;
+    background-color: #C850BC;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    min-width: 40px;
+  }
+
+  .container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .container::after{
+    content: "";
+    display: block;
+    width: calc(50% - 2em);
+    margin: 0.5em;
+  }
+
+  .name{
+    margin-left: 5px;
+  }
+
+  .name_bg{
+    background-color: #2D2D2D;
+  }
+
+  .tripParent{
+    color: white;
+    width: calc(50% - 2em);
+    height: 303px;
+    margin: 0.5em;
+    cursor: pointer;
+    border-left: solid #2D2D2D;
+    border-right: solid #2D2D2D;
+    border-bottom: solid #2D2D2D;
+    min-width: 330px;
+  }
+
+  .noTripMemory{
+    color: #535353;
+    margin-top: 40px;
+    font-family: serif;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    text-align: center;
+  }
+}
 </style>
 
 <style>
