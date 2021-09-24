@@ -24,26 +24,27 @@
       </div>
     </header>
     <TopLink class="toplink" msg="写真で巡るあなたの旅物語"/>
-    <!--    <main class="main">-->
-    <main class="item01">
+    <div class="item01">
         <span>
           <h2>
             旅の記録を思い出と共に残しませんか？
           </h2>
-          <h3>
+          <h3 href="/signup" class="try_btn">
             地図＋写真で振り返る新しい旅記録
           </h3>
         </span>
-    </main>
-    <main class="item02">
+    </div>
+    <div class="item02">
       <span>
         <h2 class="item_msg">方法は簡単<br>旅で撮った写真を<br>アップロードするだけ</h2>
       </span>
-    </main>
-    <main class="item03">
-
-    </main>
-    <div class="item04"></div>
+    </div>
+    <div class="item03">
+      <img class="phone_photo" src="../assets/phone_photo.jpg" />
+    </div>
+    <div class="item04">
+      <img class="map_human" src="../assets/map_human.png" />
+    </div>
     <div class="item05">
       <span>
       <h2 class="item_msg">
@@ -58,14 +59,15 @@
         </h2>
         </span>
     </div>
-    <div class="item07"></div>
+    <div class="item07">
+      <img class="travel" src="../assets/travel.png" />
+    </div>
     <div class="item08">
         <span>
           <h2 class="msg">あなたの思い出作りにフォト旅を</h2>
-          <a href="/signup" class="try_btn">Try now</a>
+          <h3 href="/signup" class="try_btn">Try now</h3>
         </span>
     </div>
-    <!--    </main>-->
   </div>
 </template>
 <script>
@@ -290,13 +292,14 @@ h3 {
 }
 
 .try_btn {
-  margin-top: 20px;
-  margin-bottom: 50px;
-  text-decoration: none;
-  font-size: 25px;
+  /*margin-top: 20px;*/
+  /*margin-bottom: 50px;*/
+  /*text-decoration: none;*/
+  /*font-size: 12px;*/
   color: #ffffff;
   cursor: pointer;
-  border: 0px;
+  /*border: 0px;*/
+  /*text-align: center;*/
 }
 
 .item01 {
@@ -320,7 +323,6 @@ h3 {
   align-items: center;
   font-family: serif;
   background: #112aff;
-  text-align: left;
 }
 
 .item03 {
@@ -328,7 +330,7 @@ h3 {
   grid-column: 3;
   display: flex;
   flex-flow: column;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   font-family: serif;
   background: #42b983;
@@ -354,7 +356,6 @@ h3 {
   align-items: center;
   font-family: serif;
   background: #993a66;
-  text-align: left;
 }
 
 .item06 {
@@ -393,9 +394,28 @@ h3 {
 
 .item_msg {
   text-align: left;
+  font-size: 14px;
 }
 
 .msg {
   color: #f1f1f1;
+}
+
+.phone_photo {
+  width: 60%;
+  margin-top: 40px;
+  margin-left: 30px;
+}
+
+.map_human {
+  width: 70%;
+  margin-top: 40px;
+  margin-left: 20px;
+}
+
+.travel {
+  width: 70%;
+  margin-top: 30px;
+  margin-right: 20px;
 }
 </style>
