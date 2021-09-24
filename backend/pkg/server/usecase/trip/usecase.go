@@ -152,7 +152,7 @@ func ExtractInfoAndSave(
 	// ---
 	// ストレージに保存
 	// ---
-	filename := userID + "/" + imgID.String()
+	filename := userID + "/" + imgID.String() + ".jpg"
 	imgUrl, err := tu.fileRepo.SaveFile(filename, imgData)
 	if err != nil {
 		return err
