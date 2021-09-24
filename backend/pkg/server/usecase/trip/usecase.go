@@ -71,7 +71,13 @@ func (tu *tripUsecase) RegisterTrip(userID string, imgs [][]byte) (string, error
 		// 画像から必要な情報抜き取り登録
 		// ---
 		for i := 0; i < len(imgs); i++ {
-			if err := ExtractInfoAndSave(tu, tx, imgs[i], tripID.String()); err != nil {
+			if err := ExtractInfoAndSave(
+				tu,
+				tx,
+				imgs[i],
+				tripID.String(),
+				userID,
+			); err != nil {
 				return err
 			}
 		}
@@ -128,6 +134,7 @@ func ExtractInfoAndSave(
 	tx *sql.Tx,
 	imgData []byte,
 	tripID string,
+	userID string,
 ) error {
 	flag := 0
 	imgID, err := tu.createUUID()
@@ -145,7 +152,7 @@ func ExtractInfoAndSave(
 	// ---
 	// ストレージに保存
 	// ---
-	filename := imgID.String()
+	filename := userID + "/" + imgID.String()
 	imgUrl, err := tu.fileRepo.SaveFile(filename, imgData)
 	if err != nil {
 		return err
@@ -183,7 +190,7 @@ func ExtractInfoAndSave(
 	}
 
 	imgModel := &img.Img{
-		ImgID:     imgID.String(),
+		ImgID:     filename,
 		TripID:    tripID,
 		ImgUrl:    imgUrl,
 		Longitude: lng,
