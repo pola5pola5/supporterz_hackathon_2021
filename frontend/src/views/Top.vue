@@ -23,21 +23,61 @@
         <span></span>
       </div>
     </header>
-    <TopLink class="toplink" msg="写真で巡るあなたの旅物語" />
-    <main class="main">main</main>
+    <TopLink class="toplink" msg="写真で巡るあなたの旅物語"/>
+    <!--    <main class="main">-->
+    <main class="item01">
+        <span>
+          <h2>
+            旅の記録を思い出と共に残しませんか？
+          </h2>
+          <h3>
+            地図＋写真で振り返る新しい旅記録
+          </h3>
+        </span>
+    </main>
+    <main class="item02">
+      <span>
+        <h2 class="item_msg">方法は簡単<br>旅で撮った写真を<br>アップロードするだけ</h2>
+      </span>
+    </main>
+    <main class="item03">
 
+    </main>
+    <div class="item04"></div>
+    <div class="item05">
+      <span>
+      <h2 class="item_msg">
+        フォト旅が<br>あなたの旅を写真と共に<br>記録します
+      </h2>
+        </span>
+    </div>
+    <div class="item06">
+        <span>
+        <h2 class="item_msg">
+          記録された旅は<br>いつでも見返せるから<br>思い出作りに便利
+        </h2>
+        </span>
+    </div>
+    <div class="item07"></div>
+    <div class="item08">
+        <span>
+          <h2 class="msg">あなたの思い出作りにフォト旅を</h2>
+          <a href="/signup" class="try_btn">Try now</a>
+        </span>
+    </div>
+    <!--    </main>-->
   </div>
 </template>
-
 <script>
 // @ is an alias to /src
 import TopLink from "@/components/TopLink.vue";
+
 export default {
   name: "Top",
   components: {
     TopLink,
   },
-  data(){
+  data() {
     return {
       isActive: false
     }
@@ -48,49 +88,57 @@ export default {
 * {
   box-sizing: border-box;
 }
-.top{
+
+.top {
   display: grid;
-   grid-template-rows: 60px 300px 1fr
+  grid-template-columns: 200px 1fr 180px;
+  grid-template-rows: 60px 300px 160px 220px 300px 220px 200px;
 }
-.header{
+
+.header {
   grid-row-start: 1;
   grid-row-end: auto;
+  grid-column: 1/4;
   font-family: serif;
   padding: 30px 4% 10px;
   background: #2d2d2d;
   display: flex;
   align-items: center;
 }
+
 h1 {
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
   font-size: 20px;
 }
+
 a {
   text-decoration: none;
   color: #ffffff;
   cursor: pointer;
 }
+
 nav {
   margin: 0 0 0 auto;
 }
+
 ul {
   list-style: none;
   margin: 0;
   display: flex;
 }
+
 li {
   margin: 0 0 0 15px;
   font-size: 14px;
 }
+
 .toplink {
-  grid-row-start: 2;
-  grid-row-end: auto;
+  grid-row: 2;
+  grid-column: 1/4;
   padding: 0 4%;
 }
-.main{
-  grid-row-start: 3;
-  grid-row-end: auto;
-}
+
 @media screen and (max-width: 640px) {
   .pc_nav {
     display: none;
@@ -104,6 +152,7 @@ li {
   height: 25px;
   margin: 0 0 0 auto;
 }
+
 #hamburger span {
   position: absolute;
   top: 50%;
@@ -114,6 +163,7 @@ li {
   background-color: #ffffff;
   transform: translateY(-50%);
 }
+
 #hamburger::before {
   content: '';
   display: block;
@@ -124,6 +174,7 @@ li {
   height: 2px;
   background-color: #ffffff;
 }
+
 #hamburger::after {
   content: '';
   display: block;
@@ -134,6 +185,7 @@ li {
   height: 2px;
   background-color: #ffffff;
 }
+
 .sp_nav {
   z-index: 1;
   position: fixed;
@@ -147,6 +199,7 @@ li {
   opacity: 0;
   transform: translateY(-100%);
 }
+
 .sp_nav ul {
   padding: 0;
   display: flex;
@@ -155,23 +208,28 @@ li {
   align-items: center;
   height: 100%;
 }
+
 .sp_nav li {
   margin: 0;
   padding: 0;
 }
+
 .sp_nav li span {
   font-size: 15px;
   color: #ffffff;
 }
+
 .sp_nav li a, .sp_nav li span {
   display: block;
   padding: 20px 0;
 }
+
 /*基準となるli要素*/
 .sp_nav .close {
   position: relative;
   padding-left: 20px;
 }
+
 /*バツ印線1*/
 .sp_nav .close::before {
   content: '';
@@ -182,8 +240,9 @@ li {
   width: 16px;
   height: 1px;
   background: #ffffff;
-  transform: rotate( 45deg );
+  transform: rotate(45deg);
 }
+
 /*バツ印線2*/
 .sp_nav .close::after {
   content: '';
@@ -194,15 +253,149 @@ li {
   width: 16px;
   height: 1px;
   background: #ffffff;
-  transform: rotate( -45deg );
+  transform: rotate(-45deg);
 }
+
 .toggle {
-  transform: translateY( 0 );
+  transform: translateY(0);
   opacity: 1;
 }
-@media screen and (min-width: 641px){
+
+@media screen and (min-width: 641px) {
   #hamburger {
     display: none;
   }
+}
+
+h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: normal;
+  color: #2d2d2d;
+  letter-spacing: 0.2em;
+  text-align: center;
+  line-height: 1.6;
+}
+
+h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: normal;
+  color: #2d2d2d;
+  letter-spacing: 0.2em;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.try_btn {
+  margin-top: 20px;
+  margin-bottom: 50px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #ffffff;
+  cursor: pointer;
+  border: 0px;
+}
+
+.item01 {
+  grid-row: 3;
+  grid-column: 1/4;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
+  /*background: #f1f1f1;*/
+  background: #ccb800;
+}
+
+.item02 {
+  grid-row: 4;
+  grid-column: 1/3;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
+  background: #112aff;
+  text-align: left;
+}
+
+.item03 {
+  grid-row: 4;
+  grid-column: 3;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
+  background: #42b983;
+}
+
+.item04 {
+  grid-row: 5;
+  grid-column: 1;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
+  background: #882aff;
+}
+
+.item05 {
+  grid-row: 5;
+  grid-column: 2/4;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
+  background: #993a66;
+  text-align: left;
+}
+
+.item06 {
+  grid-row: 6;
+  grid-column: 1/3;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
+  background: darkslateblue;
+}
+
+.item07 {
+  grid-row: 6;
+  grid-column: 3;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
+  background: #993a99;
+}
+
+.item08 {
+  grid-row: 7;
+  grid-column: 1/4;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
+  padding: 0 4%;
+  background: #2d2d2d;
+}
+
+.item_msg {
+  text-align: left;
+}
+
+.msg {
+  color: #f1f1f1;
 }
 </style>
