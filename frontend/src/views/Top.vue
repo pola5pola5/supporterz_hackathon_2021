@@ -39,7 +39,7 @@
     </div>
     <div class="item03">
       <!--      <img class="photo2" src="../assets/photo2.jpg"/>-->
-      <img class="phone_photo" src="../assets/phone_photo.jpg"/>
+      <img class="trakking" src="../assets/trakking.png"/>
     </div>
     <div class="item04">
       <img class="map_human" src="../assets/map_human.png"/>
@@ -407,9 +407,9 @@ a {
   color: #f1f1f1;
 }
 
-.phone_photo {
-  width: 70%;
-  margin-top: 30px;
+.trakking {
+  width: 90%;
+  /*margin-top: 30px;*/
   opacity: 0;
   animation: fadein-bottom 1.5s .3s ease-out forwards;
 }
