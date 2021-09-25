@@ -1,7 +1,7 @@
 <template>
   <div class="TopLink">
-    <h2>{{ msg }}</h2>
-    <a href="/signup">Try now</a>
+    <h2 class="fade-in-top">{{ msg }}</h2>
+    <a href="/signup" class="fade-in-bottom">Try now</a>
   </div>
 </template>
 
@@ -48,5 +48,37 @@ a {
   color: #ffffff;
   cursor: pointer;
   border: 0px;
+}
+
+.fade-in-top {
+  opacity: 0;
+  animation: fadein-top 1.5s .3s ease-out forwards;
+}
+
+@keyframes fadein-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-bottom {
+  opacity: 0;
+  animation: fadein-bottom 1.5s ease-out forwards;
+}
+
+@keyframes fadein-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

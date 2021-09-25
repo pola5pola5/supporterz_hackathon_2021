@@ -1,9 +1,9 @@
 <template>
   <div class="top">
     <header class="header">
-      <h1><a href="/">
-        フォト旅
-      </a></h1>
+        <h1><a href="/">
+          フォト旅
+        </a></h1>
       <!--      <router-link to="/signin" tag="button" class="signin_btn">Sign in</router-link>-->
       <!--      <router-link to="/signup" tag="button" class="signup_btn">Sign up</router-link>-->
       <nav class="pc_nav">
@@ -26,24 +26,25 @@
     <TopLink class="toplink" msg="写真で巡るあなたの旅物語"/>
     <div class="item01">
         <span>
-          <h2>
+          <h2 class="fade-in-bottom">
             旅の記録を思い出と共に残しませんか？
           </h2>
-          <h3 href="/signup" class="try_btn">
+          <h3 class="fade-in-bottom">
             地図＋写真で振り返る新しい旅記録
           </h3>
         </span>
     </div>
     <div class="item02">
       <span>
-        <h2 class="item_msg">方法は簡単<br>旅で撮った写真を<br>アップロードするだけ</h2>
+          <h2 class="item_msg">方法は簡単<br>旅で撮った写真を<br>アップロードするだけ</h2>
       </span>
     </div>
     <div class="item03">
-      <img class="phone_photo" src="../assets/phone_photo.jpg" />
+      <!--      <img class="photo2" src="../assets/photo2.jpg"/>-->
+      <img class="phone_photo" src="../assets/phone_photo.jpg"/>
     </div>
     <div class="item04">
-      <img class="map_human" src="../assets/map_human.png" />
+      <img class="map_human" src="../assets/map_human.png"/>
     </div>
     <div class="item05">
       <span>
@@ -60,13 +61,11 @@
         </span>
     </div>
     <div class="item07">
-      <img class="travel" src="../assets/travel.png" />
+      <img class="travel" src="../assets/travel.png"/>
     </div>
     <div class="item08">
-        <span>
           <h2 class="msg">あなたの思い出作りにフォト旅を</h2>
-          <h3 href="/signup" class="try_btn">Try now</h3>
-        </span>
+          <a href="/signup" class="try_btn">Try now</a>
     </div>
   </div>
 </template>
@@ -94,7 +93,7 @@ export default {
 .top {
   display: grid;
   grid-template-columns: 200px 1fr 180px;
-  grid-template-rows: 60px 300px 160px 220px 300px 220px 200px;
+  grid-template-rows: 60px 300px 160px 220px 200px 180px 200px;
 }
 
 .header {
@@ -112,12 +111,6 @@ h1 {
   margin: 0;
   padding: 0;
   font-size: 20px;
-}
-
-a {
-  text-decoration: none;
-  color: #ffffff;
-  cursor: pointer;
 }
 
 nav {
@@ -292,14 +285,20 @@ h3 {
 }
 
 .try_btn {
-  /*margin-top: 20px;*/
-  /*margin-bottom: 50px;*/
-  /*text-decoration: none;*/
-  /*font-size: 12px;*/
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: normal;
+  letter-spacing: 0.2em;
+  text-align: center;
+  line-height: 1.6;
+  color: #ffffff;
+}
+
+a {
+  text-decoration: none;
   color: #ffffff;
   cursor: pointer;
-  /*border: 0px;*/
-  /*text-align: center;*/
 }
 
 .item01 {
@@ -310,8 +309,6 @@ h3 {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  /*background: #f1f1f1;*/
-  background: #ccb800;
 }
 
 .item02 {
@@ -322,7 +319,7 @@ h3 {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #112aff;
+  background: #ffffff;
 }
 
 .item03 {
@@ -333,7 +330,7 @@ h3 {
   justify-content: left;
   align-items: center;
   font-family: serif;
-  background: #42b983;
+  background: #ffffff;
 }
 
 .item04 {
@@ -344,7 +341,7 @@ h3 {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #882aff;
+  background: #ffffff;
 }
 
 .item05 {
@@ -355,7 +352,7 @@ h3 {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #993a66;
+  background: #ffffff;
 }
 
 .item06 {
@@ -366,7 +363,7 @@ h3 {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: darkslateblue;
+  background: #ffffff;
 }
 
 .item07 {
@@ -377,7 +374,7 @@ h3 {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #993a99;
+  background: #ffffff;
 }
 
 .item08 {
@@ -395,6 +392,19 @@ h3 {
 .item_msg {
   text-align: left;
   font-size: 14px;
+  opacity: 0;
+  animation: item_msg 1.5s .3s ease-out forwards;
+}
+
+@keyframes item_msg {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .msg {
@@ -402,20 +412,75 @@ h3 {
 }
 
 .phone_photo {
-  width: 60%;
-  margin-top: 40px;
-  margin-left: 30px;
+  width: 70%;
+  margin-top: 30px;
+  /*margin-left: 20px;*/
+  opacity: 0;
+  animation: phone_photo 1.5s .3s ease-out forwards;
+}
+
+@keyframes phone_photo {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .map_human {
-  width: 70%;
-  margin-top: 40px;
-  margin-left: 20px;
+  width: 90%;
+  /*margin-top: 40px;*/
+  /*margin-left: 20px;*/
+  opacity: 0;
+  animation: map_human 1.5s .3s ease-out forwards;
+}
+
+@keyframes map_human {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .travel {
-  width: 70%;
-  margin-top: 30px;
-  margin-right: 20px;
+  width: 90%;
+  /*margin-top: 30px;*/
+  /*margin-right: 20px;*/
+  opacity: 0;
+  animation: travel 1.5s .3s ease-out forwards;
+}
+
+@keyframes travel {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-bottom {
+  opacity: 0;
+  animation: fadein-bottom 1.5s 0 ease-out forwards;
+}
+
+@keyframes fadein-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
