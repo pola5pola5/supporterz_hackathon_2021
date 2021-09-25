@@ -34,7 +34,7 @@
     </div>
     <div class="item02">
       <span>
-          <h2 class="item_msg">方法は簡単<br>旅で撮った写真を<br>アップロードするだけ</h2>
+        <h2 class="item_msg">方法は簡単<br>旅で撮った写真を<br>アップロードするだけ</h2>
       </span>
     </div>
     <div class="item03">
@@ -45,11 +45,9 @@
       <img class="map_human" src="../assets/map_human.png"/>
     </div>
     <div class="item05">
-      <span>
       <h2 class="item_msg">
         フォト旅が<br>あなたの旅を写真と共に<br>記録します
       </h2>
-        </span>
     </div>
     <div class="item06">
         <span>
@@ -307,7 +305,7 @@ a {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #ccb800;
+  background: #ffffff;
 }
 
 .item02 {
@@ -318,7 +316,7 @@ a {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #ccb800;
+  background: #ffffff;
 }
 
 .item03 {
@@ -351,7 +349,7 @@ a {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #ccb800;
+  background: #ffffff;
 }
 
 .item06 {
@@ -362,7 +360,7 @@ a {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #ccb800;
+  background: #ffffff;
 }
 
 .item07 {
@@ -392,16 +390,16 @@ a {
   text-align: left;
   font-size: 14px;
   opacity: 0;
-  animation: item-msg 1.5s 0 ease-out forwards;
+  animation: item-msg 1.5s ease-out 0s 1 forwards;
 }
-@keyframes item-msg {
+@keyframes fadein-left {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateX(-20px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 
