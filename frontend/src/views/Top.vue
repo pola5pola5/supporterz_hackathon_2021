@@ -93,7 +93,7 @@ export default {
 .top {
   display: grid;
   grid-template-columns: 200px 1fr 180px;
-  grid-template-rows: 60px 300px 160px 220px 200px 180px 200px;
+  grid-template-rows: 60px 300px 160px 220px 180px 160px 200px;
 }
 
 .header {
@@ -309,6 +309,7 @@ a {
   justify-content: center;
   align-items: center;
   font-family: serif;
+  background: #ffffff;
 }
 
 .item02 {
@@ -393,20 +394,19 @@ a {
   text-align: left;
   font-size: 14px;
   opacity: 0;
-  animation: item_msg 1.5s .3s ease-out forwards;
+  animation: item_msg 1.5s 0 ease-out forwards;
 }
 
 @keyframes item_msg {
   0% {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
-
 .msg {
   color: #f1f1f1;
 }
