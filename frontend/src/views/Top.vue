@@ -24,10 +24,10 @@
     <TopLink class="toplink" msg="写真で巡るあなたの旅物語"/>
     <div class="item01">
         <span>
-          <h2 class="fade-in-bottom">
+          <h2 class="fade-in-top">
             旅の記録を思い出と共に残しませんか？
           </h2>
-          <h3 class="fade-in-bottom">
+          <h3 class="fade-in-top">
             地図＋写真で振り返る新しい旅記録
           </h3>
         </span>
@@ -307,7 +307,7 @@ a {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #ffffff;
+  background: #ccb800;
 }
 
 .item02 {
@@ -318,7 +318,7 @@ a {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #ffffff;
+  background: #ccb800;
 }
 
 .item03 {
@@ -351,7 +351,7 @@ a {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #ffffff;
+  background: #ccb800;
 }
 
 .item06 {
@@ -362,7 +362,7 @@ a {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  background: #ffffff;
+  background: #ccb800;
 }
 
 .item07 {
@@ -394,7 +394,6 @@ a {
   opacity: 0;
   animation: item-msg 1.5s 0 ease-out forwards;
 }
-
 @keyframes item-msg {
   0% {
     opacity: 0;
@@ -414,13 +413,12 @@ a {
   width: 70%;
   margin-top: 30px;
   opacity: 0;
-  animation: phone-photo 1.5s 0 ease-out forwards;
+  animation: fadein-bottom 1.5s .3s ease-out forwards;
 }
-
-@keyframes phone-photo {
+@keyframes fadein-bottom {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(-20px);
   }
   100% {
     opacity: 1;
@@ -475,6 +473,20 @@ a {
   0% {
     opacity: 0;
     transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in-top {
+  opacity: 0;
+  animation: fadein-top 1.5s .3s ease-out forwards;
+}
+@keyframes fadein-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
   }
   100% {
     opacity: 1;
