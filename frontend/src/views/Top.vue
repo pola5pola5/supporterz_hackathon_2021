@@ -392,7 +392,7 @@ a {
   opacity: 0;
   animation: item-msg 1.5s ease-out 0s 1 forwards;
 }
-@keyframes fadein-left {
+@keyframes item-msg {
   0% {
     opacity: 0;
     transform: translateX(-20px);
