@@ -19,7 +19,7 @@ func NewPersistence(db *sql.DB) repo.ImgRepo {
 	}
 }
 
-// TODO: datatime順に取得してくる
+// tripIDからimg_table内の画像情報全てを取得
 func (ip imgPersistence) SelectImgsByTripID(tripID string) ([]*model.Img, error) {
 	rows, err := ip.db.Query("SELECT * FROM img_table WHERE trip_id = ? ORDER BY date_time ASC", tripID)
 	if err != nil {
@@ -28,6 +28,7 @@ func (ip imgPersistence) SelectImgsByTripID(tripID string) ([]*model.Img, error)
 	return convertToImgs(rows)
 }
 
+// 画像情報をimg_tableに追加
 func (ip imgPersistence) InsertImg(img *model.Img, tx *sql.Tx) error {
 	stmt, err := tx.Prepare(
 		"INSERT INTO img_table (img_id, trip_id, img_url, longitude, latitude, date_time) VALUES (?, ?, ?, ?, ?, ?)")
@@ -38,6 +39,7 @@ func (ip imgPersistence) InsertImg(img *model.Img, tx *sql.Tx) error {
 	return err
 }
 
+// tripIDから旅の期間を取得
 func (ip imgPersistence) SelectDatesByTripID(tripID string) ([]*time.Time, error) {
 	// 開始日時の取得
 	row := ip.db.QueryRow("SELECT date_time FROM img_table WHERE trip_id = ? ORDER BY date_time LIMIT 1", tripID)

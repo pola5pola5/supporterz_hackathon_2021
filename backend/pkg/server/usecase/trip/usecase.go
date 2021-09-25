@@ -71,7 +71,13 @@ func (tu *tripUsecase) RegisterTrip(userID string, imgs [][]byte) (string, error
 		// 画像から必要な情報抜き取り登録
 		// ---
 		for i := 0; i < len(imgs); i++ {
-			if err := ExtractInfoAndSave(tu, tx, imgs[i], tripID.String()); err != nil {
+			if err := ExtractInfoAndSave(
+				tu,
+				tx,
+				imgs[i],
+				tripID.String(),
+				userID,
+			); err != nil {
 				return err
 			}
 		}
@@ -83,6 +89,7 @@ func (tu *tripUsecase) RegisterTrip(userID string, imgs [][]byte) (string, error
 }
 
 func (tu *tripUsecase) GetImgsByTripID(tripID string) ([]*img.Img, error) {
+	// DBから画像情報を取得
 	imgs, err := tu.imgRepo.SelectImgsByTripID(tripID)
 	if err != nil {
 		return nil, err
@@ -90,6 +97,16 @@ func (tu *tripUsecase) GetImgsByTripID(tripID string) ([]*img.Img, error) {
 	if imgs == nil {
 		errMsg := fmt.Errorf("img not found. tripID=%s", tripID)
 		return nil, errMsg
+	}
+	// アクセス制限のためのpre-signed urlの発行
+	// TODO: urlに関しては毎回urlを発行するのでDBに保存しなくても良いのでは？
+	// 指定画像のpre-signed urlを発行しオブジェクトの情報を修正
+	for _, img := range imgs {
+		preSignedURL, err := tu.fileRepo.CreatepreSignedURL(img.ImgID)
+		if err != nil {
+			return nil, err
+		}
+		img.ImgUrl = preSignedURL
 	}
 	return imgs, nil
 }
@@ -117,6 +134,7 @@ func ExtractInfoAndSave(
 	tx *sql.Tx,
 	imgData []byte,
 	tripID string,
+	userID string,
 ) error {
 	flag := 0
 	imgID, err := tu.createUUID()
@@ -134,7 +152,7 @@ func ExtractInfoAndSave(
 	// ---
 	// ストレージに保存
 	// ---
-	filename := imgID.String()
+	filename := userID + "/" + imgID.String() + ".jpg"
 	imgUrl, err := tu.fileRepo.SaveFile(filename, imgData)
 	if err != nil {
 		return err
@@ -172,7 +190,7 @@ func ExtractInfoAndSave(
 	}
 
 	imgModel := &img.Img{
-		ImgID:     imgID.String(),
+		ImgID:     filename,
 		TripID:    tripID,
 		ImgUrl:    imgUrl,
 		Longitude: lng,
