@@ -38,7 +38,6 @@
       </span>
     </div>
     <div class="item03">
-      <!--      <img class="photo2" src="../assets/photo2.jpg"/>-->
       <img class="trakking" src="../assets/trakking.png"/>
     </div>
     <div class="item04">
@@ -89,7 +88,7 @@ export default {
 .top {
   display: grid;
   grid-template-columns: 200px 1fr 180px;
-  grid-template-rows: 60px 300px 160px 220px 180px 160px 200px;
+  grid-template-rows: 60px 300px 160px 180px 180px 160px 200px;
 }
 
 .header {
@@ -324,7 +323,7 @@ a {
   grid-column: 3;
   display: flex;
   flex-flow: column;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
   font-family: serif;
   background: #ffffff;
