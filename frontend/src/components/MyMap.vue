@@ -294,7 +294,9 @@ export default {
 }
 
 .headerTitle {
-  width: 170px;
+  /* width: 170px; */
+  margin-left: 10px;
+  margin-right: 10px;
   font-family: serif;
   font-size: 30px;
   cursor: pointer;
@@ -305,37 +307,39 @@ export default {
 }
 
 .title {
-  margin-right: auto;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .menu {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-left: 50%;
+  margin-left: auto;
 }
 
 .toHome {
   font-family: serif;
   color: white;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 1em;
   text-align: center;
 }
 
 .addtrip {
   font-family: serif;
   color: white;
-  margin-left: 40px;
   cursor: pointer;
-  font-size: 20px;
-  /* margin-left: auto; */
+  font-size: 1em;
+  margin-left: 20px;
   border-color: white;
+  text-align: center;
+  margin-right: 20px;
 }
 
 .userSetting {
   color: white;
-  margin-left: 40px;
+  margin-left: 10px;
   margin-right: 20px;
   cursor: pointer;
   background-color: #c850bc;
@@ -344,6 +348,7 @@ export default {
   border-radius: 50%;
   text-align: center;
   line-height: 40px;
+  min-width: 40px;
 }
 
 .overlay {
@@ -368,6 +373,64 @@ export default {
 
 .overlay button:hover {
   background-color: #e94040;
+}
+@media screen and (max-width: 440px) {
+  .headerTitle {
+    width: 100px;
+    font-family: serif;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: white;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .title {
+    margin-right: 0;
+  }
+
+  .addtrip {
+    font-family: serif;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8em;
+    width: 40%;
+    margin-left: 20px;
+    border-color: white;
+    text-align: center;
+    margin-right: 20px;
+  }
+
+  .toHome {
+    font-family: serif;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8em;
+    text-align: center;
+    margin-left: auto;
+  }
+
+  .userSetting {
+    color: white;
+    margin-left: 0;
+    margin-right: 20px;
+    cursor: pointer;
+    background-color: #c850bc;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    min-width: 40px;
+  }
+
+  .menu {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: auto;
+  }
 }
 </style>
 

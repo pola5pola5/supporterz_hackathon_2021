@@ -244,20 +244,22 @@ label {
   align-items: center;
 }
 .drop_area {
-  color: #42b983;
+  color: #5c5c5c;
   font-weight: bold;
   font-family: serif;
   font-size: 1.2em;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 500px;
-  height: 300px;
-  border: 5px solid #42b983;
+  /* width: 500px;
+  height: 300px; */
+  width: 80vw;
+  height: 48vh;
+  border: 5px solid #5c5c5c;
   border-radius: 15px;
 }
 .enter {
-  border: 10px dotted #42b983;
+  border: 10px dotted #5c5c5c;
 }
 ul {
   margin: 0;
@@ -311,7 +313,9 @@ span {
 }
 
 .headerTitle {
-  width: 170px;
+  /* width: 170px; */
+  margin-left: 10px;
+  margin-right: 10px;
   font-family: serif;
   font-size: 30px;
   cursor: pointer;
@@ -322,23 +326,23 @@ span {
 }
 
 .title {
-  margin-right: auto;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .menu {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-left: 50%;
+  margin-left: auto;
 }
 
 .toHome {
   font-family: serif;
   color: white;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 1em;
   text-align: center;
-  line-height: 40px;
 }
 
 .addtrip {
@@ -355,7 +359,7 @@ span {
 
 .userSetting {
   color: white;
-  margin-left: 40px;
+  margin-left: 10px;
   margin-right: 20px;
   cursor: pointer;
   background-color: #c850bc;
@@ -364,17 +368,7 @@ span {
   border-radius: 50%;
   text-align: center;
   line-height: 40px;
-}
-
-.headerTitle {
-  width: 170px;
-  font-family: serif;
-  font-size: 30px;
-  cursor: pointer;
-  color: white;
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
+  min-width: 40px;
 }
 
 .input_body {
@@ -393,5 +387,73 @@ span {
   flex-flow: column;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 440px) {
+  .header {
+    height: 50px;
+    width: 100%;
+    background-color: #2d2d2d;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    align-items: center;
+  }
+
+  .headerTitle {
+    width: 100px;
+    font-family: serif;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: white;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .userSetting {
+    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+    background-color: #c850bc;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    min-width: 40px;
+  }
+
+  .toHome {
+    font-family: serif;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8em;
+    text-align: center;
+    margin-left: auto;
+  }
+
+  .menu {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  .drop_area {
+    color: #5c5c5c;
+    font-weight: bold;
+    font-family: serif;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 80vw;
+    height: 48vh;
+    border: 5px solid #5c5c5c;
+    border-radius: 15px;
+  }
 }
 </style>
