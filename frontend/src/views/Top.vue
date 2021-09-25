@@ -1,9 +1,9 @@
 <template>
   <div class="top">
     <header class="header">
-        <h1><a href="/">
-          フォト旅
-        </a></h1>
+      <h1><a href="/">
+        フォト旅
+      </a></h1>
       <!--      <router-link to="/signin" tag="button" class="signin_btn">Sign in</router-link>-->
       <!--      <router-link to="/signup" tag="button" class="signup_btn">Sign up</router-link>-->
       <nav class="pc_nav">
@@ -64,8 +64,8 @@
       <img class="travel" src="../assets/travel.png"/>
     </div>
     <div class="item08">
-          <h2 class="msg">あなたの思い出作りにフォト旅を</h2>
-          <a href="/signup" class="try_btn">Try now</a>
+      <h2 class="msg">あなたの思い出作りにフォト旅を</h2>
+      <a href="/signup" class="try_btn">Try now</a>
     </div>
   </div>
 </template>
@@ -394,10 +394,10 @@ a {
   text-align: left;
   font-size: 14px;
   opacity: 0;
-  animation: item_msg 1.5s 0 ease-out forwards;
+  animation: item-msg 1.5s 0 ease-out forwards;
 }
 
-@keyframes item_msg {
+@keyframes item-msg {
   0% {
     opacity: 0;
     transform: translateY(20px);
@@ -407,6 +407,7 @@ a {
     transform: translateY(0);
   }
 }
+
 .msg {
   color: #f1f1f1;
 }
@@ -414,15 +415,14 @@ a {
 .phone_photo {
   width: 70%;
   margin-top: 30px;
-  /*margin-left: 20px;*/
   opacity: 0;
-  animation: phone_photo 1.5s .3s ease-out forwards;
+  animation: phone-photo 1.5s 0 ease-out forwards;
 }
 
-@keyframes phone_photo {
+@keyframes phone-photo {
   0% {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
@@ -435,10 +435,10 @@ a {
   /*margin-top: 40px;*/
   /*margin-left: 20px;*/
   opacity: 0;
-  animation: map_human 1.5s .3s ease-out forwards;
+  animation: map-human 1.5s .3s ease-out forwards;
 }
 
-@keyframes map_human {
+@keyframes map-human {
   0% {
     opacity: 0;
     transform: translateY(-20px);
