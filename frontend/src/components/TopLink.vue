@@ -1,35 +1,7 @@
 <template>
   <div class="TopLink">
-    <br />
-    <b>{{ msg }}</b>
-    <br />
-
-    <!-- <router-link to='/input'>
-      <h3 class="to_input">inputに遷移</h3>
-    </router-link>
-    <router-link to='/home'>
-      <h3 class="to_home">homeに遷移</h3>
-    </router-link> -->
-    <router-link to="/signin">
-      <h3 class="to_signin">ログイン</h3>
-    </router-link>
-    <router-link to="/signup">
-      <h3 class="to_signup">初めての方はこちら</h3>
-    </router-link>
-
-    <!-- <h4>チェック用リンク</h4>
-    <ul>
-      <li>
-        <a href="/getpost" target="_blank" rel="noopener">GetPost</a>
-      </li>
-      <li>
-        <a href="/upload" target="_blank" rel="noopener">upload</a>
-      </li>
-      <li>
-        <a href="/input" target="_blank" rel="noopener">input</a
-        >
-      </li>
-    </ul> -->
+    <h2 class="fade-in-top">{{ msg }}</h2>
+    <a href="/signup" class="fade-in-bottom">Try now</a>
   </div>
 </template>
 
@@ -44,80 +16,69 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1 {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin: 40px 0 0;
-  color: #42b983;
+* {
+  box-sizing: border-box;
 }
-.to_input {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  position: relative;
-  color: white;
-  background-color: #42b983;
-  width: 150px;
-  height: 30px;
-  border-radius: 8px;
 
-  margin-left: auto;
-  margin-right: auto;
+h2 {
+  margin-top: 40px;
+  margin-bottom: 30px;
+  font-size: 40px;
+  font-weight: normal;
+  color: #f1f1f1;
+  letter-spacing: 0.2em;
+  text-align: center;
+  line-height: 1.6;
 }
-.to_home {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  position: relative;
-  color: white;
-  background-color: #42b983;
-  width: 150px;
-  height: 30px;
-  border-radius: 8px;
 
-  margin-left: auto;
-  margin-right: auto;
+.TopLink {
+  background: #2d2d2d;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
 }
-.to_signin {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  position: relative;
-  color: white;
-  font-size: 30px;
-  background-color: #42b983;
-  width: 150px;
-  height: 42px;
-  border-radius: 8px;
 
-  margin-left: auto;
-  margin-right: auto;
-}
-.to_signup {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  position: relative;
-  color: white;
-  font-size: 15px;
-  background-color: #42b983;
-  width: 180px;
-  height: 24px;
-  border-radius: 8px;
-
-  margin-left: auto;
-  margin-right: auto;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
 a {
-  color: #42b983;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #ffffff;
+  cursor: pointer;
+  border: 0px;
+}
+
+.fade-in-top {
+  opacity: 0;
+  animation: fadein-top 1.5s .3s ease-out forwards;
+}
+
+@keyframes fadein-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-bottom {
+  opacity: 0;
+  animation: fadein-bottom 1.5s ease-out forwards;
+}
+
+@keyframes fadein-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
