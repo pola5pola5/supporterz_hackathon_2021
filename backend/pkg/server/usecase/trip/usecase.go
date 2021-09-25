@@ -1,8 +1,12 @@
 package trip
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
+	"image"
+	"image/jpeg"
+	"io"
 	"log"
 	"strings"
 	"time"
@@ -14,6 +18,7 @@ import (
 	ir "github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/repository/img"
 	txr "github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/repository/transaction"
 	tr "github.com/littletake/supporterz_hackathon_2021/pkg/server/domain/repository/trip"
+	"github.com/nfnt/resize"
 )
 
 const imgLayout = "2006:01:02 15:04:05"
@@ -153,7 +158,20 @@ func ExtractInfoAndSave(
 	// ストレージに保存
 	// ---
 	filename := userID + "/" + imgID.String() + ".jpg"
-	imgUrl, err := tu.fileRepo.SaveFile(filename, imgData)
+	// デコード
+	decodedImgData, _, err := image.Decode(bytes.NewReader(imgData))
+	// リサイズ
+	resizedImgData := resize.Resize(300, 300, decodedImgData, resize.NearestNeighbor)
+	// エンコード
+	pr, pw := io.Pipe()
+	go func() error {
+		if err := jpeg.Encode(pw, resizedImgData, nil); err != nil {
+			return err
+		}
+		pw.Close()
+		return nil
+	}()
+	imgUrl, err := tu.fileRepo.SaveFile(filename, pr)
 	if err != nil {
 		return err
 	}

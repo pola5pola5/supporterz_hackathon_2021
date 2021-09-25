@@ -1,7 +1,7 @@
 package s3
 
 import (
-	"bytes"
+	"io"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -23,7 +23,7 @@ func NewPersistence() file.FileRepo {
 }
 
 // s3にファイルを保存する処理
-func (sp s3Persistence) SaveFile(filename string, file []byte) (string, error) {
+func (sp s3Persistence) SaveFile(filename string, file io.Reader) (string, error) {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region),
 	})
@@ -31,11 +31,10 @@ func (sp s3Persistence) SaveFile(filename string, file []byte) (string, error) {
 		return "", err
 	}
 	uploader := s3manager.NewUploader(sess)
-	// TODO: []byteとio.Readerの関係を理解する
 	output, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(filename),
-		Body:   bytes.NewReader(file),
+		Body:   file,
 	})
 	if err != nil {
 		return "", err

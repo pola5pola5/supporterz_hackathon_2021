@@ -1,5 +1,5 @@
 <template>
-  <div class="map">
+  <div class="map" v-cloak>
     <MyMap />
   </div>
 </template>
