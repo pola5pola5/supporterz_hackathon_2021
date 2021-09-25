@@ -4,8 +4,6 @@
       <h1><a href="/">
         フォト旅
       </a></h1>
-      <!--      <router-link to="/signin" tag="button" class="signin_btn">Sign in</router-link>-->
-      <!--      <router-link to="/signup" tag="button" class="signup_btn">Sign up</router-link>-->
       <nav class="pc_nav">
         <ul>
           <li><a href="/signin">Sign In</a></li>
